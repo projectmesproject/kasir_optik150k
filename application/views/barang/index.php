@@ -8,13 +8,30 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
+              <!-- import excel -->
+              <?php if (!empty($this->session->flashdata('status'))) { ?>
+                <div class="alert alert-info" role="alert"><?= $this->session->flashdata('status'); ?></div>
+              <?php } ?>
+              <form action="<?= base_url('Barang/import'); ?>" method="post" enctype="multipart/form-data">
+                <div class="row mb-4">
+                  <label class="col-2">Pilih File Excel</label>
+                  <div class="col-3 col-md-7">
+                    <input type="file" name="fileExcel" class="form-control" required accept=".xls, .xlsx">
+                  </div>
+                  <button class='btn btn-success' type="submit">
+                    Import
+                    <i class="fas fas fa-upload"></i>
+                  </button>
+                </div>
+
+              </form>
+              <!-- end import excel -->
               <!-- FLASH DATA -->
               <?php
               $dat = $this->session->flashdata('msg');
               if ($dat != "") { ?>
                 <div id="notifikasi" class="alert alert-success"><strong>Sukses! </strong> <?= $dat; ?></div>
               <?php } ?>
-
               <?php
               $dat = $this->session->flashdata('msg2');
               if ($dat != "") { ?>
@@ -24,7 +41,8 @@
               <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_barang">
                 (+) TAMBAH
               </button>
-              <a href="<?php echo base_url("barang/export"); ?>" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Export to Excel</a><br><br>
+              <a href="<?php echo base_url("barang/export"); ?>" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Export to Excel</a>
+
             </div>
             <div class="card-body">
               <div class="table-responsive">

@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+
 class Barang extends CI_Controller
 {
 
@@ -14,6 +15,7 @@ class Barang extends CI_Controller
 
 		$this->load->model('m_kategori');
 		$this->load->model('m_barang');
+		$this->load->library('Excel');
 		///$this->load->library('barcode');
 	}
 
@@ -255,5 +257,52 @@ class Barang extends CI_Controller
 
 		$writer = new Xlsx($spreadsheet);
 		$writer->save('php://output');
+	}
+	public function import()
+	{
+		if (isset($_FILES["fileExcel"]["name"])) {
+			$path = $_FILES["fileExcel"]["tmp_name"];
+			$object = PHPExcel_IOFactory::load($path);
+			foreach ($object->getWorksheetIterator() as $worksheet) {
+				$highestRow = $worksheet->getHighestRow();
+				$highestColumn = $worksheet->getHighestColumn();
+				for ($row = 4; $row <= $highestRow; $row++) {
+					$barang_id = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+					$barang_nama = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+					$barang_satuan = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+					$barang_harpok  = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
+					$barang_harjul  = $worksheet->getCellByColumnAndRow(5, $row)->getValue();
+					$barang_stok  = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
+					$barang_min_stok  = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
+					$barang_tgl_input  = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
+					$barang_tgl_last_update = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
+					$barang_kategori_id = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
+					$serial_number  = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
+					$temp_data[] = array(
+						'barang_id'	=> $barang_id,
+						'barang_nama'	=> $barang_nama,
+						'barang_satuan'	=> $barang_satuan,
+						'barang_harpok'	=> $barang_harpok,
+						'barang_harjul'	=> $barang_harjul,
+						'barang_stok'	=> $barang_stok,
+						'barang_min_stok'	=> $barang_min_stok,
+						'barang_tgl_input'	=> $barang_tgl_input,
+						'barang_tgl_last_update'	=> $barang_tgl_last_update,
+						'barang_kategori_id'	=> $barang_kategori_id,
+						'serial_number'	=> $serial_number,
+					);
+				}
+			}
+			$insert = $this->m_barang->addImportToExcel($temp_data);
+			if ($insert) {
+				$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-ok"></span> Data Berhasil di Import ke Database');
+				redirect($_SERVER['HTTP_REFERER']);
+			} else {
+				$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span> Terjadi Kesalahan');
+				redirect($_SERVER['HTTP_REFERER']);
+			}
+		} else {
+			echo "Tidak ada file yang masuk";
+		}
 	}
 }

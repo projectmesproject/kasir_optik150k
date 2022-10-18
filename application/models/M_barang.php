@@ -157,4 +157,8 @@ class M_barang extends CI_Model
 
 		return $query;
 	}
+	public function addImportToExcel($data)
+	{
+		return $this->db->insert_batch("tbl_barang", $data);
+	}
 }
