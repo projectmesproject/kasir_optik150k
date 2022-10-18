@@ -161,4 +161,8 @@ class M_barang extends CI_Model
 	{
 		return $this->db->insert_batch("tbl_barang", $data);
 	}
+	public function deleteAll()
+	{
+		return $this->db->empty_table('tbl_barang');
+	}
 }

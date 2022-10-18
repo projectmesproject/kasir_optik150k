@@ -42,6 +42,7 @@
                 (+) TAMBAH
               </button>
               <a href="<?php echo base_url("barang/export"); ?>" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Export to Excel</a>
+              <a href="<?php echo base_url("barang/deleteAll"); ?>" class="btn btn-danger btn-sm"><i class="fas fa-recycle"></i> Delete All</a>
 
             </div>
             <div class="card-body">

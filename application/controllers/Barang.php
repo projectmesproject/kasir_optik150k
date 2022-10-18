@@ -305,4 +305,14 @@ class Barang extends CI_Controller
 			echo "Tidak ada file yang masuk";
 		}
 	}
+	public function deleteAll()
+	{
+		$delete = $this->m_barang->deleteAll();
+		if ($delete) {
+			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-ok"></span> Data Berhasil di Hapus');
+			redirect($_SERVER['HTTP_REFERER']);
+		} else {
+			echo "Tidak ada file yang dihapus";
+		}
+	}
 }
