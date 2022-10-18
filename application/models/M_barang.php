@@ -144,4 +144,17 @@ class M_barang extends CI_Model
 		$this->db->where('id', $id);
 		$this->db->update('tbl_barang', $data);
 	}
+
+	// ahmad updated
+	public function getToExcel()
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_barang');
+		// $this->db->limit(10);
+		$this->db->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id');
+
+		$query = $this->db->get()->result();
+
+		return $query;
+	}
 }
