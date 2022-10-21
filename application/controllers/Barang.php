@@ -288,6 +288,7 @@ class Barang extends CI_Controller
 						'barang_min_stok'	=> $barang_min_stok,
 						'barang_tgl_input'	=> $barang_tgl_input,
 						'barang_tgl_last_update'	=> $barang_tgl_last_update,
+
 						'barang_kategori_id'	=> $barang_kategori_id,
 						'serial_number'	=> $serial_number,
 					);
@@ -309,7 +310,7 @@ class Barang extends CI_Controller
 	{
 		$delete = $this->m_barang->deleteAll();
 		if ($delete) {
-			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-ok"></span> Data Berhasil di Hapus');
+			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-warning"></span> Data Berhasil di Hapus');
 			redirect($_SERVER['HTTP_REFERER']);
 		} else {
 			echo "Tidak ada file yang dihapus";

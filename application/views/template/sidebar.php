@@ -154,6 +154,15 @@
 
       <?php if ($this->session->userdata('level') == 'admin') { ?>
 
+        <div class="sidebar-heading">
+          Master Data
+        </div>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo site_url('cara_bayar'); ?>">
+            <i class="fas fa-database"></i>
+            <span>Data Cara Bayar</span></a>
+        </li>
+
         <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -167,7 +176,6 @@
             <i class="fas fa-print"></i>
             <span>Laporan</span></a>
         </li>
-
 
         <!-- Divider -->
         <hr class="sidebar-divider">
