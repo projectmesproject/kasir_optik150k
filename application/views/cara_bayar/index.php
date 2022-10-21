@@ -89,12 +89,9 @@
                         id: id,
                     },
                     success: function(data) {
-                        let list = "";
-
-
                         Swal.fire({
                             title: 'Update List Cara Bayar',
-                            html: '<label>Section Name</label>' +
+                            html: '<label>Cara Bayar</label>' +
                                 '<input id="name" type="text" class="swal2-input" value="' + data.cara_bayar + '"/>',
                             focusConfirm: false,
                             showCancelButton: true,
@@ -110,6 +107,7 @@
                                     method: "post",
                                     dataType: "json",
                                     data: {
+                                        id: id,
                                         cara_bayar: cara_bayar,
                                     },
                                     success: function(data) {
