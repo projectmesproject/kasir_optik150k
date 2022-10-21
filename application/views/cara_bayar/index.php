@@ -130,7 +130,7 @@
 
             function create() {
                 Swal.fire({
-                    title: 'Create Section',
+                    title: 'Create Cara Bayar',
                     html: '<label>Cara Bayar</label>' +
                         '<input id="name" type="text" class="swal2-input" />',
                     focusConfirm: false,
