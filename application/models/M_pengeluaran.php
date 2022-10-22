@@ -1,9 +1,12 @@
 <?php
 class M_pengeluaran extends CI_Model{
-
+    private $table = "pengeluaran";
     function tampilData(){
-        return $this->db->query("select a.id, a.jenis_pengeluaran, a.nominal, a.tanggal, a.keterangan, b.nama as nama_karyawan
-                                        from pengeluaran a left join karyawan b on a.penerima=b.id order by a.id desc")->result_array();
+        $this->db->select('a.*,b.nama as nama_karyawan');
+        $this->db->from("pengeluaran a");
+        $this->db->join("karyawan b","a.penerima=b.id","left");
+        $data = $this->db->get()->result_array();
+        return $data;
     }
 
     function tambahData(){
@@ -12,9 +15,10 @@ class M_pengeluaran extends CI_Model{
         $data = [
             "jenis_pengeluaran" => $this->input->post('jns_pengeluaran',TRUE),
             "nominal" => $this->input->post('nominal',TRUE),
-            "tanggal" => $this->input->post('tanggal',TRUE),
+            "tanggal" => date('Y-m-d'),
             "keterangan" => $this->input->post('keterangan',TRUE),
-            "penerima" => $this->input->post('penerima',TRUE),
+            "nama_karyawan" => $this->input->post('karyawan',TRUE),
+            "updated_time" => date('Y-m-d H:i:s')
         ];
 
         $this->db->insert('pengeluaran',$data);
@@ -27,7 +31,8 @@ class M_pengeluaran extends CI_Model{
             "nominal" => $this->input->post('nominal',TRUE),
             "tanggal" => $this->input->post('tanggal',TRUE),
             "keterangan" => $this->input->post('keterangan',TRUE),
-            "penerima" => $this->input->post('penerima',TRUE),
+            "nama_karyawan" => $this->input->post('karyawan',TRUE),
+            "updated_time" => date('Y-m-d H:i:s')
         ];
 
         $this->db->where('id',$this->input->post('id',TRUE));

@@ -13,6 +13,7 @@ class Penjualan extends CI_Controller
         $this->load->model('m_suplier');
         $this->load->model('m_penjualan');
         $this->load->model('M_customer');
+        $this->load->model('M_Cara_Bayar');
     }
 
     public function index()
@@ -20,6 +21,7 @@ class Penjualan extends CI_Controller
         $data['title'] = 'Penjualan';
         $data['barang'] = $this->m_barang->tampil_barang();
         $data['nohp'] = $this->M_customer->tampil_customer();
+        $data['cara_bayar'] = $this->M_Cara_Bayar->list();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
         $this->load->view('template/topbar', $data);

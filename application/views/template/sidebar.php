@@ -63,7 +63,9 @@
 
       <!-- DATA TOKO -->
 
-      <?php if ($this->session->userdata('level') == 'admin' || $this->session->userdata('level') == 'kasir') { ?>
+      <?php
+      $show = 0;
+      if ($this->session->userdata('level') == 'admin' || $this->session->userdata('level') == 'kasir' && $show) { ?>
         <!------------------------- DATA BARANG --------------------------------->
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -123,7 +125,28 @@
         </div>
       </li>
       <!-- AKHIR DATA PENJUALAN -->
+      <!-- Heading -->
+      <?php if ($this->session->userdata('level') == 'kasir') { ?>
+        <div class="sidebar-heading">
+          Data Pengeluaran
+        </div>
 
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo4" aria-expanded="true" aria-controls="collapseTwo4">
+            <i class="fas fa-cart-plus"></i>
+            <span>Data Pengeluaran</span>
+          </a>
+          <div id="collapseTwo4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Data Pengeluaran</h6>
+
+              <a class="collapse-item" href="<?php echo site_url('pengeluaran'); ?>">Pengeluaran</a>
+
+            </div>
+          </div>
+        </li>
+      <?php } ?>
       <!-- DATA PEMBELIAN -->
       <?php if ($this->session->userdata('level') == 'admin') { ?>
         <!-- Divider -->
