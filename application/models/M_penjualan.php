@@ -2,9 +2,9 @@
 class M_penjualan extends CI_Model{
 
 
-	function simpan_penjualan($nofak,$total,$jml_uang,$kembalian,$bayar,$diskon,$nohp){
+	function simpan_penjualan($nofak,$total,$jml_uang,$kembalian,$bayar,$bayar2,$diskon,$nohp){
 		$idadmin=$this->session->userdata('idadmin');
-		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_kembalian,jual_user_id,jual_keterangan,diskon,no_hp) VALUES ('$nofak','$total','$jml_uang','$kembalian','$idadmin','$bayar','$diskon','$nohp')");
+		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_kembalian,jual_user_id,jual_keterangan,jual_keterangan2,diskon,no_hp) VALUES ('$nofak','$total','$jml_uang','$kembalian','$idadmin','$bayar','$bayar2','$diskon','$nohp')");
 		foreach ($this->cart->contents() as $item) {
 			$data=array(
 				'd_jual_nofak' 			=>	$nofak,
@@ -27,9 +27,9 @@ class M_penjualan extends CI_Model{
 	}
 
 
-	function simpan_penjualan1($nofak,$total,$jml_uang,$kembalian,$diskon,$nohp,$dp){
+	function simpan_penjualan1($nofak,$total,$jml_uang,$kembalian,$diskon,$nohp,$dp,$dp2){
 		$idadmin=$this->session->userdata('idadmin');
-		$this->db->query("INSERT INTO tbl_jual_dp (jual_nofak,jual_total,jual_jml_uang,jual_kembalian,jual_user_id,jual_keterangan,diskon,no_hp,uang_muka,is_status) VALUES ('$nofak','$total','$jml_uang','$kembalian','$idadmin','buah','$diskon','$nohp','$dp',0)");
+		$this->db->query("INSERT INTO tbl_jual_dp (jual_nofak,jual_total,jual_jml_uang,jual_kembalian,jual_user_id,jual_keterangan,diskon,no_hp,uang_muka,uang_muka2,is_status) VALUES ('$nofak','$total','$jml_uang','$kembalian','$idadmin','buah','$diskon','$nohp','$dp','$dp2',0)");
 		foreach ($this->cart->contents() as $item) {
 			$data=array(
 				'd_jual_nofak' 			=>	$nofak,
@@ -80,7 +80,7 @@ class M_penjualan extends CI_Model{
     
 	function cetak_faktur(){
 		$nofak=$this->session->userdata('nofak');
-		$hsl=$this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d/%m/%Y %H:%i:%s') AS jual_tanggal,jual_total,jual_jml_uang,jual_kembalian,jual_keterangan,diskon,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,no_hp FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE jual_nofak='$nofak'");
+		$hsl=$this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d/%m/%Y %H:%i:%s') AS jual_tanggal,jual_total,jual_jml_uang,jual_kembalian,jual_keterangan,diskon,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,no_hp,jual_keterangan2 FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE jual_nofak='$nofak'");
 		//die($this->db->last_query());
 		return $hsl;
 	}
@@ -92,7 +92,7 @@ class M_penjualan extends CI_Model{
 
 	function cetak_faktur_dp(){
 		$nofak=$this->session->userdata('nofak');
-		$hsl=$this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d/%m/%Y %H:%i:%s') AS jual_tanggal,jual_total,jual_jml_uang,jual_kembalian,jual_keterangan,diskon,uang_muka,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,no_hp FROM tbl_jual_dp JOIN tbl_detail_jual_dp ON jual_nofak=d_jual_nofak WHERE jual_nofak='$nofak'");
+		$hsl=$this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d/%m/%Y %H:%i:%s') AS jual_tanggal,jual_total,jual_jml_uang,jual_kembalian,jual_keterangan,diskon,uang_muka,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,no_hp,uang_muka2 FROM tbl_jual_dp JOIN tbl_detail_jual_dp ON jual_nofak=d_jual_nofak WHERE jual_nofak='$nofak'");
 		return $hsl;
 	}
 

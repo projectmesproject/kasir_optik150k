@@ -4,7 +4,7 @@
 					?>
 					<table>
 						<tr>
-		                    <th style="width:150px;"></th>
+		                    <th style="width:300px;"></th>
                             <th>Kode Customer</th>
 		                    <th></th>
 		                    <th>Nama</th>

@@ -182,8 +182,17 @@
       var diskon = $("#diskon").val();
       var tot_bayar = total_b;
       $("#totbayar").val(tot_bayar);
-      $("#kembalian").val(uang - tot_bayar);
+      $("#jml_uang2").val(tot_bayar - uang);
     });
+    // $("#jml_uang2").keyup(function() {
+
+    //   var uang = $("#jml_uang").val();
+    //   var total_b = $("#total").val();
+    //   var diskon = $("#diskon").val();
+    //   var tot_bayar = total_b;
+    //   $("#totbayar").val(tot_bayar);
+    //   $("#kembalian").val(uang - tot_bayar);
+    // });
   });
 </script>
 
@@ -241,7 +250,7 @@
     });
 
     // Format mata uang.
-    $('#kembalian').divide({
+    $('#jml_uang2').divide({
       delimiter: ',',
       divideThousand: true, // 1,000..9,999
       delimiterRegExp: /[\.\,\s]/g

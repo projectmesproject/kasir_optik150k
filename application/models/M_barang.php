@@ -140,6 +140,14 @@ class M_barang extends CI_Model
 		return $this->db->get_where('tbl_barang', array('id' => $id));
 	}
 
+	public function getBarangPaket()
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_barang');
+		$this->db->like('barang_id', "PKT");
+		return $this->db->get()->result();
+	}
+
 	public function UpdateGambar($id, $data)
 	{
 		$this->db->where('id', $id);

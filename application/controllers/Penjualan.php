@@ -22,6 +22,8 @@ class Penjualan extends CI_Controller
         $data['barang'] = $this->m_barang->tampil_barang();
         $data['nohp'] = $this->M_customer->tampil_customer();
         $data['cara_bayar'] = $this->M_Cara_Bayar->list();
+        
+        $data["paket"] = $this->m_barang->getBarangPaket();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
         $this->load->view('template/topbar', $data);
@@ -60,6 +62,7 @@ class Penjualan extends CI_Controller
 
         $kobar = $this->input->post('nabar');
         $x['brg'] = $this->m_barang->get_barang($kobar);
+        
         $this->load->view('penjualan/detail_barang_jual', $x);
     }
 
@@ -131,12 +134,19 @@ class Penjualan extends CI_Controller
     {
         $nohp = $this->input->post('no_hp');
         $tampung = $this->db->query("select * from tbl_customer where no_hp='$nohp' ")->row_array();
-        $payment1 = [
-            'Lunas', 'Kredit', 'Debit', 'Transfer', 'OVO', 'LINK', 'DANA', 'Lain-Lain'
-        ];
+
+        $payment1 = [];
+
+        $get_cara_byr = $this->M_Cara_Bayar->list();
+        foreach($get_cara_byr as $byr){
+            if($byr->cara_bayar == 'DP')
+            continue;
+            array_push($payment1,$byr->cara_bayar);
+        }
         //        if($this->input->post('bayar')=="Lunas" || $this->input->post('bayar')=="Kredit" || $this->input->post('bayar')=="Debit" || $this->input->post('bayar')=="Transfer" || $this->input->post('bayar')=="OVO" || $this->input->post('bayar')=="LINK" || $this->input->post('bayar')=="DANA")
         if (in_array($this->input->post('bayar'), $payment1)) {
             $bayar = $this->input->post('bayar', TRUE);
+            $bayar2 = $this->input->post('bayar2', TRUE);
             $total_belanja = $this->input->post('total'); ////sama tambahin ini juga jar kalau di kameranya
             $total = $this->input->post('totbayar');
             $diskon = $this->input->post('diskon');
@@ -152,10 +162,10 @@ class Penjualan extends CI_Controller
                     $this->session->set_userdata('nofak', $nofak);
 
                     if ($tampung['no_hp'] != NULL) {
-                        $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $kembalian, $bayar, $diskon, $nohp);
+                        $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $kembalian, $bayar,$bayar2, $diskon, $nohp);
                     } else {
                         $this->M_customer->tambah_data();
-                        $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $kembalian, $bayar, $diskon, $nohp);
+                        $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $kembalian, $bayar,$bayar2, $diskon, $nohp);
                     }
 
 
@@ -175,23 +185,24 @@ class Penjualan extends CI_Controller
                 echo $this->session->set_flashdata('error', 'Penjualan Gagal di Simpan, Mohon Periksa Kembali Semua Inputan Anda!');
                 redirect('penjualan');
             }
-        } elseif ($this->input->post('bayar') == "Uang Muka") {
-            $dp = $this->input->post('bayar');
+        } elseif ($this->input->post('bayar') == "DP") {
+            $dp = "Uang Muka";
+            $dp2= $this->input->post('bayar2');
             $total_belanja = $this->input->post('total');
 
             $total = $this->input->post('totbayar');
             $diskon = $this->input->post('diskon');
             $jml_uang = str_replace(",", "", $this->input->post('jml_uang'));
-            $kekurangan = $total - $jml_uang;
+            $jml_uang2 = str_replace(",", "", $this->input->post('jml_uang2'));
             if (!empty($total) && !empty($jml_uang) && !empty($nohp)) {
                 $nofak = $this->m_penjualan->get_nofak1();
                 $this->session->set_userdata('nofak', $nofak);
 
                 if ($tampung != NULL) {
-                    $order_proses = $this->m_penjualan->simpan_penjualan1($nofak, $total, $jml_uang, $kekurangan, $diskon, $nohp, $dp);
+                    $order_proses = $this->m_penjualan->simpan_penjualan1($nofak, $total, $jml_uang, $jml_uang2, $diskon, $nohp, $dp,$dp2);
                 } else {
                     $this->M_customer->tambah_data();
-                    $order_proses = $this->m_penjualan->simpan_penjualan1($nofak, $total, $jml_uang, $kekurangan, $diskon, $nohp, $dp);
+                    $order_proses = $this->m_penjualan->simpan_penjualan1($nofak, $total, $jml_uang, $jml_uang2, $diskon, $nohp, $dp,$dp2);
                 }
 
                 if ($order_proses) {

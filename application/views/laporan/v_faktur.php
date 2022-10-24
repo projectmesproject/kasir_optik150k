@@ -147,8 +147,8 @@ $no=0;
         </tr>
         
 <tr>
-            <th style="text-align:left;">Keterangan</th>
-            <th style="text-align:left;">: <?php echo $b['jual_keterangan'];?></th>
+            <th style="text-align:left;">Metode Pembayaran</th>
+            <th style="text-align:left;">: <?php echo $b['jual_keterangan'];?> <?php if($b['jual_keterangan2']) echo ",$b[jual_keterangan2]"; ?></th>
         </tr>
 </table>
 <table align="center" style="width:302px; border:none;margin-top:5px;margin-bottom:20px;">
