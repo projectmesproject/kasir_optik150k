@@ -53,7 +53,7 @@
               </form>
               <br />
               <hr>
-              <div class="table-responsive">
+              <div class="table-responsive" style="overflow: hidden;">
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                   <thead class="thead-light">
                     <tr>
@@ -100,7 +100,7 @@
                     <th>No HP : </th>
                   </tr>
                   <tr>
-                    <th><input type="text" name="no_hp" list="list_no" autocomplete="off" id="no_hp" class="form-control input-sm" style="width:150px;" required>
+                    <th><input type="number" name="no_hp" list="list_no" autocomplete="off" id="no_hp" class="form-control input-sm" style="width:250px;" required>
                       <datalist id="list_no">
                         <?php foreach ($nohp->result() as $nohp) : ?>
                           <option value="<?= $nohp->no_hp ?>"><?= $nohp->no_hp ?></option>
@@ -130,15 +130,15 @@
                       ?>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
-                    <label class="font-weight-bold">Keterangan 1 :</label>
-                    <input type="text" id="diskon" name="diskon" class="diskon form-control input-sm" required>
-                  </div>
+                  
                   <div class="form-group col-sm-2">
                     <label class="font-weight-bold">Cara Bayar 2 :</label>
-                    <select required name="bayar" id="bayar" class="form-control">
+                    <select required name="bayar2" id="bayar2" class="form-control">
                       <option value="" selected disabled>-- Pilih Cara Bayar --</option>
                       <?php foreach ($cara_bayar as $bayar) {
+
+                        if($bayar->cara_bayar =='DP')
+                        continue;
                       ?>
                         <option value="<?= $bayar->cara_bayar ?>"><?= $bayar->cara_bayar ?></option>
                       <?php
@@ -146,18 +146,30 @@
                       ?>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
-                    <label class="font-weight-bold">Keterangan 2 :</label>
+                  <div class="form-group col-sm-5">
+                    <label class="font-weight-bold">Keterangan :</label>
                     <input type="text" id="diskon" name="diskon" class="diskon form-control input-sm" required>
                   </div>
                 </div>
                 <br>
+                <?php
+                // var_dump($paket);
+                foreach ($paket as $pkt) {
+                ?>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="kotak" value="Kotak">
+                    <label class="form-check-label" for="kotak"><?= $pkt->barang_nama ?></label>
+                  </div>
+
+                <?php
+                }
+                ?>
                 <table>
 
                   <tr>
                     <td class="col-sm-6" rowspan="3"><button type="submit" class="btn btn-success btn-lg"> CETAK</button></td>
                     <th colspan="4">Total Yang Harus Dibayar (Rp) : </th>
-                    <th style="text-align:right;"><input type="text" id="totbayar" value="0" min="0" name="totbayar" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
+                    <th style="text-align:right;"><input type="text" id="totbayar" value="<?php echo number_format($this->cart->total()); ?>" min="0" name="totbayar" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
                   </tr>
 
 
@@ -169,14 +181,14 @@
                   </tr>
                   <tr>
                     <th colspan="4">Tunai 2(Rp) :</th>
-                    <th style="text-align:right;"><input type="text" id="jml_uang" name="jml_uang" class="jml_uang form-control input-sm" style="text-align:right;margin-bottom:5px;" required></th>
+                    <th style="text-align:right;"><input type="text" id="jml_uang2" name="jml_uang2" class="jml_uang2 form-control input-sm" style="text-align:right;margin-bottom:5px;" required readonly></th>
 
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <td></td>
                     <th colspan="4">Kembalian(Rp) :</th>
-                    <th style="text-align:right;"><input type="text" id="kembalian" name="kembalian" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" required></th>
-                  </tr>
+                    <th style="text-align:right;"><input type="text" id="kembalian" name="kembalian" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" required readonly></th>
+                  </tr> -->
 
 
                 </table>

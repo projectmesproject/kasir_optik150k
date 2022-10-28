@@ -29,11 +29,9 @@ $b = $brg->row_array();
 </tr>
 <tr class="border">
 	<td class="p-3" colspan="8">
-		<div class="form-check form-check-inline">
-			<input class="form-check-input" type="checkbox" id="kotak" value="Kotak">
-			<label class="form-check-label" for="kotak">Kotak</label>
-		</div>
-		<div class="form-check form-check-inline">
+		
+
+		<!-- <div class="form-check form-check-inline">
 			<input class="form-check-input" type="checkbox" id="pembersih_kcmt" value="Pembersih Kaca Mata">
 			<label class="form-check-label" for="pembersih_kcmt">Pembersih Kaca Mata</label>
 		</div>
@@ -44,7 +42,7 @@ $b = $brg->row_array();
 		<div class="form-check form-check-inline">
 			<input class="form-check-input" type="checkbox" id="lap" value="Kain Lap">
 			<label class="form-check-label" for="lap">Kain Lap</label>
-		</div>
+		</div> -->
 	</td>
 </tr>
-<br/><br/>
+<br /><br />
