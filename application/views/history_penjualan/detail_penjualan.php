@@ -37,9 +37,6 @@
           </tr>
         </table>
       </div>
-      <div class="row float-sm-right mr-3">
-        <button class="btn btn-danger" onclick="batal('<?= $jual['jual_nofak']; ?>')">Batal</button>
-      </div>
     </div>
   </div>
 
