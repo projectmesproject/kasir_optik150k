@@ -146,6 +146,32 @@
             </div>
           </div>
         </li>
+        <?php if ($this->session->userdata('level') == 'kasir') { ?>
+          <!-- DATA Kwitansi -->
+          <!-- Divider -->
+          <hr class="sidebar-divider">
+
+          <!-- Heading -->
+          <div class="sidebar-heading">
+            Data Kwitansi
+          </div>
+
+          <!-- Nav Item - Pages Collapse Menu -->
+          <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo5" aria-expanded="true" aria-controls="collapseTwo">
+              <i class="fal fa-sticky-note"></i>
+              <span>Data Kwitansi</span>
+            </a>
+            <div id="collapseTwo5" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Data Kwitansi</h6>
+
+                <a class="collapse-item" href="<?php echo site_url('Kwitansi'); ?>">Kwitansi</a>
+              </div>
+            </div>
+          </li>
+        <?php } ?>
+        <!-- AKHIR DATA Kwitansi -->
       <?php } ?>
       <!-- DATA PEMBELIAN -->
       <?php if ($this->session->userdata('level') == 'admin') { ?>

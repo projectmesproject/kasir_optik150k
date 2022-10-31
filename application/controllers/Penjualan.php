@@ -22,7 +22,7 @@ class Penjualan extends CI_Controller
         $data['barang'] = $this->m_barang->tampil_barang();
         $data['nohp'] = $this->M_customer->tampil_customer();
         $data['cara_bayar'] = $this->M_Cara_Bayar->list();
-        
+
         $data["paket"] = $this->m_barang->getBarangPaket();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
@@ -62,8 +62,33 @@ class Penjualan extends CI_Controller
 
         $kobar = $this->input->post('nabar');
         $x['brg'] = $this->m_barang->get_barang($kobar);
-        
+
         $this->load->view('penjualan/detail_barang_jual', $x);
+    }
+
+    function bayar_dp()
+    {
+        $nofak = $this->input->post("nofak");
+        $bayar = $this->input->post("bayar");
+        $kurang = $this->input->post("kurang");
+        $cara_bayar = $this->input->post("cara_bayar");
+        if ($bayar == $kurang) {
+            $jml_uang = (int)$bayar + (int)$kurang;
+
+            $data = [
+                "jual_kurang_uang" => 0,
+                "status" => "COMPLETE",
+                "jual_jml_uang" => $jml_uang,
+                "jual_keterangan2" => $cara_bayar
+            ];
+
+            $this->db->where('jual_nofak', $nofak);
+            $this->db->update('tbl_jual', $data);
+            redirect('history_penjualan');
+        } else {
+            $this->session->set_flashdata('msg2','Data gagal ditambahkan! uang anda kurang');
+            redirect('history_penjualan/in_detail/'. $nofak);
+        }
     }
 
     function get_autocomplete()
@@ -116,6 +141,65 @@ class Penjualan extends CI_Controller
         redirect('penjualan');
     }
 
+    function add_to_cart_paket()
+    {
+        $kobar = $this->input->post('kode_brg');
+
+        $produk = $this->m_barang->get_barang1($kobar);
+        $i = $produk->row_array();
+        $data = array(
+            'id'       => $i['barang_id'],
+            'id_kat_barang' => $i['barang_kategori_id'],
+            'name'     => $i['barang_nama'],
+            'satuan'   => $i['barang_satuan'],
+            'harpok'   => $i['barang_harpok'],
+            'price'    => 0,
+            'disc'     => 0,
+            'qty'      => 1,
+            'amount'      => 0
+        );
+        $this->cart->insert($data);
+        ob_start();
+?>
+        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+            <thead class="thead-light">
+                <tr>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Satuan</th>
+                    <th>Harga Jual</th>
+                    <th>Keterangan</th>
+                    <th>Jumlah Beli</th>
+                    <th>Sub Total</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php $i = 1; ?>
+                <?php foreach ($this->cart->contents() as $items) : ?>
+                    <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
+                    <tr>
+                        <td><?= $items['id']; ?></td>
+                        <td><?= $items['name']; ?></td>
+                        <td style="text-align:center;"><?= $items['satuan']; ?></td>
+                        <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
+                        <td style="text-align:right;"><?php echo $items['disc']; ?></td>
+                        <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
+                        <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
+
+                        <td style="text-align:center;"><a href="<?php base_url() ?>penjualan/remove/<?= $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
+                    </tr>
+
+                    <?php $i++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php
+        $konten = ob_get_contents();
+        return $konten;
+    }
+
     function remove()
     {
 
@@ -128,22 +212,85 @@ class Penjualan extends CI_Controller
         redirect('penjualan');
     }
 
+    function searchForId($id, $array)
+    {
+        foreach ($array as $key => $val) {
+            if ($val['id'] === $id) {
+                return $key;
+            }
+        }
+        return null;
+    }
+
+    function remove_paket()
+    {
+
+
+        $row_id = $this->input->post('kode_brg');
+        $data = $this->cart->contents();
+        $key = $this->searchForId($row_id, $data);
+        $this->cart->update(array(
+            'rowid'      => $key,
+            'qty'     => 0
+        ));
+        ob_start();
+    ?>
+        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+            <thead class="thead-light">
+                <tr>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Satuan</th>
+                    <th>Harga Jual</th>
+                    <th>Keterangan</th>
+                    <th>Jumlah Beli</th>
+                    <th>Sub Total</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php $i = 1; ?>
+                <?php foreach ($this->cart->contents() as $items) : ?>
+                    <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
+                    <tr>
+                        <td><?= $items['id']; ?></td>
+                        <td><?= $items['name']; ?></td>
+                        <td style="text-align:center;"><?= $items['satuan']; ?></td>
+                        <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
+                        <td style="text-align:right;"><?php echo $items['disc']; ?></td>
+                        <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
+                        <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
+
+                        <td style="text-align:center;"><a href="<?php base_url() ?>penjualan/remove/<?= $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
+                    </tr>
+
+                    <?php $i++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+<?php
+        $konten = ob_get_contents();
+        return $konten;
+    }
     ///revisi baru 8/10/19
 
     function simpan_penjualan()
     {
+        // jika uang1 > total = kembalian
+        // jika uang1 < uang2 = kurang -> status = DP
         $nohp = $this->input->post('no_hp');
         $tampung = $this->db->query("select * from tbl_customer where no_hp='$nohp' ")->row_array();
 
         $payment1 = [];
 
         $get_cara_byr = $this->M_Cara_Bayar->list();
-        foreach($get_cara_byr as $byr){
-            if($byr->cara_bayar == 'DP')
-            continue;
-            array_push($payment1,$byr->cara_bayar);
+        foreach ($get_cara_byr as $byr) {
+            if ($byr->cara_bayar == 'DP')
+                continue;
+            array_push($payment1, $byr->cara_bayar);
         }
-        //        if($this->input->post('bayar')=="Lunas" || $this->input->post('bayar')=="Kredit" || $this->input->post('bayar')=="Debit" || $this->input->post('bayar')=="Transfer" || $this->input->post('bayar')=="OVO" || $this->input->post('bayar')=="LINK" || $this->input->post('bayar')=="DANA")
+        // Jika Bayar1 > Total Bayat
         if (in_array($this->input->post('bayar'), $payment1)) {
             $bayar = $this->input->post('bayar', TRUE);
             $bayar2 = $this->input->post('bayar2', TRUE);
@@ -151,67 +298,41 @@ class Penjualan extends CI_Controller
             $total = $this->input->post('totbayar');
             $diskon = $this->input->post('diskon');
             $jml_uang = str_replace(",", "", $this->input->post('jml_uang'));
-            $kembalian = $jml_uang - $total;
-            if (!empty($total) && !empty($jml_uang) && !empty($nohp)) {
-                if ($jml_uang < $total) {
-                    echo $this->session->set_flashdata('error', 'Jumlah Uang yang anda masukan Kurang !!');
-                    redirect('penjualan');
-                } else {
-
-                    $nofak = $this->m_penjualan->get_nofak();
-                    $this->session->set_userdata('nofak', $nofak);
-
-                    if ($tampung['no_hp'] != NULL) {
-                        $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $kembalian, $bayar,$bayar2, $diskon, $nohp);
-                    } else {
-                        $this->M_customer->tambah_data();
-                        $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $kembalian, $bayar,$bayar2, $diskon, $nohp);
-                    }
-
-
-                    if ($order_proses) {
-                        $this->cart->destroy();
-
-                        $this->session->unset_userdata('tglfak');
-                        $this->session->unset_userdata('suplier');
-                        echo $this->session->set_flashdata('msg', 'Berhasil !!');
-                        //v13nr redirect('penjualan');	
-                        $this->cetak_faktur();
-                    } else {
-                        redirect('penjualan');
-                    }
-                }
-            } else {
-                echo $this->session->set_flashdata('error', 'Penjualan Gagal di Simpan, Mohon Periksa Kembali Semua Inputan Anda!');
-                redirect('penjualan');
-            }
-        } elseif ($this->input->post('bayar') == "DP") {
-            $dp = "Uang Muka";
-            $dp2= $this->input->post('bayar2');
-            $total_belanja = $this->input->post('total');
-
-            $total = $this->input->post('totbayar');
-            $diskon = $this->input->post('diskon');
-            $jml_uang = str_replace(",", "", $this->input->post('jml_uang'));
             $jml_uang2 = str_replace(",", "", $this->input->post('jml_uang2'));
+            $kembalian = 0;
+            $kurang = 0;
+            $status = "COMPLETE";
+            if ((int)$jml_uang > (int)$total) {
+                $kembalian = (int)$total - (int)$jml_uang;
+                $status = "COMPLETE";
+            }
+
+            if ((int)$jml_uang < (int)$total) {
+                $kurang = (int)$jml_uang2;
+                $status = "DP";
+            }
+
             if (!empty($total) && !empty($jml_uang) && !empty($nohp)) {
-                $nofak = $this->m_penjualan->get_nofak1();
+
+
+                $nofak = $this->m_penjualan->get_nofak();
                 $this->session->set_userdata('nofak', $nofak);
 
-                if ($tampung != NULL) {
-                    $order_proses = $this->m_penjualan->simpan_penjualan1($nofak, $total, $jml_uang, $jml_uang2, $diskon, $nohp, $dp,$dp2);
-                } else {
+                if ($tampung['no_hp'] == NULL) {
+
                     $this->M_customer->tambah_data();
-                    $order_proses = $this->m_penjualan->simpan_penjualan1($nofak, $total, $jml_uang, $jml_uang2, $diskon, $nohp, $dp,$dp2);
                 }
+                // $nofak, $total, $jml_uang,$kurang, $kembalian, $bayar,$bayar2, $diskon, $nohp,$status
+                $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $kurang, $kembalian, $bayar, $bayar2, $diskon, $nohp, $status);
 
                 if ($order_proses) {
                     $this->cart->destroy();
 
                     $this->session->unset_userdata('tglfak');
                     $this->session->unset_userdata('suplier');
-                    echo $this->session->set_flashdata('muka', 'Berhasil !!');
-                    redirect('penjualan');
+                    echo $this->session->set_flashdata('msg', 'Berhasil !!');
+                    //v13nr redirect('penjualan');	
+                    $this->cetak_faktur();
                 } else {
                     redirect('penjualan');
                 }
@@ -219,12 +340,6 @@ class Penjualan extends CI_Controller
                 echo $this->session->set_flashdata('error', 'Penjualan Gagal di Simpan, Mohon Periksa Kembali Semua Inputan Anda!');
                 redirect('penjualan');
             }
-        } else {
-
-
-
-            echo $this->session->set_flashdata('error', 'Metode Bayar Tidak Boleh Kosong !');
-            redirect('penjualan');
         }
     }
 

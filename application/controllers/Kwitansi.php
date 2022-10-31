@@ -1,0 +1,30 @@
+<?php
+class Kwitansi extends CI_Controller{
+    function __construct()
+    {
+		parent::__construct();
+		
+		$this->load->model('m_kwitansi');
+
+	}
+
+	function index(){
+    
+        $data['title'] = 'Kwitansi';
+		$data['data']=$this->m_kwitansi->tampil_kwitansi()->result();
+
+        $this->load->view('template/header',$data);
+		$this->load->view('template/sidebar',$data);
+		$this->load->view('template/topbar',$data);
+        $this->load->view('kwitansi/index',$data);
+        $this->load->view('template/footer',$data);
+	
+    }
+
+    function tambah_kwitansi(){
+        $this->m_kwitansi->tambah_kwitansi();
+        $this->session->set_flashdata('msg','Data berhasil ditambahkan');
+      redirect('kwitansi');
+    }
+}
+?>

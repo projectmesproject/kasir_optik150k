@@ -8,7 +8,7 @@ class History_penjualan extends CI_Controller
     {
         parent::__construct();
         $this->load->model('M_penjualan');
-
+        $this->load->model('M_Cara_Bayar');
         if ($this->session->userdata('level') != TRUE) {
             redirect(base_url());
         }
@@ -17,10 +17,17 @@ class History_penjualan extends CI_Controller
     function index()
     {
         $data['title'] = "Data History Penjualan";
+        $data_array = array();
 
-        $data['data'] = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A
-        LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp
-        order by jual_nofak desc")->result_array();
+        $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp order by jual_tanggal desc")->result_array();
+
+        foreach($data1 as $dt){
+            $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
+            $dt["jumlah_item"] = $jmlh->jum;
+            array_push($data_array,$dt);
+        }
+        $data["data"] = $data_array;
+        
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
@@ -32,6 +39,8 @@ class History_penjualan extends CI_Controller
     function in_detail($id)
     {
         $data['title'] = "Detail Penjualan";
+        
+        $data['cara_bayar'] = $this->M_Cara_Bayar->list();
 
         $jual = $this->db->query("select * from tbl_jual where jual_nofak='$id'")->row_array();
         $no_hp = $jual['no_hp'];

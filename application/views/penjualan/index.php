@@ -4,6 +4,7 @@
 
 
           <?php
+
           $dat = $this->session->flashdata('msg');
           if ($dat != "") { ?>
             <div class="alert alert-success"><strong>Sukses! </strong> <?= $dat; ?>
@@ -53,41 +54,43 @@
               </form>
               <br />
               <hr>
-              <div class="table-responsive" style="overflow: hidden;">
-                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                  <thead class="thead-light">
-                    <tr>
-                      <th>Kode Barang</th>
-                      <th>Nama Barang</th>
-                      <th>Satuan</th>
-                      <th>Harga Jual</th>
-                      <th>Keterangan</th>
-                      <th>Jumlah Beli</th>
-                      <th>Sub Total</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <?php $i = 1; ?>
-                    <?php foreach ($this->cart->contents() as $items) : ?>
-                      <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
+              <div class="" style="overflow: hidden;">
+                <div class="table-responsive" id="result_table">
+                  <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="thead-light">
                       <tr>
-                        <td><?= $items['id']; ?></td>
-                        <td><?= $items['name']; ?></td>
-                        <td style="text-align:center;"><?= $items['satuan']; ?></td>
-                        <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
-                        <td style="text-align:right;"><?php echo $items['disc']; ?></td>
-                        <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
-                        <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
-
-                        <td style="text-align:center;"><a href="<?php base_url() ?>penjualan/remove/<?= $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Satuan</th>
+                        <th>Harga Jual</th>
+                        <th>Keterangan</th>
+                        <th>Jumlah Beli</th>
+                        <th>Sub Total</th>
+                        <th>Aksi</th>
                       </tr>
+                    </thead>
 
-                      <?php $i++; ?>
-                    <?php endforeach; ?>
-                  </tbody>
-                </table>
+                    <tbody>
+                      <?php $i = 1; ?>
+                      <?php foreach ($this->cart->contents() as $items) : ?>
+                        <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
+                        <tr>
+                          <td><?= $items['id']; ?></td>
+                          <td><?= $items['name']; ?></td>
+                          <td style="text-align:center;"><?= $items['satuan']; ?></td>
+                          <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
+                          <td style="text-align:right;"><?php echo $items['disc']; ?></td>
+                          <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
+                          <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
+
+                          <td style="text-align:center;"><a href="<?php base_url() ?>penjualan/remove/<?= $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
+                        </tr>
+
+                        <?php $i++; ?>
+                      <?php endforeach; ?>
+                    </tbody>
+                  </table>
+                </div>
                 <br>
 
                 <?php echo form_open('Penjualan/simpan_penjualan') ?>
@@ -130,15 +133,15 @@
                       ?>
                     </select>
                   </div>
-                  
-                  <div class="form-group col-sm-2">
+
+                  <div class="form-group col-sm-2" id="cara_bayar2_select">
                     <label class="font-weight-bold">Cara Bayar 2 :</label>
-                    <select required name="bayar2" id="bayar2" class="form-control">
+                    <select name="bayar2" id="bayar2" class="form-control">
                       <option value="" selected disabled>-- Pilih Cara Bayar --</option>
                       <?php foreach ($cara_bayar as $bayar) {
 
-                        if($bayar->cara_bayar =='DP')
-                        continue;
+                        if ($bayar->cara_bayar == 'DP')
+                          continue;
                       ?>
                         <option value="<?= $bayar->cara_bayar ?>"><?= $bayar->cara_bayar ?></option>
                       <?php
@@ -157,8 +160,8 @@
                 foreach ($paket as $pkt) {
                 ?>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="kotak" value="Kotak">
-                    <label class="form-check-label" for="kotak"><?= $pkt->barang_nama ?></label>
+                    <input class="form-check-input checkPaket" type="checkbox" data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
+                    <label class="form-check-label" for="pkt<?= $pkt->barang_id ?>"><?= $pkt->barang_nama ?></label>
                   </div>
 
                 <?php
@@ -180,7 +183,7 @@
 
                   </tr>
                   <tr>
-                    <th colspan="4">Tunai 2(Rp) :</th>
+                    <th colspan="4" id="tunai2_label">Tunai 2(Rp) :</th>
                     <th style="text-align:right;"><input type="text" id="jml_uang2" name="jml_uang2" class="jml_uang2 form-control input-sm" style="text-align:right;margin-bottom:5px;" required readonly></th>
 
                   </tr>
@@ -210,7 +213,54 @@
 
 
         <script type='text/javascript'>
+          function loadData() {
+            $('#dataTable tr').each(function() {
+              var kode_brg = $(this).find("td:first").html();
+              const selected = [];
+              $(".form-check input[type=checkbox]").each(function() {
+                selected.push(this.value);
+              });
+              selected.map((item,index)=> {
+                if(item == kode_brg){
+                    $('#pkt'+kode_brg).prop('checked',true);
+                }
+              })
+            });
+          }
+          $(".checkPaket").click(function() {
+            let kode_brg = $(this).attr('data-kode_brg')
+            if ($(this).is(':checked')) {
+              $.ajax({
+                url: '<?= base_url() ?>/penjualan/add_to_cart_paket',
+                cache: false,
+                type: 'POST',
+                data: {
+                  "kode_brg": kode_brg
+                },
+                success: function(res) {
+                  $('#result_table').html(res)
+                }
+              })
+            } else {
+              $.ajax({
+                url: '<?= base_url() ?>/penjualan/remove_paket',
+                cache: false,
+                type: 'POST',
+                data: {
+                  "kode_brg": kode_brg
+                },
+                success: function(res) {
+                  $('#result_table').html(res)
+                }
+              })
+            }
+
+          })
+
+
           $(function() {
+            loadData()
+
 
             $("#nabar").autocomplete({
               source: function(request, response) {

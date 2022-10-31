@@ -33,27 +33,16 @@
               <th>Aksi</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th>No</th>
-              <th>Nama PLG</th>
-              <th>Tanggal</th>
-              <th>No HP</th>
-              <th>No Faktur</th>
-              <th>Jumlah</th>
-              <th>Total Harga</th>
-              <th>Status</th>
-              <th>Aksi</th>
-            </tr>
-          </tfoot>
+
           <tbody>
             <?php $no = 1;
             foreach ($data as $a) { ?>
               <?php
               $no_fak = $a['jual_nofak'];
-              $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$no_fak'")->row_array();
               if ($a['status'] == "COMPLETE") {
                 $status = '<div class="badge badge-success">Complete</div>';
+              } else if ($a['status'] == "DP") {
+                $status = '<div class="badge badge-warning">DP</div>';
               } else {
                 $status = '<div class="badge badge-danger">Cancel</div>';
               }
@@ -65,7 +54,7 @@
                 <td><?php echo $a['jual_tanggal']; ?></td>
                 <td><?php echo $a['no_hp']; ?></td>
                 <td><?= $a['jual_nofak']; ?></td>
-                <td><?= $jmlh['jum']; ?> items</td>
+                <td><?= $a['jumlah_item']; ?> items</td>
                 <td>Rp. <?= number_format($a['jual_total']); ?></td>
                 <td><?= $status ?></td>
                 <td class="text-center">

@@ -3,10 +3,10 @@ class M_penjualan extends CI_Model
 {
 
 
-	function simpan_penjualan($nofak, $total, $jml_uang, $kembalian, $bayar, $diskon, $nohp)
+	function simpan_penjualan($nofak, $total, $jml_uang,$kurang, $kembalian, $bayar,$bayar2, $diskon, $nohp,$status)
 	{
 		$idadmin = $this->session->userdata('idadmin');
-		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_kembalian,jual_user_id,jual_keterangan,diskon,no_hp) VALUES ('$nofak','$total','$jml_uang','$kembalian','$idadmin','$bayar','$diskon','$nohp')");
+		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_kurang_uang,jual_kembalian,jual_user_id,jual_keterangan,jual_keterangan2,diskon,no_hp,status) VALUES ('$nofak','$total','$jml_uang','$kurang','$kembalian','$idadmin','$bayar','$bayar2','$diskon','$nohp','$status')");
 		foreach ($this->cart->contents() as $item) {
 			$data = array(
 				'd_jual_nofak' 			=>	$nofak,
@@ -54,16 +54,20 @@ class M_penjualan extends CI_Model
 
 	function get_nofak()
 	{
-		$q = $this->db->query("SELECT MAX(RIGHT(jual_nofak,6)) AS kd_max FROM tbl_jual ");
+		$now = date('Y-m-d');
+		$q = $this->db->query("SELECT jual_nofak FROM tbl_jual WHERE DATE(jual_tanggal) ='$now'");
 		$kd = "";
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $k) {
-				$tmp = ((int)$k->kd_max) + 1;
-				$kd = sprintf("%06s", $tmp);
-			}
-		} else {
-			$kd = "000001";
-		}
+		$kd = $q->num_rows();
+		$kd+=1;
+		$kd= sprintf("%06d",$kd);
+		// if ($q->num_rows() > 0) {
+		// 	foreach ($q->result() as $k) {
+		// 		$tmp = ((int)$k->kd_max) + 1;
+		// 		$kd = sprintf("%06s", $tmp);
+		// 	}
+		// } else {
+		// 	$kd = "000001";
+		// }
 		return date("dmY") . "" . $kd;
 	}
 

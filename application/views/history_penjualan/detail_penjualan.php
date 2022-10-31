@@ -3,7 +3,17 @@
 
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
+  <?php
+    $dat = $this->session->flashdata('msg2');
+    if ($dat != "") { ?>
+      <div id="notifikasi" class="alert alert-danger"><strong> </strong> <?= $dat; ?></div>
+    <?php } ?>
     <div class="card-header py-3">
+      <?php if ($jual['status'] == 'DP') : ?>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_hutang_karyawan" style="float:left;">
+          (+) Bayar
+        </button>
+      <?php endif ?>
       <h6 class="m-0 font-weight-bold text-primary text-center">KETERANGAN PENJUALAN</h6>
     </div>
     <br>
@@ -35,6 +45,18 @@
             <td>:</td>
             <td>Rp. <?= number_format($jual['jual_total']); ?></td>
           </tr>
+          <?php if ($jual['status'] == 'DP') : ?>
+            <tr>
+              <td>DP</td>
+              <td>:</td>
+              <td>Rp. <?= number_format($jual['jual_jml_uang']); ?></td>
+            </tr>
+            <tr>
+              <td>Kurang</td>
+              <td>:</td>
+              <td>Rp. <?= number_format(abs($jual['jual_kurang_uang'])); ?></td>
+            </tr>
+          <?php endif ?>
         </table>
       </div>
     </div>
@@ -78,3 +100,52 @@
 
 </div>
 <!-- End of Main Content -->
+
+<!---------------------------------------------Tambah Data---------------------------------------------->
+<div class="modal fade" id="add_hutang_karyawan">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Pelunasan DP</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <?php echo form_open('penjualan/bayar_dp') ?>
+      <input type="hidden" readonly value="<?= $jual['jual_nofak']; ?>" name="nofak" class="form-control">
+      <input type="hidden" readonly value="<?= abs($jual['jual_kurang_uang'])?>" name="kurang" class="form-control">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Cara Bayar:</label>
+          <select required name="cara_bayar" id="cara_bayar" class="form-control">
+            <option value="" selected disabled>-- Pilih Cara Bayar --</option>
+            <?php foreach ($cara_bayar as $bayar) {
+              if($bayar->cara_bayar =='DP')
+              continue;
+            ?>
+              <option value="<?= $bayar->cara_bayar ?>"><?= $bayar->cara_bayar ?></option>
+            <?php
+            }
+            ?>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="nominal">Bayar : </label>
+          <input type="number" id="nominal" name="bayar" class="form-control" placeholder="Bayar" required>
+        </div>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Simpan" />
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!---------------------------------------------Akhir Tambah Data---------------------------------------------->

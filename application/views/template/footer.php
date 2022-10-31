@@ -181,8 +181,21 @@
       var total_b = $("#total").val();
       var diskon = $("#diskon").val();
       var tot_bayar = total_b;
+      var uang2 = uang - tot_bayar
       $("#totbayar").val(tot_bayar);
-      $("#jml_uang2").val(tot_bayar - uang);
+      console.log(uang + " - " + tot_bayar)
+      if(parseInt(uang) > parseInt(tot_bayar)){
+        $("#tunai2_label").text("Kembalian")
+        uang2 = Math.abs(uang2);
+        $('#cara_bayar2_select').hide()
+        $('#cara_bayar2_select').prop('required',false)
+      } else if(parseInt(uang) < parseInt(tot_bayar)){
+        $("#tunai2_label").text("Kekurangan")
+        uang2 = Math.abs(uang2);
+        $('#cara_bayar2_select').show()
+        $('#cara_bayar2_select').prop('required',false)
+      }
+      $("#jml_uang2").val(uang2);
     });
     // $("#jml_uang2").keyup(function() {
 
