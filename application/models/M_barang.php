@@ -18,13 +18,12 @@ class M_barang extends CI_Model
 		$nama_barang = $this->input->post('barang_nama');
 		$kategori = $this->input->post('kategori_nama');
 
-		if ($nama_barang) {
-			$this->db->where('nama_barang', $nama_barang);
-		}
 		if ($kategori) {
 			$this->db->where('kategori_nama', $kategori);
 		}
-
+		if ($nama_barang) {
+			$this->db->where('barang_nama', $nama_barang);
+		}
 		$this->db->select('*');
 		$this->db->from($this->table);
 		$this->db->order_by($this->primary, "DESC");
