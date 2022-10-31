@@ -72,6 +72,7 @@
 <script src="<?= base_url('assets/admin/'); ?>js/jquery-ui.js"></script>
 
 <script src="<?= base_url('assets/'); ?>plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="<?= base_url('assets/'); ?>plugins/select2/select2.min.js"></script>
 <script>
   $(document).ready(function() {
     $('#dataTable').DataTable();
