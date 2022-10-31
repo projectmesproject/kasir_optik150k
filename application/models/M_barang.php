@@ -3,7 +3,7 @@ class M_barang extends CI_Model
 {
 	var $table = 'tbl_barang';
 	var $primary = 'barang_id';
-	var $column_order = array(null, 'barang_id', 'barang_nama');
+	var $column_order = array(null, 'barang_id', 'barang_nama', 'barang_satuan', 'barang_harjul', 'barang_stok', 'kategori_nama');
 	var $column_search = array('barang_nama');
 	var $order = array('barang_id' => 'desc');
 
