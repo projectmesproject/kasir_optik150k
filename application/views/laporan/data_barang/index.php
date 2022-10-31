@@ -31,7 +31,7 @@
 						</select>
 					</div>
 				</div>
-				<button type="button" class="btn btn-secondary float-right ml-2"><i class="fa fa-reply"></i> Reset</i></button>
+				<button type="button" class="btn btn-secondary float-right ml-2" id="btn-reset"><i class="fa fa-reply"></i> Reset</i></button>
 				<button type="button" class="btn btn-success float-right" id="btn-filter"><i class="fa fa-filter"> Filter</i></button>
 			</form>
 		</div>
@@ -72,8 +72,6 @@
 					data.kategori_nama = $('#kategori_nama').val();
 				}
 			},
-
-
 			"columnDefs": [{
 				"targets": [0],
 				"orderable": false,
@@ -84,7 +82,12 @@
 			table.ajax.reload();
 		});
 		$('#btn-reset').click(function() {
+			let form = $('#form-filter');
 			$('#form-filter')[0].reset();
+			form.find('select[name=barang_nama]').val("");
+			form.find('select[name=kategori_nama]').val("");
+			form.find('select[name=barang_nama]').trigger("change");
+			form.find('select[name=kategori_nama]').trigger("change");
 			table.ajax.reload();
 		});
 
