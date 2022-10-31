@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
 
   <link href="<?= base_url('assets/admin/'); ?>css/jquery-ui.css" rel="stylesheet">
+  <link href="<?= base_url('assets/plugins/'); ?>select2/select2.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
 </head>
 

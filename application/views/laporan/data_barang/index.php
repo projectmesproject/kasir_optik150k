@@ -3,56 +3,93 @@
 	<h1 class="h3 mb-2 text-gray-800">Laporan Data Barang</h1>
 	<!-- DataTales Example -->
 	<div class="card shadow mb-4">
-
+		<div class="card-body">
+			<form id="form-filter">
+				<div class="row">
+					<div class="col-2">
+						<label>Kategori</label>
+					</div>
+					<div class="col-4">
+						<select class="form-control select" name="kategori_nama" id="kategori_nama">
+							<option value="">-Select Kategori-</option>
+							<?php foreach ($selectKategori as $row) { ?>
+								<option value="<?= $row->kategori_nama; ?>"><?= $row->kategori_nama; ?></option>
+							<?php } ?>
+						</select>
+					</div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-2">
+						<label>Nama Barang</label>
+					</div>
+					<div class="col-4">
+						<select name="barang_nama" id="barang_nama" class="form-control select">
+							<option value="" selected>-Select Barang-</option>
+							<?php foreach ($selectBarang as $row) { ?>
+								<option value="<?= $row->barang_nama; ?>"><?= $row->barang_nama; ?></option>
+							<?php } ?>
+						</select>
+					</div>
+				</div>
+				<button type="button" class="btn btn-secondary float-right ml-2" id="btn-reset"><i class="fa fa-reply"></i> Reset</i></button>
+				<button type="button" class="btn btn-success float-right" id="btn-filter"><i class="fa fa-filter"> Filter</i></button>
+			</form>
+		</div>
 		<div class="card-body">
 			<div class="table-responsive">
-				<table border="1" align="center" style="width:900px;margin-bottom:20px;">
-					<?php
-					$urut=0;
-					$nomor=0;
-					$group='-';
-					foreach($data->result_array() as $d){
-						$nomor++;
-						$urut++;
-						if($group=='-' || $group!=$d['kategori_nama']){
-							$kat=$d['kategori_nama'];
-
-							if($group!='-')
-								echo "</table><br>";
-							echo "<table align='center' width='900px;' border='1'>";
-							echo "<tr><td colspan='6'><b>Kategori: $kat</b></td> </tr>";
-							echo "<tr style='background-color:#ccc;'>
-            <td width='4%' align='center'>No</td>
-            <td width='40%' align='center'>Nama Barang</td>
-            <td width='10%' align='center'>Satuan</td>
-            <td width='20%' align='center'>Harga Jual</td>
-            <td width='30%' align='center'>Stok</td>
-    
-    </tr>";
-							$nomor=1;
-						}
-						$group=$d['kategori_nama'];
-						if($urut==500){
-							$nomor=0;
-							echo "<div class='pagebreak'> </div>";
-
-						}
-						?>
-						<tr>
-							<td style="text-align:center;vertical-align:center;text-align:center;"><?php echo $nomor; ?></td>
-							<td style="vertical-align:center;padding-left:5px;"><?php echo $d['barang_nama']; ?></td>
-							<td style="vertical-align:center;text-align:center;"><?php echo $d['barang_satuan']; ?></td>
-							<td style="vertical-align:center;padding-right:5px;text-align:right;"><?php echo 'Rp '.number_format($d['barang_harjul']); ?></td>
-							<td style="vertical-align:center;text-align:center;text-align:center;"><?php echo $d['barang_stok']; ?></td>
-						</tr>
-
-
-						<?php
-					}
-					?>
+				<table align="center" style="width:900px;margin-bottom:20px;" id="tableBarang">
+					<thead>
+						<th>No.</th>
+						<th>Nama Barang</th>
+						<th>Satuan</th>
+						<th>Harga Jual</th>
+						<th>Stok</th>
+						<th>Kategori</th>
+					</thead>
+					<tbody></tbody>
 				</table>
 			</div>
 		</div>
 	</div>
 
 </div>
+<script type="text/javascript">
+	var table;
+	$(document).ready(function() {
+
+		$('.select').select2();
+		//datatables
+		table = $('#tableBarang').DataTable({
+
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('laporan/laporan_data_barang') ?>",
+				"type": "POST",
+				"data": function(data) {
+					data.barang_nama = $('#barang_nama').val();
+					data.kategori_nama = $('#kategori_nama').val();
+				}
+			},
+			"columnDefs": [{
+				"targets": [0],
+				"orderable": false,
+			}, ],
+
+		});
+		$('#btn-filter').click(function() {
+			table.ajax.reload();
+		});
+		$('#btn-reset').click(function() {
+			let form = $('#form-filter');
+			$('#form-filter')[0].reset();
+			form.find('select[name=barang_nama]').val("");
+			form.find('select[name=kategori_nama]').val("");
+			form.find('select[name=barang_nama]').trigger("change");
+			form.find('select[name=kategori_nama]').trigger("change");
+			table.ajax.reload();
+		});
+
+	});
+</script>
