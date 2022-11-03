@@ -11,6 +11,13 @@
               <a class="btn btn-info" href="<?php echo site_url('penjualan/cetak_faktur') ?>" target="_blank"><span class="fa fa-print"></span>Cetak</a>
             </div>
           <?php } ?>
+          <?php
+
+          $dat = $this->session->flashdata('msg_brg');
+          if ($dat != "") { ?>
+            <div class="alert alert-success"><strong>Sukses! </strong> <?= $dat; ?>
+            </div>
+          <?php } ?>
 
           <?php
           $dat = $this->session->flashdata('muka');
@@ -36,21 +43,58 @@
           <div class="card shadow mb-4">
             <div class="card-body">
               <?php echo form_open('Penjualan/add_to_cart') ?>
-              <div class="table-responsive">
+              <div class="row">
+                <div class="form-group col-sm-3" style="position: relative;">
+                  <label>Nama Barang : </label>
+                  <input class="form-control" id="nabar" type="search" autocomplete="off" />
+                  <div class="ajax_list_barang">
+                    <ul style="list-style:none;" class="list_container" id="list_container">
+
+                    </ul>
+                  </div>
+                </div>
+                <div class="form-group" style="max-width: 10%;">
+                  <label>Satuan :</label>
+                  <input type="text" readonly id="satuan_ket" name="satuan" class="form-control" />
+                  <input type="hidden" readonly id="kode_brg_ket" name="kode_brg_ket" class="form-control" />
+                </div>
+                <div class="form-group col-sm-1">
+                  <label>Stok :</label>
+                  <input type="text" readonly id="stok_ket" name="stok_ket" class="form-control" />
+                </div>
+                <div class="form-group col-sm-2">
+                  <label>Harga(Rp) :</label>
+                  <input type="text" readonly id="harga_ket" name="harga_ket" class="form-control" />
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Keterangan :</label>
+                  <input type="text" id="keterangan" name="keterangan" class="form-control" />
+                </div>
+                <div class="form-group col-sm-2">
+                  <label>Jumlah :</label>
+                  <input type="number" readonly id="jumlah_ket" name="jumlah_ket" class="form-control" />
+                </div>
+                <div class="form-group col-sm-3">
+                  <label>&nbsp;</label><br />
+                  <button class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
+                </div>
+              </div>
+              <!-- <div class="table-responsive">
                 <a href="#nabar" class="btn btn-info btn-sm"><i class='fas fa-sync'></i> Refresh</a>
                 <hr>
-                <table>
+                <table class="border">
                   <tr>
                     <th>Nama Barang : </th>
                   </tr>
                   <tr>
-                    <th><input type="text" autocomplete="on" name="nabar" id="nabar" class="form-control input-sm" style="width:200px;">
+                    <th class="col-sm-12">
+                      
                     </th>
                   </tr>
                   <div id="detail_barangku" style="position:absolute;">
                   </div>
                 </table>
-              </div>
+              </div> -->
               </form>
               <br />
               <hr>
@@ -202,7 +246,87 @@
               </div>
             </div>
           </div>
+          <div class="modal fade" id="add_barang" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
 
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Tambah Barang</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <?php echo form_open_multipart('Penjualan/tambah_barang') ?>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="nama">Nama Barang : </label>
+                    <input type="text" id="nabar" name="nabar" class="form-control" placeholder="Nama Barang" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="satuan">Satuan : </label>
+                    <select required name="satuan" id="satuan" class="form-control">
+                      <option value="buah">Buah</option>
+                    </select>
+
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hargapokok">Harga Pokok : </label>
+                    <input type="text" id="harpok" name="harpok" class="form-control" placeholder="Harga Pokok" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hargajual">Harga Jual : </label>
+                    <input type="text" id="harjul" name="harjul" class="form-control" placeholder="Harga Jual" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="stok">Stok : </label>
+                    <input type="text" id="stok" name="stok" class="form-control" placeholder="Stok" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="minimalstok">Minimal Stok : </label>
+                    <input type="text" id="min_stok" name="min_stok" class="form-control" placeholder="Minimal Stok" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="serial">Serial Number : </label>
+                    <input type="text" id="sn" name="sn" class="form-control" placeholder="Serial Number" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="Kategori">Kategori : </label>
+                    <select required name="kategori" id="kategori" class="form-control">
+                      <option value="">-- Pilih Kategori --</option>
+                      <?php foreach ($kat->result() as $x) {
+                        $id = $x->kategori_id;
+                        $nm = $x->kategori_nama;
+                      ?>
+
+                        <option value="<?php echo $id; ?>"><?php echo $nm; ?></option>
+
+
+                      <?php } ?>
+                    </select>
+                  </div>
+
+               
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Simpan" />
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- /.container-fluid -->
 
@@ -213,6 +337,13 @@
 
 
         <script type='text/javascript'>
+          $('.ajax_list_barang').hide()
+          $(document).ready(function() {
+
+            $('.select').select2();
+
+          })
+
           function loadData() {
             $('#dataTable tr').each(function() {
               var kode_brg = $(this).find("td:first").html();
@@ -220,9 +351,9 @@
               $(".form-check input[type=checkbox]").each(function() {
                 selected.push(this.value);
               });
-              selected.map((item,index)=> {
-                if(item == kode_brg){
-                    $('#pkt'+kode_brg).prop('checked',true);
+              selected.map((item, index) => {
+                if (item == kode_brg) {
+                  $('#pkt' + kode_brg).prop('checked', true);
                 }
               })
             });
@@ -258,47 +389,88 @@
           })
 
 
-          $(function() {
-            loadData()
+          $('#nabar').keyup(function() {
+            let search = $(this).val();
+            if (search == "") {
+              $('.ajax_list_barang').hide()
+            } else {
+              $.ajax({
+                url: '<?= base_url() ?>/penjualan/get_barang_autocomplete',
+                type: 'POST',
+                cache: false,
+                data: {
+                  "search": search
+                },
+                success: function(res) {
+
+                  $('.ajax_list_barang').show()
+                  $("#list_container").html(res)
+                  $('.item_barang').click(function() {
+                    let value = $(this).attr('data-value')
+                    let label = $(this).text()
+                    $('#nabar').val(label)
+                    if (value != "tambah_barang") {
+                      var res = value.split("#");
+                      console.log(res)
+                      $('#harga_ket').val(formatUang(res[0]))
+                      $('#kode_brg_ket').val(res[1])
+                      $('#jumlah_ket').val(1)
+                      $('#satuan_ket').val(res[2])
+                      $('#stok_ket').val(res[3])
+                    } else {
+                      $('#add_barang').modal('show')
+                    }
+                    $('.ajax_list_barang').hide()
+                  })
+                }
+              })
+            }
+
+          })
 
 
-            $("#nabar").autocomplete({
-              source: function(request, response) {
 
-                $.ajax({
-                  url: "ajax/getDataBarang",
-                  type: 'post',
-                  dataType: "json",
-                  data: {
-                    search: request.term
-                  },
-                  success: function(data) {
-                    response(data);
-                  }
-                });
-              },
-              select: function(event, ui) {
-                var str = ui.item.value;
-                var res = str.split("#");
+          // $(function() {
+          //   loadData()
 
-                $('#nabar').val(ui.item.label); // display the selected text
-                $('#kode_brg').val(res[1]); // save selected id to input
-                $('#harjul').val(res[0]); // save selected id to input
-                $('#satuan').val(res[2]); // save selected id to input
-                $('#stok').val(res[3]); // save selected id to input
-                return false;
-              },
-              focus: function(event, ui) {
-                var str = ui.item.value;
-                var res = str.split("#");
-                $("#nabar").val(ui.item.label);
-                $("#kode_brg").val(res[1]);
-                $('#harjul').val(res[0]);
-                $('#satuan').val(res[2]); // save selected id to input
-                $('#stok').val(res[3]); // save selected id to input
-                return false;
-              },
-            });
 
-          });
+          //   $("#nabar").autocomplete({
+          //     source: function(request, response) {
+
+          //       $.ajax({
+          //         url: "ajax/getDataBarang",
+          //         type: 'post',
+          //         dataType: "json",
+          //         data: {
+          //           search: request.term
+          //         },
+          //         success: function(data) {
+          //           response(data);
+          //         }
+          //       });
+          //     },
+          //     select: function(event, ui) {
+          //       var str = ui.item.value;
+          //       var res = str.split("#");
+
+          //       $('#nabar').val(ui.item.label); // display the selected text
+          //       $('#kode_brg').val(res[1]); // save selected id to input
+          //       $('#harjul').val(res[0]); // save selected id to input
+          //       $('#satuan').val(res[2]); // save selected id to input
+          //       $('#stok').val(res[3]); // save selected id to input
+          //       return false;
+          //     },
+          //     focus: function(event, ui) {
+          //       var str = ui.item.value;
+          //       var res = str.split("#");
+          //       $("#nabar").val(ui.item.label);
+          //       $("#kode_brg").val(res[1]);
+          //       $('#harjul').val(res[0]);
+          //       $('#satuan').val(res[2]); // save selected id to input
+          //       $('#stok').val(res[3]); // save selected id to input
+          //       return false;
+          //     },
+          //   });
+
+          // });
         </script>

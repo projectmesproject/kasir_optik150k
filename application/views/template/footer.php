@@ -185,16 +185,16 @@
       var uang2 = uang - tot_bayar
       $("#totbayar").val(tot_bayar);
       console.log(uang + " - " + tot_bayar)
-      if(parseInt(uang) > parseInt(tot_bayar)){
+      if (parseInt(uang) > parseInt(tot_bayar)) {
         $("#tunai2_label").text("Kembalian")
         uang2 = Math.abs(uang2);
         $('#cara_bayar2_select').hide()
-        $('#cara_bayar2_select').prop('required',false)
-      } else if(parseInt(uang) < parseInt(tot_bayar)){
+        $('#cara_bayar2_select').prop('required', false)
+      } else if (parseInt(uang) < parseInt(tot_bayar)) {
         $("#tunai2_label").text("Kekurangan")
         uang2 = Math.abs(uang2);
         $('#cara_bayar2_select').show()
-        $('#cara_bayar2_select').prop('required',false)
+        $('#cara_bayar2_select').prop('required', false)
       }
       $("#jml_uang2").val(uang2);
     });
@@ -248,7 +248,7 @@
   $(document).ready(function() {
 
     // Format mata uang.
-
+   
     // Format mata uang.
     $('.jml_uang').divide({
       delimiter: ',',

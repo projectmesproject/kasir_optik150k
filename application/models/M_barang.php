@@ -89,7 +89,7 @@ class M_barang extends CI_Model
 		$this->db->order_by('barang_id', "DESC");
 		$this->db->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id');
 
-		$query = $this->db->get()->result();
+		$query = $this->db->get();
 
 		return $query;
 	}
@@ -208,16 +208,19 @@ class M_barang extends CI_Model
 
 	function get_kobar()
 	{
-		$q = $this->db->query("SELECT MAX(RIGHT(barang_id,6)) AS kd_max FROM tbl_barang");
+		$q = $this->db->query("SELECT barang_id FROM tbl_barang");
 		$kd = "";
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $k) {
-				$tmp = ((int)$k->kd_max) + 1;
-				$kd = sprintf("%06s", $tmp);
-			}
-		} else {
-			$kd = "000001";
-		}
+		$count = $q->num_rows();
+		// if ($q->num_rows() > 0) {
+		// 	foreach ($q->result() as $k) {
+		// 		$tmp = ((int)$k->kd_max) + 1;
+		// 		$kd = sprintf("%06s", $tmp);
+		// 	}
+		// } else {
+		// 	$kd = "000001";
+		// }
+		$count++;
+		$kd = sprintf("%06s", $count);
 		return "BR" . $kd;
 	}
 
@@ -259,5 +262,23 @@ class M_barang extends CI_Model
 	public function deleteAll()
 	{
 		return $this->db->empty_table('tbl_barang');
+	}
+
+	public function getBarangList()
+	{
+		$this->db->select('barang_nama as label, CONCAT(barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok) as value');
+		$this->db->from('tbl_barang');
+		$this->db->like('barang_nama', $this->input->post("search"));
+		$dt = $this->db->get()->result_array();
+		// $html = "";
+		//   foreach($dt as $v ){
+		// 		$response[] = array("value"=>$v['value'],"label"=>$v['label']);
+		// 		$html .= "<li data-value='$v[value]'>$v[label]</li>";
+		// 	}
+
+
+
+		// echo json_encode($response);
+		return $dt;
 	}
 }

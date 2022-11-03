@@ -22,6 +22,7 @@ class Penjualan extends CI_Controller
         $data['barang'] = $this->m_barang->tampil_barang();
         $data['nohp'] = $this->M_customer->tampil_customer();
         $data['cara_bayar'] = $this->M_Cara_Bayar->list();
+        $data['kat'] = $this->m_kategori->tampil_kategori();
 
         $data["paket"] = $this->m_barang->getBarangPaket();
         $this->load->view('template/header', $data);
@@ -56,7 +57,21 @@ class Penjualan extends CI_Controller
             redirect('penjualan');
         }
     }
+    function tambah_barang()
+    {
+        //  Cek jika ada gambar yang ingin di upload
 
+
+        $a = '-';
+        $this->m_barang->tambah_barang($a);
+
+
+        $this->session->set_flashdata('msg_brg', 'Berhasil ditambahkan');
+
+        // $this->m_barang->tambah_barang();
+        // $this->session->set_flashdata('msg','Berhasil');
+        redirect('penjualan');
+    }
     public function get_barang()
     {
 
@@ -64,6 +79,23 @@ class Penjualan extends CI_Controller
         $x['brg'] = $this->m_barang->get_barang($kobar);
 
         $this->load->view('penjualan/detail_barang_jual', $x);
+    }
+
+    public function get_barang_autocomplete()
+    {
+        $result = $this->m_barang->getBarangList();
+        $html = "";
+        if (count($result) > 0) {
+
+            foreach ($result as $v) {
+                // $response[] = array("value"=>$v['value'],"label"=>$v['label']);
+                $html .= "<li class='item_barang' data-value='$v[value]'>$v[label]</li>";
+            }
+        } else {
+            $html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
+        }
+
+        echo $html;
     }
 
     function bayar_dp()
@@ -86,8 +118,8 @@ class Penjualan extends CI_Controller
             $this->db->update('tbl_jual', $data);
             redirect('history_penjualan');
         } else {
-            $this->session->set_flashdata('msg2','Data gagal ditambahkan! uang anda kurang');
-            redirect('history_penjualan/in_detail/'. $nofak);
+            $this->session->set_flashdata('msg2', 'Data gagal ditambahkan! uang anda kurang');
+            redirect('history_penjualan/in_detail/' . $nofak);
         }
     }
 
@@ -122,8 +154,7 @@ class Penjualan extends CI_Controller
     ///revisi baru 8/10/19
     function add_to_cart()
     {
-        $kobar = $this->input->post('kode_brg');
-
+        $kobar = $this->input->post('kode_brg_ket');
         $produk = $this->m_barang->get_barang1($kobar);
         $i = $produk->row_array();
         $data = array(
@@ -132,10 +163,10 @@ class Penjualan extends CI_Controller
             'name'     => $i['barang_nama'],
             'satuan'   => $i['barang_satuan'],
             'harpok'   => $i['barang_harpok'],
-            'price'    => str_replace(",", "", $this->input->post('harjul')),
-            'disc'     => $this->input->post('diskon'),
-            'qty'      => $this->input->post('qty'),
-            'amount'      => str_replace(",", "", $this->input->post('harjul'))
+            'price'    => str_replace(",", "", $this->input->post('harga_ket')),
+            'disc'     => $this->input->post('keterangan'),
+            'qty'      => $this->input->post('jumlah_ket'),
+            'amount'      => str_replace(",", "", $this->input->post('harga_ket'))
         );
         $this->cart->insert($data);
         redirect('penjualan');

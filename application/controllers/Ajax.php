@@ -20,9 +20,10 @@ class Ajax extends CI_Controller {
 		$this->db->from('tbl_barang');
 		$this->db->like('barang_nama', $this->input->post("search"));
 		$dt = $this->db->get()->result_array();
-		
+		$html = "";
 		  foreach($dt as $v ){
 				$response[] = array("value"=>$v['value'],"label"=>$v['label']);
+				$html .= "<li data-value='$v[value]'>$v[label]</li>";
 			}
 
 

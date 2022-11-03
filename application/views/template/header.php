@@ -27,6 +27,93 @@
   <link href="<?= base_url('assets/admin/'); ?>css/jquery-ui.css" rel="stylesheet">
   <link href="<?= base_url('assets/plugins/'); ?>select2/select2.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+  <style>
+    .select2-selection {
+      -webkit-box-shadow: 0;
+      box-shadow: 0;
+      background-color: #fff;
+      border: 0;
+      border-radius: 0;
+      color: #555555;
+      font-size: 14px;
+      outline: 0;
+      min-height: 48px;
+      text-align: left;
+    }
+
+    .select2-selection__rendered {
+      margin: 10px;
+    }
+
+    .select2-selection__arrow {
+      margin: 10px;
+    }
+
+    .ajax_list_barang {
+      position: absolute;
+      bottom: 1;
+      max-height: 220px;
+      z-index: 100;
+      background-color: #fff;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      margin: 0 !important;
+    }
+
+    .list_container {
+      list-style: none;
+      padding-left: 0px !important;
+      margin-left: 0px !important;
+
+      border: 1px solid #eee;
+      border-radius: 10px;
+    }
+
+    .list_container li {
+      padding: 5px;
+      padding-bottom: 0px !important;
+      border-bottom: 1px solid #e0e0e0;
+      cursor: pointer;
+    }
+
+    .list_container li:hover {
+      background-color: #f0eded;
+    }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 20px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #d6dee1;
+      border-radius: 20px;
+      border: 6px solid transparent;
+      background-clip: content-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #a8bbbf;
+    }
+
+    input[type="search"]{
+      -webkit-appearance: searchfield;
+    }
+
+    input[type="search"]::-webkit-search-cancel-button {
+      -webkit-appearance: searchfield-cancel-button;
+    }
+  </style>
+  <script>
+     function formatUang(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  </script>
 </head>
 
 <body id="page-top">
