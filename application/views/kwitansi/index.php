@@ -42,7 +42,7 @@
                                 <td><?= $p->kode_kwitansi; ?></td>
                                 <td>Rp. <?= number_format($p->nominal); ?></td>
                                 <td><?= $p->karyawan; ?></td>
-                                <td><a class="badge badge-success" href="<?= base_url(); ?>history_penjualan/cetak_faktur/<?= $p->id_kwitansi; ?>" target="_blank">Cetak</a></td>
+                                <td><a class="badge badge-success" href="<?= base_url(); ?>kwitansi/cetak_kwitansi/<?= $p->id_kwitansi; ?>" target="_blank">Cetak</a></td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -66,8 +66,12 @@
             <?php echo form_open('kwitansi/tambah_kwitansi') ?>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Nominal</label>
+                        <label for="">Nominal<br/><small class="text-danger">Nominal yang akan ditulis</small></label>
                         <input type="number" name="nominal" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Harga Jual Kwitansi</label>
+                        <input type="number" name="harga" class="form-control" />
                     </div>
                     <div class="form-group">
                         <label for="">Karyawan</label>

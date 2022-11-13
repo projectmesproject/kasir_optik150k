@@ -102,10 +102,11 @@ class Penjualan extends CI_Controller
     {
         $nofak = $this->input->post("nofak");
         $bayar = $this->input->post("bayar");
-        $kurang = $this->input->post("kurang");
+        $jml_uang1 = $this->input->post("jml_uang");
         $cara_bayar = $this->input->post("cara_bayar");
+        $kurang = $this->input->post("kurang");
         if ($bayar == $kurang) {
-            $jml_uang = (int)$bayar + (int)$kurang;
+            $jml_uang = (int)$bayar + (int)$jml_uang1;
 
             $data = [
                 "jual_kurang_uang" => 0,
@@ -334,7 +335,7 @@ class Penjualan extends CI_Controller
             $kurang = 0;
             $status = "COMPLETE";
             if ((int)$jml_uang > (int)$total) {
-                $kembalian = (int)$total - (int)$jml_uang;
+                $kembalian = (int)$jml_uang - (int)$total;
                 $status = "COMPLETE";
             }
 

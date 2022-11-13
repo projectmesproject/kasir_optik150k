@@ -47,7 +47,7 @@
           </tr>
           <?php if ($jual['status'] == 'DP') : ?>
             <tr>
-              <td>DP</td>
+              <td>Uang Yang Telah Di Bayar</td>
               <td>:</td>
               <td>Rp. <?= number_format($jual['jual_jml_uang']); ?></td>
             </tr>
@@ -116,6 +116,7 @@
       <!-- Modal body -->
       <?php echo form_open('penjualan/bayar_dp') ?>
       <input type="hidden" readonly value="<?= $jual['jual_nofak']; ?>" name="nofak" class="form-control">
+      <input type="hidden" readonly value="<?= abs($jual['jual_jml_uang'])?>" name="jml_uang" class="form-control">
       <input type="hidden" readonly value="<?= abs($jual['jual_kurang_uang'])?>" name="kurang" class="form-control">
       <div class="modal-body">
         <div class="form-group">
@@ -142,10 +143,19 @@
       <!-- Modal footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Simpan" />
+        <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Simpan" disabled="true"/>
       </div>
       </form>
     </div>
   </div>
 </div>
 <!---------------------------------------------Akhir Tambah Data---------------------------------------------->
+<script>
+  $('#nominal').keyup(function(){
+    if($(this).val() == '<?=$jual['jual_kurang_uang'] ?>'){
+      $('#submit').prop("disabled",false)
+    } else {
+      $('#submit').prop("disabled",true)
+    }
+  })
+</script>

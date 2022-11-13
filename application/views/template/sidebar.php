@@ -118,8 +118,13 @@
             <h6 class="collapse-header">Data Penjualan</h6>
             <?php if ($this->session->userdata('level') == 'kasir') { ?>
               <a class="collapse-item" href="<?php echo site_url('Penjualan'); ?>">Penjualan</a>
-              <a class="collapse-item" href="<?php echo site_url('jual_dp'); ?>">Pembayaran DP</a>
-            <?php } ?>
+              <?php
+              $show_byr_dp = 0;
+              if ($show_byr_dp) {
+              ?>
+                <a class="collapse-item" href="<?php echo site_url('jual_dp'); ?>">Pembayaran DP</a>
+            <?php }
+            } ?>
             <a class="collapse-item" href="<?php echo site_url('history_penjualan'); ?>">History Penjualan</a>
           </div>
         </div>

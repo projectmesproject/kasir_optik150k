@@ -12,6 +12,7 @@ class M_kwitansi extends CI_Model
            
         "kode_kwitansi" => "Tes",
         "nominal" => $this->input->post('nominal'),
+        "harga_jual" => $this->input->post('harga'),
         "karyawan" => $this->input->post('karyawan'),
         "date_created" => date('Y-m-d H:i:s'),
            

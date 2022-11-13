@@ -26,5 +26,11 @@ class Kwitansi extends CI_Controller{
         $this->session->set_flashdata('msg','Data berhasil ditambahkan');
       redirect('kwitansi');
     }
+
+    function cetak_kwitansi($kwitansi){
+        // $x['data'] = $this->m_kwitansi->cetak_faktur2($nofak);
+        $x['data'] = $kwitansi;
+        $this->load->view('kwitansi/cetak_faktur', $x);
+    }
 }
 ?>
