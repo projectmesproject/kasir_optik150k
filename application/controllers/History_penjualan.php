@@ -70,12 +70,12 @@ class History_penjualan extends CI_Controller
         $status = $this->input->post('status');
         $data_array = array();
 
-        if($status != "SEMUA"){
+        if ($status != "SEMUA") {
             $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp WHERE A.status='$status' order by jual_tanggal desc")->result_array();
         } else {
             $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp  order by jual_tanggal desc")->result_array();
         }
-       
+
 
         foreach ($data1 as $dt) {
             $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
@@ -152,11 +152,18 @@ class History_penjualan extends CI_Controller
     }
     function batal()
     {
+        $id = $this->input->post('id');
         $data = [
             'status' => "CANCEL",
         ];
-        $this->db->where('jual_nofak', $this->uri->segment(3));
-        $this->db->update('tbl_jual', $data);
-        redirect('history_penjualan');
+        $res =  $this->M_penjualan->update_status($id, $data);
+        $data_array = array();
+        $data1 =  $this->M_penjualan->detail_penjualan($id);
+        foreach ($data1 as $dt) {
+            $qty = (int)$dt['d_jual_qty'];
+            array_push($data_array, $dt);
+            $this->db->query("update tbl_barang set barang_stok=barang_stok+'$qty' where barang_id='$dt[d_jual_barang_id]'");
+        }
+        echo json_encode($res);
     }
 }

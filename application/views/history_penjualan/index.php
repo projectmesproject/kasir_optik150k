@@ -18,21 +18,21 @@
     <br>
     <div class="card-body">
       <form id="filter_history_form">
-      <div class="row">
-        <div class="form-group col-sm-3">
-          <label>Status</label>
-          <select class="form-control" name="status">
-            <option value="SEMUA">SEMUA</option>
-            <option value="COMPLETE">COMPLETE</option>
-            <option value="CANCEL">CANCEL</option>
-            <option value="DP">DP</option>
-          </select>
+        <div class="row">
+          <div class="form-group col-sm-3">
+            <label>Status</label>
+            <select class="form-control" name="status">
+              <option value="SEMUA">SEMUA</option>
+              <option value="COMPLETE">COMPLETE</option>
+              <option value="CANCEL">CANCEL</option>
+              <option value="DP">DP</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-3">
+            <label>&nbsp;</label><br />
+            <button class="btn btn-warning" type="submit">FILTER</button>
+          </div>
         </div>
-        <div class="form-group col-sm-3">
-          <label>&nbsp;</label><br />
-          <button class="btn btn-warning" type="submit">FILTER</button>
-        </div>
-      </div>
       </form>
       <br>
       <div class="table-responsive" id="result_table">
@@ -83,7 +83,6 @@
                     <a class="badge badge-success" href="<?= base_url(); ?>history_penjualan/cetak_faktur/<?= $a['jual_nofak']; ?>" target="_blank">Cetak</a>
                     <a class="badge badge-success" href="<?= base_url(); ?>penjualan_edit/index/<?= $a['jual_nofak']; ?>">Edit</a>
                     <a class="badge badge-success" href="<?= base_url(); ?>history_penjualan/takdeletekowe/<?= $a['jual_nofak']; ?>">Delete</a>
-                    <a class="badge badge-danger" href="<?= base_url(); ?>history_penjualan/batal/<?= $a['jual_nofak']; ?>">Batal</a>
                   <?php } ?>
                 </td>
               </tr>
@@ -100,15 +99,15 @@
 </div>
 <!-- End of Main Content -->
 <script>
-  $("#filter_history_form").submit(function(ev){
+  $("#filter_history_form").submit(function(ev) {
     ev.preventDefault();
     $("#result_table").html("<h3 class='text-center'>Loading...</h3>")
     $.ajax({
-      url : "<?=base_url() ?>/history_penjualan/filter_history",
+      url: "<?= base_url() ?>/history_penjualan/filter_history",
       data: $(this).serialize(),
-      cache : false,
-      type :'POST',
-      success : function(res){
+      cache: false,
+      type: 'POST',
+      success: function(res) {
         console.log(res)
         $("#result_table").html(res)
         $("#dataTable").dataTable()

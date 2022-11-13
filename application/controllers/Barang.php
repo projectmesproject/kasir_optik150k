@@ -31,7 +31,6 @@ class Barang extends CI_Controller
 		$this->load->view('template/footer', $data);
 	}
 
-
 	function tambah_barang()
 	{
 		//  Cek jika ada gambar yang ingin di upload

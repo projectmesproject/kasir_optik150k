@@ -248,7 +248,7 @@
   $(document).ready(function() {
 
     // Format mata uang.
-   
+
     // Format mata uang.
     $('.jml_uang').divide({
       delimiter: ',',
