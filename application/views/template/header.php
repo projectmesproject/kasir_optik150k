@@ -27,6 +27,26 @@
   <link href="<?= base_url('assets/admin/'); ?>css/jquery-ui.css" rel="stylesheet">
   <link href="<?= base_url('assets/plugins/'); ?>select2/select2.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+  <?php if ($this->session->userdata('level') == "kasir") { ?>
+    <script>
+      document.onkeyup = KeyCheck;
+
+      function KeyCheck(e) {
+        var KeyID = (window.event) ? event.keyCode : e.keyCode;
+        if (KeyID == 113) {
+          $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('Ajax/getJual'); ?>",
+            success: function(msg) {
+              $('#teswoii').html(msg);
+            }
+          });
+          $('#modalLaporanPenjualan').modal('show');
+        }
+      }
+    </script>
+  <?php } ?>
+
   <style>
     .select2-selection {
       -webkit-box-shadow: 0;
@@ -101,7 +121,7 @@
       background-color: #a8bbbf;
     }
 
-    input[type="search"]{
+    input[type="search"] {
       -webkit-appearance: searchfield;
     }
 
@@ -110,13 +130,31 @@
     }
   </style>
   <script>
-     function formatUang(x) {
+    function formatUang(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   </script>
 </head>
 
 <body id="page-top">
-
+  <!-- Modal -->
+  <div class="modal fade bd-example-modal-lg" id="modalLaporanPenjualan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Penjualan Tanggal : <?= date('d-m-Y'); ?></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="teswoii">tes.</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Page Wrapper -->
   <div id="wrapper">

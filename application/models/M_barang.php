@@ -80,7 +80,33 @@ class M_barang extends CI_Model
 		return $this->db->count_all_results();
 	}
 
-
+	public function listBarang()
+	{
+		$this->db->select('kategori_id , kategori_nama');
+		$this->db->from($this->table);
+		$this->db->distinct('kategori_nama');
+		$this->db->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id');
+		$res = 	$this->db->get()->result();
+		return $res;
+	}
+	public function get_byKategori($kategori_nama)
+	{
+		$res = $this->db->select('*')
+			->from($this->table)
+			->where('kategori_id', $kategori_nama)
+			->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id')
+			->get()->row();
+		return $res;
+	}
+	public function get_list_barang($kategori_nama)
+	{
+		$res = $this->db->select('*')
+			->from($this->table)
+			->where('kategori_id', $kategori_nama)
+			->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id')
+			->get()->result();
+		return $res;
+	}
 	public function tampil_barang()
 	{
 		$this->db->select('*');

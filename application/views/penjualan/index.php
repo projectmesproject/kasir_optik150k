@@ -314,7 +314,7 @@
                     </select>
                   </div>
 
-               
+
 
                 </div>
 
@@ -427,8 +427,6 @@
             }
 
           })
-
-
 
           // $(function() {
           //   loadData()

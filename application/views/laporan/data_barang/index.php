@@ -4,7 +4,7 @@
 	<!-- DataTales Example -->
 	<div class="card shadow mb-4">
 		<div class="card-body">
-			<form id="form-filter">
+			<form id="form-filter" method="post" action="<?= base_url('laporan/lap_data_barang_kategori') ?>">
 				<div class="row">
 					<div class="col-2">
 						<label>Kategori</label>
@@ -31,6 +31,7 @@
 						</select>
 					</div>
 				</div>
+				<button type="submit" class="btn btn-success float-right ml-2"><i class="fa fa-print"> Cetak</i></button>
 				<button type="button" class="btn btn-secondary float-right ml-2" id="btn-reset"><i class="fa fa-reply"></i> Reset</i></button>
 				<button type="button" class="btn btn-success float-right" id="btn-filter"><i class="fa fa-filter"> Filter</i></button>
 			</form>
