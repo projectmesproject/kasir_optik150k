@@ -4,7 +4,7 @@ class M_barang extends CI_Model
 	var $table = 'tbl_barang';
 	var $primary = 'barang_id';
 	var $column_order = array(null, 'barang_id', 'barang_nama', 'barang_satuan', 'barang_harjul', 'barang_stok', 'kategori_nama');
-	var $column_search = array('barang_nama');
+	var $column_search = array('barang_id', 'barang_nama');
 	var $order = array('barang_id' => 'desc');
 
 	public function __construct()
@@ -80,12 +80,38 @@ class M_barang extends CI_Model
 		return $this->db->count_all_results();
 	}
 
-
+	public function listBarang()
+	{
+		$this->db->select('kategori_id , kategori_nama');
+		$this->db->from($this->table);
+		$this->db->distinct('kategori_nama');
+		$this->db->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id');
+		$res = 	$this->db->get()->result();
+		return $res;
+	}
+	public function get_byKategori($kategori_nama)
+	{
+		$res = $this->db->select('*')
+			->from($this->table)
+			->where('kategori_id', $kategori_nama)
+			->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id')
+			->get()->row();
+		return $res;
+	}
+	public function get_list_barang($kategori_nama)
+	{
+		$res = $this->db->select('*')
+			->from($this->table)
+			->where('kategori_id', $kategori_nama)
+			->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id')
+			->get()->result();
+		return $res;
+	}
 	public function tampil_barang()
 	{
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
-		$this->db->limit(10);
+		$this->db->limit(50);
 		$this->db->order_by('barang_id', "DESC");
 		$this->db->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id');
 

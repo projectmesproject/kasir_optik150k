@@ -3,7 +3,7 @@
 
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
-  <?php
+    <?php
     $dat = $this->session->flashdata('msg2');
     if ($dat != "") { ?>
       <div id="notifikasi" class="alert alert-danger"><strong> </strong> <?= $dat; ?></div>
@@ -13,7 +13,16 @@
         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_hutang_karyawan" style="float:left;">
           (+) Bayar
         </button>
+        <button class="btn btn-primary btn-sm" onclick="batal(<?= $jual['jual_nofak']; ?>)" style="float:left;">
+          (-) Cancel
+        </button>
       <?php endif ?>
+      <?php if ($jual['status'] == 'COMPLETE') : ?>
+        <button type="button" class="btn btn-primary btn-sm" onclick="batal(<?= $jual['jual_nofak']; ?>)" style="float:left;">
+          (-) Cancel
+        </button>
+      <?php endif ?>
+
       <h6 class="m-0 font-weight-bold text-primary text-center">KETERANGAN PENJUALAN</h6>
     </div>
     <br>
@@ -116,16 +125,16 @@
       <!-- Modal body -->
       <?php echo form_open('penjualan/bayar_dp') ?>
       <input type="hidden" readonly value="<?= $jual['jual_nofak']; ?>" name="nofak" class="form-control">
-      <input type="hidden" readonly value="<?= abs($jual['jual_jml_uang'])?>" name="jml_uang" class="form-control">
-      <input type="hidden" readonly value="<?= abs($jual['jual_kurang_uang'])?>" name="kurang" class="form-control">
+      <input type="hidden" readonly value="<?= abs($jual['jual_jml_uang']) ?>" name="jml_uang" class="form-control">
+      <input type="hidden" readonly value="<?= abs($jual['jual_kurang_uang']) ?>" name="kurang" class="form-control">
       <div class="modal-body">
         <div class="form-group">
           <label>Cara Bayar:</label>
           <select required name="cara_bayar" id="cara_bayar" class="form-control">
             <option value="" selected disabled>-- Pilih Cara Bayar --</option>
             <?php foreach ($cara_bayar as $bayar) {
-              if($bayar->cara_bayar =='DP')
-              continue;
+              if ($bayar->cara_bayar == 'DP')
+                continue;
             ?>
               <option value="<?= $bayar->cara_bayar ?>"><?= $bayar->cara_bayar ?></option>
             <?php
@@ -143,7 +152,7 @@
       <!-- Modal footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Simpan" disabled="true"/>
+        <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Simpan" disabled="true" />
       </div>
       </form>
     </div>
@@ -151,11 +160,52 @@
 </div>
 <!---------------------------------------------Akhir Tambah Data---------------------------------------------->
 <script>
-  $('#nominal').keyup(function(){
-    if($(this).val() == '<?=$jual['jual_kurang_uang'] ?>'){
-      $('#submit').prop("disabled",false)
+  $('#nominal').keyup(function() {
+    if ($(this).val() == '<?= $jual['jual_kurang_uang'] ?>') {
+      $('#submit').prop("disabled", false)
     } else {
-      $('#submit').prop("disabled",true)
+      $('#submit').prop("disabled", true)
     }
   })
+
+  function batal(id) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to Cancel this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Cancel it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "<?= base_url('history_penjualan/batal') ?>",
+          method: 'post',
+          dataType: 'json',
+          data: {
+            id: id
+          },
+          success: function(data) {
+            console.log(data);
+            if (data) {
+              Swal.fire(
+                'Canceled!',
+                'Order has been Cancel.',
+                'success'
+              )
+              window.location.href = "<?= base_url('history_penjualan') ?>"
+            }
+          },
+          error: function(xhr, status, error) {
+            console.log({
+              status,
+              error
+            })
+          }
+
+        })
+      }
+    })
+  }
 </script>

@@ -1,22 +1,21 @@
 <html lang="en" moznomarginboxes mozdisallowselectionprint>
 
 <head>
-    <title>RESUME KEUANGAN</title>
+    <title>laporan data barang</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/laporan.css') ?>" />
 </head>
 
-<body>
+<body onload="window.print()">
     <div id="laporan">
         <table align="center" style="width:900px; border-bottom:3px double;border-top:none;border-right:none;border-left:none;margin-top:5px;margin-bottom:20px;">
-
         </table>
 
         <table border="0" align="center" style="width:800px; border:none;margin-top:5px;margin-bottom:0px;">
             <tr>
-                <td colspan="2" style="width:800px;padding-left:20px;">
+                <td colspan="2" style="width:800px;paddin-left:20px;">
                     <center>
-                        <h4>RESUME KEUANGAN </h4>
+                        <h4>LAPORAN DATA BARANG PER KATEGORI</h4>
                     </center><br />
                 </td>
             </tr>
@@ -25,61 +24,41 @@
 
         <table border="0" align="center" style="width:900px;border:none;">
             <tr>
-                <th style="text-align:left"></th>
+                <th style="text-align:left">Kategori : <?= $selectKategori->kategori_nama ?></th>
             </tr>
         </table>
-        <?php
 
-        ?>
         <table border="1" align="center" style="width:900px;margin-bottom:20px;">
             <thead>
                 <tr>
-                    <th colspan="11" style="text-align:left;">Periode : <?= $start; ?> - <?= $end; ?></th>
-                </tr>
-                <tr>
-                    <th style="width:50px;">No</th>
-                    <th>Keterangan Penjualan</th>
-                    <th style="width:250px;"></th>
+                    <th>No.</th>
+                    <th>Nama Barang</th>
+                    <th>Satuan</th>
+                    <th>Harga Jual</th>
+                    <th>Stok</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php
-                $no = 1;
-                foreach ($getPenjualan as $value) {
-
-                ?>
-                    <tr>
-                        <td style="text-align:center;"><?= $no++ ?></td>
-                        <td style="text-align:left;">
-                            Total <?= ($value->jual_keterangan) ?></td>
-                        <td style="text-align:right;">Rp.
-
-                            <?= number_format($value->total_semua) ?>
-
-                        </td>
-                    </tr>
-                <?php } ?>
-
-            </tbody>
-            <tfoot>
+            <?php
+            $urut = 0;
+            $nomor = 0;
+            $group = '-';
+            foreach ($listBarang as $value) {
+                $nomor++;
+            ?>
                 <tr>
-                    <td colspan="2">Saldo</td>
-                    <td style="text-align: right;">Rp. <?= number_format($saldo) ?></td>
+                    <td style="text-align:center;vertical-align:center;text-align:center;"><?= $nomor; ?></td>
+                    <td style="vertical-align:center;padding-left:5px;"><?= $value->barang_nama ?></td>
+                    <td style="vertical-align:center;text-align:center;"><?= $value->barang_satuan ?></td>
+                    <td style="vertical-align:center;padding-right:5px;text-align:right;"><?= $value->barang_harjul ?></td>
+                    <td style="vertical-align:center;text-align:center;text-align:center;"><?= $value->barang_stok ?></td>
                 </tr>
-                <tr>
-                    <td colspan="2">Total Tunai</td>
-                    <?php
 
-                    foreach ($total as $value) {
-                        $result = $saldo + $value->total_semua;
-                    ?>
-                        <td style="text-align:right;">Rp.
-                            <!-- <?= number_format($value->total_semua) ?> -->
-                            <?= number_format($result) ?>
-                        </td>
-                    <?php } ?>
-                </tr>
-            </tfoot>
+
+            <?php
+            }
+            ?>
+        </table>
+
         </table>
         <table align="center" style="width:800px; border:none;margin-top:5px;margin-bottom:20px;">
             <tr>
@@ -113,6 +92,5 @@
         </table>
     </div>
 </body>
-
 
 </html>

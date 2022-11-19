@@ -58,8 +58,8 @@ class M_penjualan extends CI_Model
 		$q = $this->db->query("SELECT jual_nofak FROM tbl_jual WHERE DATE(jual_tanggal) ='$now'");
 		$kd = "";
 		$kd = $q->num_rows();
-		$kd+=1;
-		$kd= sprintf("%06d",$kd);
+		$kd += 1;
+		$kd = sprintf("%06d", $kd);
 		// if ($q->num_rows() > 0) {
 		// 	foreach ($q->result() as $k) {
 		// 		$tmp = ((int)$k->kd_max) + 1;
@@ -106,5 +106,16 @@ class M_penjualan extends CI_Model
 		$nofak = $this->session->userdata('nofak');
 		$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d/%m/%Y %H:%i:%s') AS jual_tanggal,jual_total,jual_jml_uang,jual_kembalian,jual_keterangan,diskon,uang_muka,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,no_hp FROM tbl_jual_dp JOIN tbl_detail_jual_dp ON jual_nofak=d_jual_nofak WHERE jual_nofak='$nofak'");
 		return $hsl;
+	}
+	function detail_penjualan($id)
+	{
+		$data = $this->db->select('*')->from('tbl_detail_jual')->where('d_jual_nofak', $id)->get()->result_array();
+		return $data;
+	}
+	function update_status($id, $data)
+	{
+		$this->db->where('jual_nofak', $id);
+		$res = $this->db->update('tbl_jual', $data);
+		return $res;
 	}
 }

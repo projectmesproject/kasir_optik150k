@@ -19,6 +19,7 @@ class Laporan extends CI_Controller
 
 		$data['title'] = 'Laporan';
 		$data['data'] = $this->m_barang->tampil_barang();
+		$data['listBarang'] = $this->m_barang->listBarang();
 		$data['kat'] = $this->m_kategori->tampil_kategori();
 		$data['karyawan'] = $this->m_karyawan->tampil_karyawan();
 
@@ -95,8 +96,25 @@ class Laporan extends CI_Controller
 
 	function lap_data_barang_cetak()
 	{
+		$input_kategori = $this->input->post('kategori_nama');
+		$input_barang = $this->input->post('barang_nama');
 		$x['data'] = $this->m_laporan->get_data_barang();
 		$this->load->view('laporan/v_lap_barang', $x);
+	}
+	function filter_barang_by_kategori()
+	{
+		$kategori_nama = $this->input->post('kategori_nama');
+		$data['kategori'] = $kategori_nama;
+		$data['selectKategori'] = $this->m_barang->get_byKategori($kategori_nama);
+		$data['listBarang'] = $this->m_barang->get_list_barang($kategori_nama);
+		$this->load->view('laporan/cetak_barang_byKategori', $data);
+	}
+	function lap_data_barang_kategori()
+	{
+		$input_kategori = $this->input->post('kategori_nama');
+		$input_barang = $this->input->post('barang_nama');
+		$x['data'] = $this->m_laporan->get_data_barang_by($input_kategori, $input_barang);
+		$this->load->view('laporan/data_barang/cetak', $x);
 	}
 
 	function exportExcel()
@@ -247,11 +265,11 @@ class Laporan extends CI_Controller
 
 	function lap_resume()
 	{
-		$tanggal1 = $this->input->post('tgl1');
-		$tanggal2 = $this->input->post('tgl2');
+		$start = $this->input->post('tgl1');
+		$end = $this->input->post('tgl2');
 
 		$SQL = "SELECT SUM(jual_total) AS total, jual_keterangan FROM tbl_jual 
-WHERE jual_tanggal BETWEEN '2021-03-01' AND '2021-03-06'
+WHERE jual_tanggal BETWEEN $start AND $end
 GROUP BY jual_keterangan";
 
 		$x['tanggal1'] = $this->input->post('tgl1');
@@ -265,17 +283,17 @@ GROUP BY jual_keterangan";
 	}
 	function lap_resume_cetak()
 	{
-		$tanggal1 = $this->input->post('tgl1');
-		$tanggal2 = $this->input->post('tgl2');
+		$start = $this->input->post('start');
+		$end = $this->input->post('end');
+		$data['saldo'] = $this->input->post('saldo');
+		$data['start'] = $start;
+		$data['end'] = $end;
+		$data['getPenjualan'] = $this->m_laporan->penjualan_by_metode($start, $end);
+		$data['total'] = $this->m_laporan->total_penjualan($start, $end);
 
-		$SQL = "SELECT SUM(jual_total) AS total, jual_keterangan FROM tbl_jual 
-WHERE jual_tanggal BETWEEN '2021-03-01' AND '2021-03-06'
-GROUP BY jual_keterangan";
-
-		$x['tanggal1'] = $this->input->post('tgl1');
-		$x['tanggal2'] = $this->input->post('tgl2');
-
-		$this->load->view('laporan/resume/cetak', $x);
+		$this->load->view('laporan/resume/cetak', $data);
+		// var_dump($data['getPenjualan']);
+		// die;
 	}
 
 	function lap_hutang_karyawan()

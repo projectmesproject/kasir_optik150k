@@ -47,7 +47,7 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover" id="table" width="100%" cellspacing="0">
                   <thead class="thead-light">
                     <tr>
                       <th>No</th>
@@ -349,3 +349,21 @@
             </div>
           </div>
         <?php endforeach; ?>
+
+        <script>
+          $(document).ready(function() {
+            $('#table').DataTable({
+              scrollY: "480px",
+              scrollCollapse: true,
+              paging: false,
+              scrollX: true,
+              info: true,
+              dom: 'Bfrtip',
+              select: true,
+
+              // to limit records
+              pageLength: 5,
+            });
+
+          });
+        </script>
