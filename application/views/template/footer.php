@@ -179,24 +179,52 @@
     $("#jml_uang").keyup(function() {
 
       var uang = $("#jml_uang").val();
+      var uang2 = $("#jml_uang2").val();
       var total_b = $("#total").val();
       var diskon = $("#diskon").val();
       var tot_bayar = total_b;
-      var uang2 = uang - tot_bayar
-      $("#totbayar").val(tot_bayar);
-      console.log(uang + " - " + tot_bayar)
-      if (parseInt(uang) > parseInt(tot_bayar)) {
-        $("#tunai2_label").text("Kembalian")
-        uang2 = Math.abs(uang2);
-        $('#cara_bayar2_select').hide()
-        $('#cara_bayar2_select').prop('required', false)
-      } else if (parseInt(uang) < parseInt(tot_bayar)) {
-        $("#tunai2_label").text("Kekurangan")
-        uang2 = Math.abs(uang2);
-        $('#cara_bayar2_select').show()
-        $('#cara_bayar2_select').prop('required', false)
+      if (!uang2) {
+        uang2 = 0;
       }
-      $("#jml_uang2").val(uang2);
+      var totall = parseInt(uang) + parseInt(uang2)
+      var hitung = totall - tot_bayar
+      $("#totbayar").val(tot_bayar);
+      if (parseInt(totall) > parseInt(tot_bayar)) {
+        $("#kembalian_label").text("Kembalian(Rp)")
+        hitung = Math.abs(hitung);
+      } else if (parseInt(totall) < parseInt(tot_bayar)) {
+        $("#kembalian_label").text("Kekurangan(Rp)")
+        hitung = Math.abs(hitung);
+      }
+      if(!hitung){
+        hitung = 0
+      }
+      $("#kembalian").val(hitung);
+    });
+    $("#jml_uang2").keyup(function() {
+
+      var uang = $("#jml_uang").val();
+      var uang2 = $("#jml_uang2").val();
+      var total_b = $("#total").val();
+      var diskon = $("#diskon").val();
+      var tot_bayar = total_b;
+      if (!uang2) {
+        uang2 = 0;
+      }
+      var totall = parseInt(uang) + parseInt(uang2)
+      var hitung = totall - tot_bayar
+      $("#totbayar").val(tot_bayar);
+      if (parseInt(totall) > parseInt(tot_bayar)) {
+        $("#kembalian_label").text("Kembalian(Rp)")
+        hitung = Math.abs(hitung);
+      } else if (parseInt(totall) < parseInt(tot_bayar)) {
+        $("#kembalian_label").text("Kekurangan(Rp)")
+        hitung = Math.abs(hitung);
+      }
+      if(!hitung){
+        hitung = 0
+      }
+      $("#kembalian").val(hitung);
     });
     // $("#jml_uang2").keyup(function() {
 
@@ -248,9 +276,15 @@
   $(document).ready(function() {
 
     // Format mata uang.
-   
+
     // Format mata uang.
     $('.jml_uang').divide({
+      delimiter: ',',
+      divideThousand: true, // 1,000..9,999
+      delimiterRegExp: /[\.\,\s]/g
+    });
+    // Format mata uang.
+    $('.kembalian').divide({
       delimiter: ',',
       divideThousand: true, // 1,000..9,999
       delimiterRegExp: /[\.\,\s]/g

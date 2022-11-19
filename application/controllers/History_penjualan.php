@@ -67,15 +67,12 @@ class History_penjualan extends CI_Controller
 
     function filter_history()
     {
-        $status = $this->input->post('status');
+        $search = $this->input->post('search');
         $data_array = array();
 
-        if($status != "SEMUA"){
-            $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp WHERE A.status='$status' order by jual_tanggal desc")->result_array();
-        } else {
-            $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp  order by jual_tanggal desc")->result_array();
-        }
-       
+        $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.no_hp LIKE '%$search%' OR A.jual_nofak LIKE '%$search%' OR B.nama LIKE '%$search%'  order by jual_tanggal desc")->result_array();
+
+
 
         foreach ($data1 as $dt) {
             $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
@@ -83,6 +80,7 @@ class History_penjualan extends CI_Controller
             array_push($data_array, $dt);
         }
         $data = $data_array;
+       
         ob_start();
 ?>
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

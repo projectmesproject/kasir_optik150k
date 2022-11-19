@@ -48,53 +48,57 @@
 </head>
 
 <body class="container p-5">
-    <?php 
+    <?php
     $bulantahun = date('mY');
-    $nomor = sprintf("%04d",$data);
-    for ($i = 1; $i < 6; $i++) { ?>
-        <div class="card-body mb-4" style=" -webkit-filter: grayscale(100%);filter: grayscale(100%);background-image:url(<?= base_url('assets/admin/kwitansi_bg/' . $i . ".jpg") ?>);background-color: #cccccc;height: auto;background-position: center; background-repeat: no-repeat;background-size: cover;position:relative;">
-        <div style="background-color:#fff;position: absolute;top:0;bottom:0;right:0;left:0;opacity:.8" class="border"></div>
-            <div class="d-flex-column">
-                <div class="border-bottom-line col-sm-3 pl-0">
-                    <span>No. KWI/OPT/<?= $nomor ?>/<?= $bulantahun?></span>
-                </div>
-                <div class="col-sm-12 border-bottom-dot pl-0">
-                    <span>Sudah Diterima Dari</span>
+    $nomor = sprintf("%04d", $data);
+    for ($i = 1; $i < 6; $i++) {
+        if ($i == $versi) {
+    ?>
+
+            <div class="card-body mb-4" style=" -webkit-filter: grayscale(100%);filter: grayscale(100%);background-image:url(<?= base_url('assets/admin/kwitansi_bg/' . $i . ".jpg") ?>);background-color: #cccccc;height: auto;background-position: center; background-repeat: no-repeat;background-size: cover;position:relative;">
+                <div style="background-color:#fff;position: absolute;top:0;bottom:0;right:0;left:0;opacity:.8" class="border"></div>
+                <div class="d-flex-column">
+                    <div class="border-bottom-line col-sm-3 pl-0">
+                        <span>No. KWI/OPT/<?= $nomor ?>/<?= $bulantahun ?></span>
+                    </div>
+                    <div class="col-sm-12 border-bottom-dot pl-0">
+                        <span>Sudah Diterima Dari</span>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-sm-2">
+                            <span>Banyaknya Uang</span>
+                        </div>
+                        <div class="col-sm-10">
+                            <hr />
+                            <hr />
+                            <hr />
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="col-sm-12 border-bottom-dot pl-0">
+                        <span>Untuk Pembayaran</span>
+                    </div>
+                    <div class="col-sm-12 border-bottom-dot pl-0">
+                        <span>&nbsp;</span>
+                    </div>
+                    <div class="col-sm-12 border-bottom-dot pl-0">
+                        <span>&nbsp;</span>
+                    </div>
                 </div>
                 <div class="row align-items-center">
-                    <div class="col-sm-2">
-                        <span>Banyaknya Uang</span>
+                    <div class="col-sm-3 ">
+                        <h2 class="font-italic">Jumlah Rp</h2>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-3">
                         <hr />
                         <hr />
                         <hr />
                         <hr />
                     </div>
-                </div>
-                <div class="col-sm-12 border-bottom-dot pl-0">
-                    <span>Untuk Pembayaran</span>
-                </div>
-                <div class="col-sm-12 border-bottom-dot pl-0">
-                    <span>&nbsp;</span>
-                </div>
-                <div class="col-sm-12 border-bottom-dot pl-0">
-                    <span>&nbsp;</span>
                 </div>
             </div>
-            <div class="row align-items-center">
-                <div class="col-sm-3 ">
-                    <h2 class="font-italic">Jumlah Rp</h2>
-                </div>
-                <div class="col-sm-3">
-                    <hr />
-                    <hr />
-                    <hr />
-                    <hr />
-                </div>
-            </div>
-        </div>
-    <?php } ?>
+    <?php }
+    } ?>
 </body>
 
 </html>

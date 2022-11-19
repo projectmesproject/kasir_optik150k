@@ -178,10 +178,10 @@
                     </select>
                   </div>
 
-                  <div class="form-group col-sm-2" id="cara_bayar2_select">
+                  <div class="form-group col-sm-2">
                     <label class="font-weight-bold">Cara Bayar 2 :</label>
                     <select name="bayar2" id="bayar2" class="form-control">
-                      <option value="" selected disabled>-- Pilih Cara Bayar --</option>
+                      <option value="" selected>-- Pilih Cara Bayar --</option>
                       <?php foreach ($cara_bayar as $bayar) {
 
                         if ($bayar->cara_bayar == 'DP')
@@ -193,7 +193,14 @@
                       ?>
                     </select>
                   </div>
-                  <div class="form-group col-sm-5">
+                  <div class="form-group col-sm-2" id="status">
+                    <label class="font-weight-bold">Status :</label>
+                    <select name="status" id="status" class="form-control">
+                      <option value="COMPLETE">Lunas</option>
+                      <option value="DP">DP</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-3">
                     <label class="font-weight-bold">Keterangan :</label>
                     <input type="text" id="diskon" name="diskon" class="diskon form-control input-sm" required>
                   </div>
@@ -226,16 +233,16 @@
                     <th style="text-align:right;"><input type="text" id="jml_uang" name="jml_uang" class="jml_uang form-control input-sm" style="text-align:right;margin-bottom:5px;" required></th>
 
                   </tr>
-                  <tr>
-                    <th colspan="4" id="tunai2_label">Tunai 2(Rp) :</th>
-                    <th style="text-align:right;"><input type="text" id="jml_uang2" name="jml_uang2" class="jml_uang2 form-control input-sm" style="text-align:right;margin-bottom:5px;" required readonly></th>
+                  <tr id="tunai2_la_">
+                    <th colspan="4">Tunai 2(Rp) :</th>
+                    <th style="text-align:right;"><input type="text" id="jml_uang2" name="jml_uang2" class="jml_uang2 form-control input-sm" style="text-align:right;margin-bottom:5px;" required></th>
 
                   </tr>
-                  <!-- <tr>
+                  <tr>
                     <td></td>
-                    <th colspan="4">Kembalian(Rp) :</th>
-                    <th style="text-align:right;"><input type="text" id="kembalian" name="kembalian" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" required readonly></th>
-                  </tr> -->
+                    <th colspan="4" id="kembalian_label">Kembalian(Rp) :</th>
+                    <th style="text-align:right;"><input type="text" id="kembalian" name="kembalian" class="form-control input-sm kembalian" style="text-align:right;margin-bottom:5px;" required readonly></th>
+                  </tr>
 
 
                 </table>
@@ -314,7 +321,7 @@
                     </select>
                   </div>
 
-               
+
 
                 </div>
 
@@ -337,6 +344,7 @@
 
 
         <script type='text/javascript'>
+          $("#jml_uang2").prop('readonly', true)
           $('.ajax_list_barang').hide()
           $(document).ready(function() {
 
@@ -358,6 +366,20 @@
               })
             });
           }
+          $("#bayar2").change(function() {
+            if (!$("#bayar").val()) {
+              swal.fire("Penjualan", "Bayar 1 Harus dipilih", "warning")
+              $(this).val("")
+            } else {
+              if ($(this).val() == "") {
+                $("#jml_uang2").prop('readonly', true)
+                $("#jml_uang2").val(0)
+              } else {
+                $("#jml_uang2").prop('readonly', false)
+              }
+            }
+
+          })
           $(".checkPaket").click(function() {
             let kode_brg = $(this).attr('data-kode_brg')
             if ($(this).is(':checked')) {

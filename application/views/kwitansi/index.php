@@ -38,11 +38,11 @@
                         foreach ($data as $p) { ?>
                             <tr>
                                 <td><?= $no++; ?></td>
-                                <td><?= date('Y-m-d',strtotime($p->date_created)); ?></td>
+                                <td><?= date('Y-m-d', strtotime($p->date_created)); ?></td>
                                 <td><?= $p->kode_kwitansi; ?></td>
                                 <td>Rp. <?= number_format($p->nominal); ?></td>
                                 <td><?= $p->karyawan; ?></td>
-                                <td><a class="badge badge-success" href="<?= base_url(); ?>kwitansi/cetak_kwitansi/<?= $p->id_kwitansi; ?>" target="_blank">Cetak</a></td>
+                                <td><a class="badge badge-success cetak_mdl text-white" data-id_kwitansi="<?= $p->id_kwitansi; ?>" style="cursor:pointer" >Cetak</a></td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -64,25 +64,77 @@
                 </button>
             </div>
             <?php echo form_open('kwitansi/tambah_kwitansi') ?>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="">Nominal<br/><small class="text-danger">Nominal yang akan ditulis</small></label>
-                        <input type="number" name="nominal" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label for="">Harga Jual Kwitansi</label>
-                        <input type="number" name="harga" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label for="">Karyawan</label>
-                        <input type="text" name="karyawan" class="form-control" />
-                    </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Nominal<br /><small class="text-danger">Nominal yang akan ditulis</small></label>
+                    <input type="number" name="nominal" class="form-control" />
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                <div class="form-group">
+                    <label for="">Harga Jual Kwitansi</label>
+                    <input type="number" name="harga" class="form-control" />
                 </div>
+                <div class="form-group">
+                    <label for="">Karyawan</label>
+                    <input type="text" name="karyawan" class="form-control" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
             </form>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="pilih_kwitansi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Pilih Kwitansi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="id_kwitansi_mdl" value=""/>
+                <div class="form-group shadow-sm border border-dark p-3 my-3">
+                    <label>Kwitansi 1</label>
+                   <img src="<?=base_url('assets/img/kwi1.png') ?>" onclick="kwitansiCetak('1')" style="width:100%;height:auto;object-fit:contain;cursor:pointer;"/>
+                </div>
+                <div class="form-group shadow-sm border border-dark p-3 my-3">
+                    <label>Kwitansi 2</label>
+                   <img src="<?=base_url('assets/img/kwi2.png') ?>" onclick="kwitansiCetak('2')" style="width:100%;height:auto;object-fit:contain;cursor:pointer;"/>
+                </div>
+                <div class="form-group shadow-sm border border-dark p-3 my-3">
+                    <label>Kwitansi 3</label>
+                   <img src="<?=base_url('assets/img/kwi3.png') ?>" onclick="kwitansiCetak('3')" style="width:100%;height:auto;object-fit:contain;cursor:pointer;"/>
+                </div>
+                <div class="form-group shadow-sm border border-dark p-3 my-3">
+                    <label>Kwitansi 4</label>
+                   <img src="<?=base_url('assets/img/kwi4.png') ?>" onclick="kwitansiCetak('4')" style="width:100%;height:auto;object-fit:contain;cursor:pointer;"/>
+                </div>
+                <div class="form-group shadow-sm border border-dark p-3 my-3">
+                    <label>Kwitansi 5</label>
+                   <img src="<?=base_url('assets/img/kwi5.png') ?>" onclick="kwitansiCetak('5')" style="width:100%;height:auto;object-fit:contain;cursor:pointer;"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(".cetak_mdl").click(function(){
+        $('#pilih_kwitansi').modal('show')
+        var id_kwitansi = $(this).attr('data-id_kwitansi')
+        $("#id_kwitansi_mdl").val(id_kwitansi)
+    })
+
+    function kwitansiCetak(model){
+        var id = $("#id_kwitansi_mdl").val()
+        window.open('<?=base_url() ?>kwitansi/cetak_kwitansi/' + id + "/" + model)
+
+    }
+
+</script>

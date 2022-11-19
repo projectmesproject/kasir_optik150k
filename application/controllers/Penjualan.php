@@ -331,18 +331,20 @@ class Penjualan extends CI_Controller
             $diskon = $this->input->post('diskon');
             $jml_uang = str_replace(",", "", $this->input->post('jml_uang'));
             $jml_uang2 = str_replace(",", "", $this->input->post('jml_uang2'));
-            $kembalian = 0;
+            $kembalian = str_replace(",", "", $this->input->post('kembalian'));
             $kurang = 0;
-            $status = "COMPLETE";
-            if ((int)$jml_uang > (int)$total) {
-                $kembalian = (int)$jml_uang - (int)$total;
-                $status = "COMPLETE";
+            $total_a = $jml_uang + $jml_uang2;
+            if ($total_a > $total) {
+                $kembalian = str_replace(",", "", $this->input->post('kembalian'));
+                $kurang=0;
+            }
+            if ($total_a < $total) {
+                $kurang = $total_belanja - $total_a;
+                $kembalian = 0;
             }
 
-            if ((int)$jml_uang < (int)$total) {
-                $kurang = (int)$jml_uang2;
-                $status = "DP";
-            }
+            $status = $this->input->post('status');
+
 
             if (!empty($total) && !empty($jml_uang) && !empty($nohp)) {
 
@@ -355,7 +357,7 @@ class Penjualan extends CI_Controller
                     $this->M_customer->tambah_data();
                 }
                 // $nofak, $total, $jml_uang,$kurang, $kembalian, $bayar,$bayar2, $diskon, $nohp,$status
-                $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $kurang, $kembalian, $bayar, $bayar2, $diskon, $nohp, $status);
+                $order_proses = $this->m_penjualan->simpan_penjualan($nofak, $total, $jml_uang, $jml_uang2, $kurang, $kembalian, $bayar, $bayar2, $diskon, $nohp, $status);
 
                 if ($order_proses) {
                     $this->cart->destroy();
