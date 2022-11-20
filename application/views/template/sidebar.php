@@ -11,8 +11,13 @@
         ?>
         <div class="sidebar-brand-text mx-3"><?= $data1['fitur']; ?></div>
       </a>
-
       <?php if ($this->session->userdata('level') == 'admin') { ?>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo site_url('dashboard'); ?>">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+        </li>
+
         <!-- DATA UTAMA -->
         <!-- Divider -->
         <hr class="sidebar-divider">
