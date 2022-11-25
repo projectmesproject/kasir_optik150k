@@ -9,10 +9,7 @@
 <body onload="window.print()">
     <div id="laporan">
         <table align="center" style="width:302px; border-bottom:3px double;border-top:none;border-right:none;border-left:none;margin-top:5px;margin-bottom:20px;">
-            <!--<tr>
-    <td><img src="<? php // echo base_url().'assets/img/kop_surat.png'
-                    ?>"/></td>
-</tr>-->
+      
         </table>
 
         <table border="0" align="center" style="width:302px; border:none;margin-top:5px;margin-bottom:0px;">

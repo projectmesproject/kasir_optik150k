@@ -42,10 +42,10 @@ class Auth extends CI_Controller {
                         ];
 
                         $this->session->set_userdata($data);
-                        if($user['level']=='admin'){
+                        if($user['level']=='admin' || $user['level'] == 'pembelian'){
                             redirect('user');
                         }
-                        else if($user['level']=='kasir'){
+                        else if($user['level']=='kasir' || $user['level']=='penjualan'){
                             redirect('penjualan');
                         }
                     }	

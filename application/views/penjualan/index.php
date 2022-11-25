@@ -8,7 +8,12 @@
           $dat = $this->session->flashdata('msg');
           if ($dat != "") { ?>
             <div class="alert alert-success"><strong>Sukses! </strong> <?= $dat; ?>
-              <a class="btn btn-info" href="<?php echo site_url('penjualan/cetak_faktur') ?>" target="_blank"><span class="fa fa-print"></span>Cetak</a>
+            <?php if($this->session->userdata('level') == 'penjualan') {?>
+              <a class="btn btn-info" href="<?php echo site_url('penjualan/cetak_faktur_cabang') ?>" target="_blank"><span class="fa fa-print"></span>Cetak</a>
+              <?php } else {?>
+                <a class="btn btn-info" href="<?php echo site_url('penjualan/cetak_faktur') ?>" target="_blank"><span class="fa fa-print"></span>Cetak</a>
+
+                <?php } ?>
             </div>
           <?php } ?>
           <?php
@@ -136,28 +141,43 @@
                   </table>
                 </div>
                 <br>
-
-                <?php echo form_open('Penjualan/simpan_penjualan') ?>
+                <?php if ($this->session->userdata('level') == 'penjualan') { ?>
+                  <?php echo form_open('penjualan/simpan_penjualan_cabang') ?>
+                <?php } else {
+                ?>
+                  <?php echo form_open('penjualan/simpan_penjualan') ?>
+                <?php
+                }
+                ?>
                 <a href="#no_hp" class="btn btn-info btn-sm"><i class='fas fa-sync'></i> Refresh</a>
 
                 <hr>
-                <table>
-                  <tr>
-                    <div id="no"></div>
-                    <th>No HP : </th>
-                  </tr>
-                  <tr>
-                    <th><input type="number" name="no_hp" list="list_no" autocomplete="off" id="no_hp" class="form-control input-sm" style="width:250px;" required>
-                      <datalist id="list_no">
-                        <?php foreach ($nohp->result() as $nohp) : ?>
-                          <option value="<?= $nohp->no_hp ?>"><?= $nohp->no_hp ?></option>
-                        <?php endforeach ?>
-                      </datalist>
-                    </th>
-                  </tr>
-                  <div id="detail_customer" style="position:absolute;">
+                <?php if ($this->session->userdata('level') == 'penjualan') { ?>
+                  <div class="form-group">
+                    <label>Cabang</label>
+                    <input class="form-control col-sm-4" name="cabang" />
                   </div>
-                </table>
+                <?php } else {
+                ?>
+                  <table>
+                    <tr>
+                      <div id="no"></div>
+                      <th>No HP : </th>
+                    </tr>
+                    <tr>
+                      <th><input type="number" name="no_hp" list="list_no" autocomplete="off" id="no_hp" class="form-control input-sm" style="width:250px;" required>
+                        <datalist id="list_no">
+                          <?php foreach ($nohp->result() as $nohp) : ?>
+                            <option value="<?= $nohp->no_hp ?>"><?= $nohp->no_hp ?></option>
+                          <?php endforeach ?>
+                        </datalist>
+                      </th>
+                    </tr>
+                    <div id="detail_customer" style="position:absolute;">
+                    </div>
+                  </table>
+                <?php
+                } ?>
                 <br>
                 <div class="row">
                   <div class="form-group col-sm-3">
@@ -208,14 +228,16 @@
                 <br>
                 <?php
                 // var_dump($paket);
-                foreach ($paket as $pkt) {
+                if ($this->session->userdata('level') == 'kasir') {
+                  foreach ($paket as $pkt) {
                 ?>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input checkPaket" type="checkbox" data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
-                    <label class="form-check-label" for="pkt<?= $pkt->barang_id ?>"><?= $pkt->barang_nama ?></label>
-                  </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input checkPaket" type="checkbox" data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
+                      <label class="form-check-label" for="pkt<?= $pkt->barang_id ?>"><?= $pkt->barang_nama ?></label>
+                    </div>
 
                 <?php
+                  }
                 }
                 ?>
                 <table>
@@ -345,6 +367,7 @@
 
         <script type='text/javascript'>
           $("#jml_uang2").prop('readonly', true)
+          $("#jml_uang2").prop('value', 0)
           $('.ajax_list_barang').hide()
           $(document).ready(function() {
 

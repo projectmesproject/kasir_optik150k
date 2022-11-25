@@ -105,9 +105,9 @@
 
       <!-- DATA PENJUALAN -->
       <!-- Divider -->
-      <hr class="sidebar-divider">
-
+      <?php if ($this->session->userdata('level') == 'kasir' || $this->session->userdata('level') == 'penjualan') { ?>
       <!-- Heading -->
+      <hr class="sidebar-divider">
       <div class="sidebar-heading">
         Data Penjualan
       </div>
@@ -121,7 +121,7 @@
         <div id="collapseTwo3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Data Penjualan</h6>
-            <?php if ($this->session->userdata('level') == 'kasir') { ?>
+            <?php if ($this->session->userdata('level') == 'kasir' || $this->session->userdata('level') == 'penjualan') { ?>
               <a class="collapse-item" href="<?php echo site_url('Penjualan'); ?>">Penjualan</a>
               <?php
               $show_byr_dp = 0;
@@ -134,6 +134,7 @@
           </div>
         </div>
       </li>
+      <?php } ?>
       <!-- AKHIR DATA PENJUALAN -->
       <!-- Heading -->
       <?php if ($this->session->userdata('level') == 'kasir') { ?>
@@ -184,7 +185,7 @@
         <!-- AKHIR DATA Kwitansi -->
       <?php } ?>
       <!-- DATA PEMBELIAN -->
-      <?php if ($this->session->userdata('level') == 'admin') { ?>
+      <?php if ($this->session->userdata('level') == 'admin' || $this->session->userdata('level') == 'pembelian') { ?>
         <!-- Divider -->
         <hr class="sidebar-divider">
 

@@ -27,6 +27,29 @@ class M_penjualan extends CI_Model
 		}
 		return true;
 	}
+	function simpan_penjualan_cabang($nofak, $total, $jml_uang,$jml_uang2,$kurang, $kembalian, $bayar,$bayar2, $diskon, $cabang,$status)
+	{
+		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_jml_uang2,jual_kurang_uang,jual_kembalian,jual_keterangan,jual_keterangan2,diskon,cabang,status) VALUES ('$nofak','$total','$jml_uang','$jml_uang2','$kurang','$kembalian','$bayar','$bayar2','$diskon','$cabang','$status')");
+		foreach ($this->cart->contents() as $item) {
+			$data = array(
+				'd_jual_nofak' 			=>	$nofak,
+				'd_jual_barang_id'		=>	$item['id'],
+				'd_jual_barang_kat_id'  =>  $item['id_kat_barang'],
+				'd_jual_barang_nama'	=>	$item['name'],
+				'd_jual_barang_satuan'	=>	$item['satuan'],
+				'd_jual_barang_harpok'	=>	$item['harpok'],
+				'd_jual_barang_harjul'	=>	$item['amount'],
+				'd_jual_qty'			=>	$item['qty'],
+				'd_jual_diskon'			=>	$item['disc'],
+				'd_jual_total'			=>	$item['subtotal']
+			);
+			$this->db->insert('tbl_detail_jual', $data);
+			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$item[id]'");
+			$this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");
+			$this->db->query("update saldo set saldo=saldo-'$kembalian' where id=1");
+		}
+		return true;
+	}
 
 
 	function simpan_penjualan1($nofak, $total, $jml_uang, $kembalian, $diskon, $nohp, $dp)
@@ -93,6 +116,14 @@ class M_penjualan extends CI_Model
 		$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d/%m/%Y %H:%i:%s') AS jual_tanggal,jual_total,jual_jml_uang,jual_jml_uang2,jual_kurang_uang,jual_kembalian,jual_keterangan,jual_keterangan2,diskon,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,no_hp FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE jual_nofak='$nofak'");
 		//die($this->db->last_query());
 		return $hsl;
+	}
+	function cetak_faktur_cabang()
+	{
+		$nofak = $this->session->userdata('nofak');
+		$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d/%m/%Y %H:%i:%s') AS jual_tanggal,jual_total,jual_jml_uang,jual_jml_uang2,jual_kurang_uang,jual_kembalian,jual_keterangan,jual_keterangan2,diskon,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total,cabang FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE jual_nofak='$nofak'");
+		//die($this->db->last_query());
+		return $hsl;
+		
 	}
 
 	function cetak_faktur2($nofak)

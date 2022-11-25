@@ -17,25 +17,32 @@
     </div>
     <br>
     <div class="card-body">
-      
-    <?php if ($this->session->userdata('level') == 'kasir') { ?>
-      <form id="filter_history_form">
-        <div class="row">
-          <div class="form-group col-sm-3">
-            <label>Cari</label>
-            <input type="search" name="search" placeholder="No. Hp, No. Faktur, Nama Pelanggan" class="form-control" />
+
+      <?php if ($this->session->userdata('level') == 'kasir' || $this->session->userdata('level') == 'penjualan') { ?>
+        <form id="filter_history_form">
+          <div class="row">
+            <div class="form-group col-sm-3">
+              <label>Cari</label>
+              <?php if ($this->session->userdata('level') == 'kasir') { ?>
+                <input type="search" name="search" placeholder="No. Hp, No. Faktur, Nama Pelanggan" class="form-control" />
+              <?php } else if($this->session->userdata('level') == 'penjualan' ){
+              ?>
+                <input type="search" name="search" placeholder="No. Faktur, Cabang" class="form-control" />
+
+              <?php
+              } ?>
+            </div>
+            <div class="form-group col-sm-3">
+              <label>&nbsp;</label><br />
+              <button class="btn btn-warning" type="submit">FILTER</button>
+            </div>
           </div>
-          <div class="form-group col-sm-3">
-            <label>&nbsp;</label><br />
-            <button class="btn btn-warning" type="submit">FILTER</button>
-          </div>
-        </div>
-      </form>
+        </form>
       <?php } ?>
       <br>
       <div class="table-responsive" id="result_table">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-          <?php if ($this->session->userdata('level') != 'kasir') { ?>
+          <?php if ($this->session->userdata('level') != 'kasir' && $this->session->userdata('level') != 'penjualan') { ?>
             <thead>
               <tr>
                 <th>No</th>
@@ -103,8 +110,14 @@
   $("#filter_history_form").submit(function(ev) {
     ev.preventDefault();
     $("#result_table").html("<h3 class='text-center'>Loading...</h3>")
+    <?php
+    $url = base_url() . "/history_penjualan/filter_history";
+    if($this->session->userdata('level')=='penjualan'){
+      $url = base_url() . "/history_penjualan/filter_history_cabang";
+    }
+    ?>
     $.ajax({
-      url: "<?= base_url() ?>/history_penjualan/filter_history",
+      url: "<?= $url ?>",
       data: $(this).serialize(),
       cache: false,
       type: 'POST',

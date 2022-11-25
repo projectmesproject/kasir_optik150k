@@ -10,7 +10,7 @@
     <?php } ?>
     <div class="card-header py-3">
       <?php if ($jual['status'] == 'DP') : ?>
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_hutang_karyawan" style="float:left;">
+        <button type="button" class="btn btn-primary btn-sm mr-3" data-toggle="modal" data-target="#add_hutang_karyawan" style="float:left;">
           (+) Bayar
         </button>
         <button class="btn btn-primary btn-sm" onclick="batal(<?= $jual['jual_nofak']; ?>)" style="float:left;">
@@ -39,11 +39,19 @@
             <td>:</td>
             <td><?php echo $jual['jual_tanggal']; ?></td>
           </tr>
-          <tr>
-            <td>Customer</td>
-            <td>:</td>
-            <td><?= $customer['nama']; ?></td>
-          </tr>
+          <?php if ($this->session->userdata('level') == 'penjualan') { ?>
+            <tr>
+              <td>Cabang</td>
+              <td>:</td>
+              <td><?= $jual['cabang']; ?></td>
+            </tr>
+          <?php } else { ?>
+            <tr>
+              <td>Customer</td>
+              <td>:</td>
+              <td><?= $customer['nama']; ?></td>
+            </tr>
+          <?php } ?>
           <tr>
             <td>Keterangan</td>
             <td>:</td>

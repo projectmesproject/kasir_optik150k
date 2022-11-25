@@ -376,11 +376,79 @@ class Penjualan extends CI_Controller
             }
         }
     }
+    function simpan_penjualan_cabang()
+    {
+        // jika uang1 > total = kembalian
+        // jika uang1 < uang2 = kurang -> status = DP
 
+        $payment1 = [];
+
+        $get_cara_byr = $this->M_Cara_Bayar->list();
+        foreach ($get_cara_byr as $byr) {
+            if ($byr->cara_bayar == 'DP')
+                continue;
+            array_push($payment1, $byr->cara_bayar);
+        }
+        // Jika Bayar1 > Total Bayat
+        if (in_array($this->input->post('bayar'), $payment1)) {
+            $bayar = $this->input->post('bayar', TRUE);
+            $bayar2 = $this->input->post('bayar2', TRUE);
+            $total_belanja = $this->input->post('total'); ////sama tambahin ini juga jar kalau di kameranya
+            $total = $this->input->post('totbayar');
+            $diskon = $this->input->post('diskon');
+            $jml_uang = str_replace(",", "", $this->input->post('jml_uang'));
+            $jml_uang2 = str_replace(",", "", $this->input->post('jml_uang2'));
+            $kembalian = str_replace(",", "", $this->input->post('kembalian'));
+            $kurang = 0;
+            $total_a = $jml_uang + $jml_uang2;
+            if ($total_a > $total) {
+                $kembalian = str_replace(",", "", $this->input->post('kembalian'));
+                $kurang=0;
+            }
+            if ($total_a < $total) {
+                $kurang = $total_belanja - $total_a;
+                $kembalian = 0;
+            }
+
+            $status = $this->input->post('status');
+
+
+            if (!empty($total) && !empty($jml_uang)) {
+
+
+                $nofak = $this->m_penjualan->get_nofak();
+                $this->session->set_userdata('nofak', $nofak);
+
+               $cabang = $this->input->post("cabang");
+                // $nofak, $total, $jml_uang,$kurang, $kembalian, $bayar,$bayar2, $diskon, $nohp,$status
+                $order_proses = $this->m_penjualan->simpan_penjualan_cabang($nofak, $total, $jml_uang, $jml_uang2, $kurang, $kembalian, $bayar, $bayar2, $diskon, $cabang, $status);
+
+                if ($order_proses) {
+                    $this->cart->destroy();
+                    $this->session->unset_userdata('tglfak');
+                    $this->session->unset_userdata('suplier');
+                    echo $this->session->set_flashdata('msg', 'Berhasil !!');
+                    //v13nr redirect('penjualan');	
+                    $this->cetak_faktur_cabang();
+                } else {
+                    redirect('penjualan');
+                }
+            } else {
+                echo $this->session->set_flashdata('error', 'Penjualan Gagal di Simpan, Mohon Periksa Kembali Semua Inputan Anda!');
+                redirect('penjualan');
+            }
+        }
+    }
     function cetak_faktur()
     {
         $x['data'] = $this->m_penjualan->cetak_faktur();
         $this->load->view('laporan/v_faktur', $x);
+        //$this->session->unset_userdata('nofak');
+    }
+    function cetak_faktur_cabang()
+    {
+        $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
+        $this->load->view('laporan/v_faktur_cabang', $x);
         //$this->session->unset_userdata('nofak');
     }
 
