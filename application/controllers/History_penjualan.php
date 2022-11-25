@@ -20,7 +20,7 @@ class History_penjualan extends CI_Controller
         $data_array = array();
 
         $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp order by jual_tanggal desc")->result_array();
-
+       
         foreach ($data1 as $dt) {
             $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
             $dt["jumlah_item"] = $jmlh->jum;

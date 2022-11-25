@@ -73,7 +73,7 @@
 
                 <tr>
                   <td><?= $no++; ?></td>
-                  <td><?php echo $a['namaplg']; ?></td>
+                  <td><?php echo $a['namaplg'] ? $a['namaplg'] : $a["cabang"]?></td>
                   <td><?php echo $a['jual_tanggal']; ?></td>
                   <td><?php echo $a['no_hp']; ?></td>
                   <td><?= $a['jual_nofak']; ?></td>
