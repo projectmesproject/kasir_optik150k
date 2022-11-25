@@ -155,7 +155,7 @@
                 <?php if ($this->session->userdata('level') == 'penjualan') { ?>
                   <div class="form-group">
                     <label>Cabang</label>
-                    <input class="form-control col-sm-4" name="cabang" />
+                    <input class="form-control col-sm-4" name="cabang" required />
                   </div>
                 <?php } else {
                 ?>
