@@ -8,12 +8,12 @@
           $dat = $this->session->flashdata('msg');
           if ($dat != "") { ?>
             <div class="alert alert-success"><strong>Sukses! </strong> <?= $dat; ?>
-            <?php if($this->session->userdata('level') == 'penjualan') {?>
-              <a class="btn btn-info" href="<?php echo site_url('penjualan/cetak_faktur_cabang') ?>" target="_blank"><span class="fa fa-print"></span>Cetak</a>
-              <?php } else {?>
+              <?php if ($this->session->userdata('level') == 'penjualan') { ?>
+                <a class="btn btn-info" href="<?php echo site_url('penjualan/cetak_faktur_cabang') ?>" target="_blank"><span class="fa fa-print"></span>Cetak</a>
+              <?php } else { ?>
                 <a class="btn btn-info" href="<?php echo site_url('penjualan/cetak_faktur') ?>" target="_blank"><span class="fa fa-print"></span>Cetak</a>
 
-                <?php } ?>
+              <?php } ?>
             </div>
           <?php } ?>
           <?php
@@ -397,6 +397,29 @@
               if ($(this).val() == "") {
                 $("#jml_uang2").prop('readonly', true)
                 $("#jml_uang2").val(0)
+                // Hitung Ulang
+                var uang = $("#jml_uang").val();
+                var uang2 = $("#jml_uang2").val();
+                var total_b = $("#total").val();
+                var diskon = $("#diskon").val();
+                var tot_bayar = total_b;
+                if (!uang2) {
+                  uang2 = 0;
+                }
+                var totall = parseInt(uang) + parseInt(uang2)
+                var hitung = totall - tot_bayar
+                $("#totbayar").val(tot_bayar);
+                if (parseInt(totall) > parseInt(tot_bayar)) {
+                  $("#kembalian_label").text("Kembalian(Rp)")
+                  hitung = Math.abs(hitung);
+                } else if (parseInt(totall) < parseInt(tot_bayar)) {
+                  $("#kembalian_label").text("Kekurangan(Rp)")
+                  hitung = Math.abs(hitung);
+                }
+                if (!hitung) {
+                  hitung = 0
+                }
+                $("#kembalian").val(hitung);
               } else {
                 $("#jml_uang2").prop('readonly', false)
               }
