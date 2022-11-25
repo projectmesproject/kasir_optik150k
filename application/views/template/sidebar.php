@@ -93,7 +93,7 @@
               <?php if ($this->session->userdata('level') == 'admin') { ?>
                 <a class="collapse-item" href="<?php echo site_url('Kategori'); ?>">Data Kategori Barang</a>
                 <a class="collapse-item" href="<?php echo site_url('Barang_rusak'); ?>">Data Barang Rusak</a>
-                <a class="collapse-item" href="<?php echo site_url('peminjaman_barang'); ?>">Data Peminjaman Barang
+                <!-- <a class="collapse-item" href="<?php echo site_url('peminjaman_barang'); ?>">Data Peminjaman Barang -->
 
                 </a>
               <?php } ?>

@@ -69,13 +69,23 @@
                 } else {
                   $status = '<div class="badge badge-danger">Cancel</div>';
                 }
+
+                $nama_plg = "-";
+                if($a["namaplg"]){
+                  $nama_plg = $a["namaplg"];
+                }
+                if($a["cabang"]){
+                  $nama_plg = $a["cabang"];
+                }
+
+
                 ?>
 
                 <tr>
                   <td><?= $no++; ?></td>
-                  <td><?php echo $a['namaplg'] ? $a['namaplg'] : $a["cabang"]?></td>
+                  <td><?php echo $nama_plg ?></td>
                   <td><?php echo $a['jual_tanggal']; ?></td>
-                  <td><?php echo $a['no_hp']; ?></td>
+                  <td><?php echo $a['no_hp'] ?$a['no_hp'] : "-" ?></td>
                   <td><?= $a['jual_nofak']; ?></td>
                   <td><?= $a['jumlah_item']; ?> items</td>
                   <td>Rp. <?= number_format($a['jual_total']); ?></td>
