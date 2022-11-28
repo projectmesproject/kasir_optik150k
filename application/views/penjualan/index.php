@@ -77,7 +77,7 @@
                 </div>
                 <div class="form-group col-sm-2">
                   <label>Jumlah :</label>
-                  <input type="number" readonly id="jumlah_ket" name="jumlah_ket" class="form-control" />
+                  <input type="number" readonly id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
                 </div>
                 <div class="form-group col-sm-3">
                   <label>&nbsp;</label><br />
@@ -142,10 +142,10 @@
                 </div>
                 <br>
                 <?php if ($this->session->userdata('level') == 'penjualan') { ?>
-                  <?php echo form_open('penjualan/simpan_penjualan_cabang') ?>
+                  <?php echo form_open('penjualan/simpan_penjualan_cabang', array("id" => "simpan_penjualan_form")) ?>
                 <?php } else {
                 ?>
-                  <?php echo form_open('penjualan/simpan_penjualan') ?>
+                  <?php echo form_open('penjualan/simpan_penjualan', array("id" => "simpan_penjualan_form")) ?>
                 <?php
                 }
                 ?>
@@ -213,7 +213,7 @@
                       ?>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2" id="status">
+                  <div class="form-group col-sm-2">
                     <label class="font-weight-bold">Status :</label>
                     <select name="status" id="status" class="form-control">
                       <option value="COMPLETE">Lunas</option>
@@ -372,7 +372,7 @@
           $(document).ready(function() {
 
             $('.select').select2();
-
+            loadData()
           })
 
           function loadData() {
@@ -383,12 +383,31 @@
                 selected.push(this.value);
               });
               selected.map((item, index) => {
+                console.log(item)
                 if (item == kode_brg) {
                   $('#pkt' + kode_brg).prop('checked', true);
                 }
               })
             });
           }
+          $('#simpan_penjualan_form').submit(function() {
+            var total = $('#totbayar').val()
+            var uang = $("#jml_uang").val();
+            var uang2 = $("#jml_uang2").val();
+            var status = $("#status").val();
+            var bayar = uang + uang2
+            console.log(`${bayar} - ${total} - ${status}`)
+            if(bayar < total && status == 'COMPLETE'){
+              swal.fire("Penjualan", "Uang tidak cukup untuk bayar Lunas, silahkan pilih status DP untuk melanjutkan !", "warning")
+              return false;
+            }
+             if(bayar >= total && status == 'COMPLETE'){
+              return true;
+            } 
+            if(status == 'DP'){
+              return true;
+            }
+          })
           $("#bayar2").change(function() {
             if (!$("#bayar").val()) {
               swal.fire("Penjualan", "Bayar 1 Harus dipilih", "warning")
@@ -497,7 +516,7 @@
           })
 
           // $(function() {
-          //   loadData()
+          //  
 
 
           //   $("#nabar").autocomplete({

@@ -157,20 +157,30 @@ class Penjualan extends CI_Controller
     {
         $kobar = $this->input->post('kode_brg_ket');
         $produk = $this->m_barang->get_barang1($kobar);
-        $i = $produk->row_array();
-        $data = array(
-            'id'       => $i['barang_id'],
-            'id_kat_barang' => $i['barang_kategori_id'],
-            'name'     => $i['barang_nama'],
-            'satuan'   => $i['barang_satuan'],
-            'harpok'   => $i['barang_harpok'],
-            'price'    => str_replace(",", "", $this->input->post('harga_ket')),
-            'disc'     => $this->input->post('keterangan'),
-            'qty'      => $this->input->post('jumlah_ket'),
-            'amount'      => str_replace(",", "", $this->input->post('harga_ket'))
-        );
-        $this->cart->insert($data);
-        redirect('penjualan');
+        $stok = $this->input->post("stok_ket");
+        $qty = $this->input->post('jumlah_ket');
+        // Cek Stok
+        if($qty > $stok){
+            $i = $produk->row_array();
+            echo $this->session->set_flashdata('error', "Stok produk $i[barang_nama] tidak cukup !");
+            redirect('penjualan');
+        } else {
+            $i = $produk->row_array();
+            $data = array(
+                'id'       => $i['barang_id'],
+                'id_kat_barang' => $i['barang_kategori_id'],
+                'name'     => $i['barang_nama'],
+                'satuan'   => $i['barang_satuan'],
+                'harpok'   => $i['barang_harpok'],
+                'price'    => str_replace(",", "", $this->input->post('harga_ket')),
+                'disc'     => $this->input->post('keterangan'),
+                'qty'      => $qty,
+                'amount'      => str_replace(",", "", $this->input->post('harga_ket'))
+            );
+            $this->cart->insert($data);
+            redirect('penjualan');
+        }
+        
     }
 
     function add_to_cart_paket()
