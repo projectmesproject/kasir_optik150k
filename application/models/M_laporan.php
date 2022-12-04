@@ -63,15 +63,23 @@ class M_laporan extends CI_Model
 	}
 
 	// Laporan penjualan per periode
-	function get_data_jual_periode($tanggal1, $tanggal2)
+	function get_data_jual_periode($tanggal1, $tanggal2, $nama_barang)
 	{
-		$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE DATE(jual_tanggal) between '$tanggal1' AND '$tanggal2' ORDER BY jual_nofak DESC");
+		if ($nama_barang == "") {
+			$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE DATE(tbl_jual.jual_tanggal) between '$tanggal1' AND '$tanggal2' ORDER BY jual_nofak DESC");
+		} else {
+			$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE DATE(tbl_jual.jual_tanggal) between '$tanggal1' AND '$tanggal2' AND tbl_detail_jual.d_jual_barang_nama='$nama_barang' ORDER BY jual_nofak DESC");
+		}
 		return $hsl;
 	}
 
-	function get_data__total_jual_periode($tanggal1, $tanggal2)
+	function get_data__total_jual_periode($tanggal1, $tanggal2, $nama_barang)
 	{
-		$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,SUM(d_jual_total) as total FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE DATE(jual_tanggal) between '$tanggal1' AND '$tanggal2' ORDER BY jual_nofak DESC");
+		if ($nama_barang == "") {
+			$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,SUM(d_jual_total) as total FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE DATE(jual_tanggal) between '$tanggal1' AND '$tanggal2' ORDER BY jual_nofak DESC");
+		} else {
+			$hsl = $this->db->query("SELECT jual_nofak,DATE_FORMAT(jual_tanggal,'%d %M %Y') AS jual_tanggal,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,SUM(d_jual_total) as total FROM tbl_jual JOIN tbl_detail_jual ON jual_nofak=d_jual_nofak WHERE DATE(jual_tanggal) between '$tanggal1' AND '$tanggal2' AND tbl_detail_jual.d_jual_barang_nama='$nama_barang' ORDER BY jual_nofak DESC");
+		}
 		return $hsl;
 	}
 	// 

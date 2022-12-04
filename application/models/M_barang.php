@@ -301,10 +301,19 @@ class M_barang extends CI_Model
 		// 		$response[] = array("value"=>$v['value'],"label"=>$v['label']);
 		// 		$html .= "<li data-value='$v[value]'>$v[label]</li>";
 		// 	}
-
-
-
 		// echo json_encode($response);
 		return $dt;
+	}
+	public function listBarang2($start, $end)
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_jual');
+		$this->db->where('jual_tanggal >=', date('Y-m-d', strtotime($start)));
+		$this->db->where('jual_tanggal <=', date('Y-m-d', strtotime($end)));
+		$this->db->join('tbl_detail_jual', 'tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak');
+		$this->db->group_by('tbl_detail_jual.d_jual_barang_nama');
+		// ->join('tbl_kategori', 'tbl_detail_jual.d_jual_barang_kat_id=tbl_kategori.kategori_id')
+		$res = $this->db->get()->result();
+		return $res;
 	}
 }

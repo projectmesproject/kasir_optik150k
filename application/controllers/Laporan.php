@@ -176,12 +176,14 @@ class Laporan extends CI_Controller
 	{
 		$tanggal1 = $this->input->post('tgl1');
 		$tanggal2 = $this->input->post('tgl2');
+		$nama_barang = $this->input->post('nama_barang');
 
 		$x['tanggal1'] = $this->input->post('tgl1');
 		$x['tanggal2'] = $this->input->post('tgl2');
+		$x['nama_barang'] = $this->input->post('nama_barang');
 
-		$x['jml'] = $this->m_laporan->get_data__total_jual_periode($tanggal1, $tanggal2);
-		$x['data'] = $this->m_laporan->get_data_jual_periode($tanggal1, $tanggal2);
+		$x['jml'] = $this->m_laporan->get_data__total_jual_periode($tanggal1, $tanggal2, $nama_barang);
+		$x['data'] = $this->m_laporan->get_data_jual_periode($tanggal1, $tanggal2, $nama_barang);
 		$this->load->view('laporan/penjualan_per_periode/cetak', $x);
 	}
 

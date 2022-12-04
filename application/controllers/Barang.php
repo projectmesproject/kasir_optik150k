@@ -315,4 +315,11 @@ class Barang extends CI_Controller
 			echo "Tidak ada file yang dihapus";
 		}
 	}
+	public function listBarang()
+	{
+		$start = $this->input->post('start');
+		$end = $this->input->post('end');
+		$res = $this->m_barang->listBarang2($start, $end);
+		echo json_encode($res);
+	}
 }

@@ -62,28 +62,46 @@
 
                                 <tr>
                                     <td style="text-align:center;vertical-align:middle">2</td>
-                                    <td style="vertical-align:middle;">Laporan Penjualan Per Periode</td>
+                                    <td style="vertical-align:middle;">Laporan Penjualan Kasir</td>
+                                    <td style="text-align:center;">
+                                        <!-- <a class="btn btn-sm btn-success" href="#lap_jual_periode" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
+                                        <a class="btn btn-sm btn-success" href="#lap_jual_periode_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="text-align:center;vertical-align:middle">3</td>
+                                    <td style="vertical-align:middle;">Laporan Penjualan Cabang</td>
+                                    <td style="text-align:center;">
+                                        <!-- <a class="btn btn-sm btn-success" href="#lap_jual_periode" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
+                                        <a class="btn btn-sm btn-success" href="#lap_jual_periode_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="text-align:center;vertical-align:middle">4</td>
+                                    <td style="vertical-align:middle;">Laporan Pembelian</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_jual_periode" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
                                         <a class="btn btn-sm btn-success" href="#lap_jual_periode_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">3</td>
-                                    <td style="vertical-align:middle;">Laporan Penjualan Per Barang</td>
+                                    <td style="text-align:center;vertical-align:middle">5</td>
+                                    <td style="vertical-align:middle;">Laporan Penjualan Kwitansi</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_jual_barang" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
                                         <a class="btn btn-sm btn-success" href="#lap_jual_barang_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td style="text-align:center;vertical-align:middle">4</td>
                                     <td style="vertical-align:middle;">Laporan Penjualan Per Kategori Barang</td>
                                     <td style="text-align:center;">
-                                        <!-- <a class="btn btn-sm btn-success" href="#lap_penjualan_kat_barang" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
+                                        <a class="btn btn-sm btn-success" href="#lap_penjualan_kat_barang" data-toggle="modal"><span class="fa fa-eye"></span> View</a>
                                         <a class="btn btn-sm btn-success" href="#lap_penjualan_kat_barang_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
-                                </tr>
+                                </tr> -->
 
                                 <!-- <tr>
                                     <td style="text-align:center;vertical-align:middle">6</td>
@@ -95,7 +113,7 @@
                                 </tr> -->
 
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">5</td>
+                                    <td style="text-align:center;vertical-align:middle">6</td>
                                     <td style="vertical-align:middle;">Laporan Pengeluaran Toko</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_pengeluaran_toko" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
@@ -103,7 +121,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">6</td>
+                                    <td style="text-align:center;vertical-align:middle">7</td>
                                     <td style="vertical-align:middle;">Resume Laporan Keuangan</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_resume" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
@@ -143,7 +161,7 @@
                             <label class="control-label col-xs-3">Kategori Barang</label>
                             <div class="col-xs-9">
                                 <select class="form-control" name="kategori_nama">
-                                    <option value="-" selected>- Pilih Kategori Barang -</option>
+                                    <option value="-" selected>Kategori Barang </option>
                                     <?php foreach ($listBarang as $value) { ?>
                                         <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
                                     <?php } ?>
@@ -207,10 +225,9 @@
                 <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">Pilih Periode</h4>
+                        <h4 class="modal-title">Penjualan Kasir</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-
                     <!-- Modal body -->
                     <?php echo form_open('Laporan/lap_penjualan_periode_cetak', 'target="_blank"') ?>
                     <div class="modal-body">
@@ -218,16 +235,27 @@
                         <div class="form-group">
                             <label class="control-label col-xs-3">Tanggal Awal</label>
                             <div class="col-xs-9">
-                                <input type="date" class="form-control" name="tgl1" value="" placeholder="Tanggal" required>
+                                <input type="date" class="form-control" name="tgl1" id="tgl1" value="" placeholder="Tanggal" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-xs-3">Tanggal Akhir</label>
                             <div class="col-xs-9">
-                                <input type="date" class="form-control" name="tgl2" value="" placeholder="Tanggal" required>
+                                <input type="date" class="form-control" name="tgl2" id="tgl2" value="" onchange="listBarang()" placeholder="Tanggal" required>
                             </div>
                         </div>
+
+                        <label class="control-label col-xs-6">Barang</label>
+                        <div class="col-xs-9">
+                            <select name="nama_barang" id="nama_barang" class="form-control">
+                                <option value="-" selected>Barang</option>
+                                <!-- <?php foreach ($listBarang as $value) { ?>
+                                        <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
+                                    <?php } ?> -->
+                            </select>
+                        </div>
+
 
                     </div>
 
@@ -651,4 +679,41 @@
                     delimiterRegExp: /[\.\,\s]/g
                 });
             })
+
+            function listBarang() {
+                let select = $("#nama_barang");
+                let start = $("#tgl1").val();
+                let end = $("#tgl2").val();
+
+                $.ajax({
+                    url: "<?= base_url('Barang/listBarang') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        start: start,
+                        end: end
+                    },
+                    success: function(data) {
+                        if (data) {
+                            let html = '<option value="">Pilih Barang</option>';
+                            $.each(data, function(index, value) {
+                                html += '"<option value="' + value.d_jual_barang_nama + '">' + value.d_jual_barang_nama + '</option>';
+                            });
+                            $(select).html(html);
+
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+        </script>
+        <script>
+            $(document).ready(function() {
+                $('select').select2({
+                    width: '300px',
+                })
+
+            });
         </script>

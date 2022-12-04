@@ -28,4 +28,12 @@ class M_kategori extends CI_Model
         $return = $query->result();
         return $return;
     }
+    public function listKategori($start, $end)
+    {
+        $res = $this->db->select('*')->from('tbl_jual')->where('jual_tanggal <=', $start)->where('jual_tanggal >=', $end)
+            ->join('tbl_detail_jual', 'tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak')
+            ->join('tbl_kategori', 'tbl_detail_jual.d_jual_barang_kat_id=tbl_kategori.kategori_id')
+            ->get()->result_array();
+        return $res;
+    }
 }
