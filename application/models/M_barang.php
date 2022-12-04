@@ -316,4 +316,17 @@ class M_barang extends CI_Model
 		$res = $this->db->get()->result();
 		return $res;
 	}
+	public function listBarang_cabang($start, $end)
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_jual');
+		$this->db->where('jual_tanggal >=', date('Y-m-d', strtotime($start)));
+		$this->db->where('jual_tanggal <=', date('Y-m-d', strtotime($end)));
+		$this->db->where('cabang !=', '');
+		$this->db->join('tbl_detail_jual', 'tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak');
+		$this->db->group_by('tbl_detail_jual.d_jual_barang_nama');
+		// ->join('tbl_kategori', 'tbl_detail_jual.d_jual_barang_kat_id=tbl_kategori.kategori_id')
+		$res = $this->db->get()->result();
+		return $res;
+	}
 }
