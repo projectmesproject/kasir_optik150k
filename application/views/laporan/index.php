@@ -83,7 +83,7 @@
                                     <td style="vertical-align:middle;">Laporan Pembelian</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_jual_periode" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
-                                        <a class="btn btn-sm btn-success" href="#lap_jual_periode_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
+                                        <a class="btn btn-sm btn-success" href="#laporan_pembelian" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -227,45 +227,37 @@
                 </div>
             </div>
         </div>
-        <!---------------------------------------------Laporan Penjualan Cabang--------------------------------------------->
-
-        <div class="modal fade" id="penjualan_cabang">
+        <!---------------------------------------------Laporan Pembelian--------------------------------------------->
+        <div class="modal fade" id="laporan_pembelian">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">Penjualan Cabang</h4>
+                        <h4 class="modal-title">Laporan Pembelian</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <!-- Modal body -->
-
-                    <form id="form_penjualan_cabang" action="<?= base_url('Laporan/penjualan_cabang') ?>" method="post" target="_blank">
+                    <form id="form_laporan_pembelian" action="<?= base_url('Laporan/laporan_pembelian') ?>" method="post" target="_blank">
                         <div class="modal-body">
-
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Awal</label>
                                 <div class="col-xs-9">
                                     <input type="date" class="form-control" name="tgl1" placeholder="Tanggal" required>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Akhir</label>
                                 <div class="col-xs-9">
-                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listBarang_cabang()" placeholder="Tanggal" required>
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listBarang_pembelian()" placeholder="Tanggal" required>
                                 </div>
                             </div>
-
                             <label class="control-label col-xs-6">Barang</label>
                             <div class="col-xs-9">
                                 <select name="nama_barang" class="form-control">
                                     <option value="-" selected>Barang</option>
                                 </select>
                             </div>
-
-
                         </div>
-
                         <!-- Modal footer -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -276,6 +268,46 @@
             </div>
         </div>
 
+        <!---------------------------------------------Laporan Kwitansi--------------------------------------------->
+        <div class="modal fade" id="penjualan_cabang">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Penjualan Kwitansi</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="form_penjualan_kwitansi" action="<?= base_url('Laporan/penjualan_kwitansi') ?>" method="post" target="_blank">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Tanggal Awal</label>
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" name="tgl1" placeholder="Tanggal" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Tanggal Akhir</label>
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listBarang_cabang()" placeholder="Tanggal" required>
+                                </div>
+                            </div>
+                            <label class="control-label col-xs-6">Barang</label>
+                            <div class="col-xs-9">
+                                <select name="nama_barang" class="form-control">
+                                    <option value="-" selected>Barang</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button class="btn btn-success"><span class="fa fa-print"></span> Cetak</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <!---------------------------------------------Laporan Penjualan Barang--------------------------------------------->
 
         <div class="modal fade" id="lap_jual_barang">
@@ -720,7 +752,6 @@
                 let start = $("#form_penjualan_cabang").find('input[name=tgl1]').val();
                 let end = $("#form_penjualan_cabang").find('input[name=tgl2]').val();
                 let select = $("#form_penjualan_cabang").find('select[name=nama_barang]');
-                console.log("tes", select)
 
                 $.ajax({
                     url: "<?= base_url('Barang/listBarang_cabang') ?>",
@@ -735,6 +766,36 @@
                             let html = '<option value="">Pilih Barang</option>';
                             $.each(data, function(index, value) {
                                 html += '"<option value="' + value.d_jual_barang_nama + '">' + value.d_jual_barang_nama + '</option>';
+                            });
+                            $(select).html(html);
+
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+
+            function listBarang_pembelian() {
+                let start = $("#form_laporan_pembelian").find('input[name=tgl1]').val();
+                let end = $("#form_laporan_pembelian").find('input[name=tgl2]').val();
+                let select = $("#form_laporan_pembelian").find('select[name=nama_barang]');
+
+                $.ajax({
+                    url: "<?= base_url('Barang/listBarang_pembelian') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        start: start,
+                        end: end
+                    },
+                    success: function(data) {
+                        console.log(data)
+                        if (data) {
+                            let html = '<option value="">Pilih Barang</option>';
+                            $.each(data, function(index, value) {
+                                html += '"<option value="' + value.barang_id + '">' + value.barang_nama + '</option>';
                             });
                             $(select).html(html);
 

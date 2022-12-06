@@ -329,4 +329,16 @@ class M_barang extends CI_Model
 		$res = $this->db->get()->result();
 		return $res;
 	}
+	public function listBarang_pembelian($start, $end)
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_beli');
+		$this->db->where('beli_tanggal >=', date('Y-m-d', strtotime($start)));
+		$this->db->where('beli_tanggal <=', date('Y-m-d', strtotime($end)));
+		$this->db->join('tbl_detail_beli', 'tbl_beli.beli_nofak=tbl_detail_beli.d_beli_nofak');
+		$this->db->join('tbl_barang', 'tbl_detail_beli.d_beli_barang_id=tbl_barang.barang_id');
+		$this->db->group_by('tbl_barang.barang_nama');
+		$res = $this->db->get()->result();
+		return $res;
+	}
 }

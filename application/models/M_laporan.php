@@ -82,6 +82,30 @@ class M_laporan extends CI_Model
 		return $hsl;
 	}
 
+	function get_pembelian($tanggal1, $tanggal2, $nama_barang)
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_beli');
+		$this->db->where('beli_tanggal >=', date('Y-m-d', strtotime($tanggal1)));
+		$this->db->where('beli_tanggal <=', date('Y-m-d', strtotime($tanggal2)));
+		$this->db->join('tbl_detail_beli', 'tbl_beli.beli_nofak=tbl_detail_beli.d_beli_nofak');
+		$this->db->join('tbl_barang', 'tbl_detail_beli.d_beli_barang_id=tbl_barang.barang_id');
+		if ($nama_barang) {
+			$this->db->where('tbl_detail_beli.d_beli_barang_id', $nama_barang);
+		}
+		$res = $this->db->get()->result();
+		return $res;
+	}
+	function get_pembelian_total($tanggal1, $tanggal2, $nama_barang)
+	{
+		if ($nama_barang == "") {
+			$hsl = $this->db->query("SELECT beli_nofak,DATE_FORMAT(beli_tanggal,'%d %M %Y') AS beli_tanggal,d_beli_id, d_beli_nofak, d_beli_barang_id, d_beli_harga, d_beli_jumlah, SUM(d_beli_total) as total FROM tbl_beli JOIN tbl_detail_beli ON beli_nofak=d_beli_nofak WHERE DATE(tbl_beli.beli_tanggal) between '$tanggal1' AND '$tanggal2' ORDER BY beli_nofak DESC");
+		} else {
+			$hsl = $this->db->query("SELECT beli_nofak,DATE_FORMAT(beli_tanggal,'%d %M %Y') AS beli_tanggal,d_beli_id, d_beli_nofak, d_beli_barang_id, d_beli_harga, d_beli_jumlah, SUM(d_beli_total) as total FROM tbl_beli JOIN tbl_detail_beli ON beli_nofak=d_beli_nofak WHERE DATE(tbl_beli.beli_tanggal) between '$tanggal1' AND '$tanggal2' AND tbl_detail_beli.d_beli_barang_id='$nama_barang' ORDER BY beli_nofak DESC");
+		}
+		return $hsl;
+	}
+
 	function get_total_penjualan_barang($tanggal1, $tanggal2, $nama_barang)
 	{
 		if ($nama_barang == "") {

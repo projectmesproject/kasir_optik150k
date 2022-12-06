@@ -329,4 +329,11 @@ class Barang extends CI_Controller
 		$res = $this->m_barang->listBarang_cabang($start, $end);
 		echo json_encode($res);
 	}
+	public function listBarang_pembelian()
+	{
+		$start = $this->input->post('start');
+		$end = $this->input->post('end');
+		$res = $this->m_barang->listBarang_pembelian($start, $end);
+		echo json_encode($res);
+	}
 }
