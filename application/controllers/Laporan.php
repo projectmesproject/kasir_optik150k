@@ -212,6 +212,16 @@ class Laporan extends CI_Controller
 		$x['data'] = $this->m_laporan->get_pembelian($tanggal1, $tanggal2, $nama_barang);
 		$this->load->view('laporan/pembelian/cetak', $x);
 	}
+	function penjualan_kwitansi()
+	{
+		$tanggal1 = $this->input->post('tgl1');
+		$tanggal2 = $this->input->post('tgl2');
+		$x['tanggal1'] = $this->input->post('tgl1');
+		$x['tanggal2'] = $this->input->post('tgl2');
+		$x['total'] = $this->m_laporan->get_penjualan_kwitansi_total($tanggal1, $tanggal2);
+		$x['data'] = $this->m_laporan->get_penjualan_kwitansi($tanggal1, $tanggal2);
+		$this->load->view('laporan/penjualan_kwitansi/cetak', $x);
+	}
 
 	function lap_penjualan_barang()
 	{

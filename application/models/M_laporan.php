@@ -105,6 +105,25 @@ class M_laporan extends CI_Model
 		}
 		return $hsl;
 	}
+	function get_penjualan_kwitansi($tanggal1, $tanggal2)
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_kwitansi');
+		$this->db->where('date_created >=', date('Y-m-d', strtotime($tanggal1)));
+		$this->db->where('date_created <=', date('Y-m-d', strtotime($tanggal2)));
+		$res = $this->db->get()->result();
+		return $res;
+	}
+	function get_penjualan_kwitansi_total($tanggal1, $tanggal2)
+	{
+		$this->db->select('*');
+		$this->db->select_sum('harga_jual');
+		$this->db->from('tbl_kwitansi');
+		$this->db->where('date_created >=', date('Y-m-d', strtotime($tanggal1)));
+		$this->db->where('date_created <=', date('Y-m-d', strtotime($tanggal2)));
+		$res = $this->db->get()->row_array(); // Produces: SELECT SUM(age) as age FROM members
+		return $res;
+	}
 
 	function get_total_penjualan_barang($tanggal1, $tanggal2, $nama_barang)
 	{

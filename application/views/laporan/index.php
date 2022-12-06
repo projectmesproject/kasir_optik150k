@@ -64,7 +64,6 @@
                                     <td style="text-align:center;vertical-align:middle">2</td>
                                     <td style="vertical-align:middle;">Laporan Penjualan Kasir</td>
                                     <td style="text-align:center;">
-                                        <!-- <a class="btn btn-sm btn-success" href="#lap_jual_periode" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
                                         <a class="btn btn-sm btn-success" href="#penjualan_kasir" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
@@ -73,7 +72,6 @@
                                     <td style="text-align:center;vertical-align:middle">3</td>
                                     <td style="vertical-align:middle;">Laporan Penjualan Cabang</td>
                                     <td style="text-align:center;">
-                                        <!-- <a class="btn btn-sm btn-success" href="#lap_jual_periode" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
                                         <a class="btn btn-sm btn-success" href="#penjualan_cabang" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
@@ -82,7 +80,6 @@
                                     <td style="text-align:center;vertical-align:middle">4</td>
                                     <td style="vertical-align:middle;">Laporan Pembelian</td>
                                     <td style="text-align:center;">
-                                        <!-- <a class="btn btn-sm btn-success" href="#lap_jual_periode" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
                                         <a class="btn btn-sm btn-success" href="#laporan_pembelian" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
@@ -90,8 +87,7 @@
                                     <td style="text-align:center;vertical-align:middle">5</td>
                                     <td style="vertical-align:middle;">Laporan Penjualan Kwitansi</td>
                                     <td style="text-align:center;">
-                                        <!-- <a class="btn btn-sm btn-success" href="#lap_jual_barang" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
-                                        <a class="btn btn-sm btn-success" href="#lap_jual_barang_cetak" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
+                                        <a class="btn btn-sm btn-success" href="#penjualan_kwitansi" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
                                 <!-- <tr>
@@ -268,8 +264,48 @@
             </div>
         </div>
 
-        <!---------------------------------------------Laporan Kwitansi--------------------------------------------->
+        <!---------------------------------------------Laporan Cabang--------------------------------------------->
         <div class="modal fade" id="penjualan_cabang">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Penjualan Cabang</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="form_penjualan_cabang" action="<?= base_url('Laporan/penjualan_cabang') ?>" method="post" target="_blank">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Tanggal Awal</label>
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" name="tgl1" placeholder="Tanggal" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Tanggal Akhir</label>
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listBarang_cabang()" placeholder="Tanggal" required>
+                                </div>
+                            </div>
+                            <label class="control-label col-xs-6">Barang</label>
+                            <div class="col-xs-9">
+                                <select name="nama_barang" class="form-control">
+                                    <option value="-" selected>Barang</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button class="btn btn-success"><span class="fa fa-print"></span> Cetak</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!---------------------------------------------Laporan Penjualan Kwitansi--------------------------------------------->
+        <div class="modal fade" id="penjualan_kwitansi">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- Modal Header -->
@@ -289,14 +325,8 @@
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Akhir</label>
                                 <div class="col-xs-9">
-                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listBarang_cabang()" placeholder="Tanggal" required>
+                                    <input type="date" class="form-control" name="tgl2" value="" placeholder="Tanggal" required>
                                 </div>
-                            </div>
-                            <label class="control-label col-xs-6">Barang</label>
-                            <div class="col-xs-9">
-                                <select name="nama_barang" class="form-control">
-                                    <option value="-" selected>Barang</option>
-                                </select>
                             </div>
                         </div>
                         <!-- Modal footer -->

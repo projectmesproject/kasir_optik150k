@@ -1,7 +1,7 @@
 <html lang="en" moznomarginboxes mozdisallowselectionprint>
 
 <head>
-    <title>Laporan data Pembelian</title>
+    <title>Laporan data Penjualan Kwitansi</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/laporan.css') ?>" />
 </head>
@@ -15,7 +15,7 @@
             <tr>
                 <td colspan="2" style="width:800px;padding-left:20px;">
                     <center>
-                        <h4>LAPORAN PEMBELIAN</h4>
+                        <h4>LAPORAN PENJUALAN KWITANSI</h4>
                     </center><br />
                 </td>
             </tr>
@@ -26,21 +26,17 @@
             <tr>
                 <th style="text-align:left">Tanggal : <?= date('d-M-Y', strtotime($tanggal1)) . " - " . date('d-M-Y', strtotime($tanggal2)) ?></th>
             </tr>
-            <tr>
-                <th style="text-align:left">Barang : <?= $nama_barang ?></th>
-            </tr>
         </table>
 
         <table border="1" align="center" style="width:900px;margin-bottom:20px;">
             <thead>
                 <tr>
                     <th style="width:50px;">No</th>
-                    <th>No Faktur</th>
+                    <th>Kode Kwitansi</th>
                     <th>Tanggal</th>
-                    <th>Nama Barang</th>
-                    <th>Harga Beli</th>
-                    <th>Qty</th>
-                    <th>Total</th>
+                    <th>Karyawan</th>
+                    <th>Nominal</th>
+                    <th>Harga Jual</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,22 +48,18 @@
                 ?>
                     <tr>
                         <td style="text-align:center;"><?= $no; ?></td>
-                        <td style="text-align:center;"><?= $value->beli_nofak; ?></td>
-                        <td style="text-align:center;"><?= date('d-M-Y', strtotime($value->beli_tanggal)); ?></td>
-                        <td style="text-align:center;"><?= $value->barang_nama; ?></td>
-                        <td style="text-align:right;"><?= 'Rp ' . number_format($value->d_beli_harga); ?></td>
-                        <td style="text-align:center;"><?= $value->d_beli_jumlah; ?></td>
-                        <td style="text-align:right;"><?= 'Rp ' . number_format($value->d_beli_total); ?></td>
+                        <td style="text-align:center;"><?= $value->kode_kwitansi; ?></td>
+                        <td style="text-align:center;"><?= date('d-M-Y', strtotime($value->date_created)); ?></td>
+                        <td style="text-align:center;"><?= $value->karyawan; ?></td>
+                        <td style="text-align:center;"><?= 'Rp ' . number_format($value->nominal); ?></td>
+                        <td style="text-align:right;"><?= 'Rp ' . number_format($value->harga_jual); ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
             <tfoot>
-                <?php
-                $b = $jml->row_array();
-                ?>
                 <tr>
-                    <td colspan="6" style="text-align:center;"><b>Total</b></td>
-                    <td style="text-align:right;"><b><?php echo 'Rp ' . number_format($b['total']); ?></b></td>
+                    <td colspan="5" style="text-align:center;"><b>Total</b></td>
+                    <td style="text-align:right;"><b><?php echo 'Rp ' . number_format($total['harga_jual']); ?></b></td>
                 </tr>
             </tfoot>
         </table>
