@@ -160,7 +160,7 @@ class Penjualan extends CI_Controller
         $stok = $this->input->post("stok_ket");
         $qty = $this->input->post('jumlah_ket');
         // Cek Stok
-        if($qty > $stok){
+        if ($qty > $stok) {
             $i = $produk->row_array();
             echo $this->session->set_flashdata('error', "Stok produk $i[barang_nama] tidak cukup !");
             redirect('penjualan');
@@ -180,7 +180,6 @@ class Penjualan extends CI_Controller
             $this->cart->insert($data);
             redirect('penjualan');
         }
-        
     }
 
     function add_to_cart_paket()
@@ -346,7 +345,7 @@ class Penjualan extends CI_Controller
             $total_a = $jml_uang + $jml_uang2;
             if ($total_a > $total) {
                 $kembalian = str_replace(",", "", $this->input->post('kembalian'));
-                $kurang=0;
+                $kurang = 0;
             }
             if ($total_a < $total) {
                 $kurang = $total_belanja - $total_a;
@@ -413,7 +412,7 @@ class Penjualan extends CI_Controller
             $total_a = $jml_uang + $jml_uang2;
             if ($total_a > $total) {
                 $kembalian = str_replace(",", "", $this->input->post('kembalian'));
-                $kurang=0;
+                $kurang = 0;
             }
             if ($total_a < $total) {
                 $kurang = $total_belanja - $total_a;
@@ -429,7 +428,12 @@ class Penjualan extends CI_Controller
                 $nofak = $this->m_penjualan->get_nofak();
                 $this->session->set_userdata('nofak', $nofak);
 
-               $cabang = $this->input->post("cabang");
+                $cabang = $this->input->post("cabang");
+
+                $jenis_cetak = "";
+                if ($this->input->post("jenis_cetak") != null) {
+                    $jenis_cetak = $this->input->post("jenis_cetak");
+                }
                 // $nofak, $total, $jml_uang,$kurang, $kembalian, $bayar,$bayar2, $diskon, $nohp,$status
                 $order_proses = $this->m_penjualan->simpan_penjualan_cabang($nofak, $total, $jml_uang, $jml_uang2, $kurang, $kembalian, $bayar, $bayar2, $diskon, $cabang, $status);
 
@@ -437,9 +441,18 @@ class Penjualan extends CI_Controller
                     $this->cart->destroy();
                     $this->session->unset_userdata('tglfak');
                     $this->session->unset_userdata('suplier');
-                    echo $this->session->set_flashdata('msg', 'Berhasil !!');
-                    //v13nr redirect('penjualan');	
-                    $this->cetak_faktur_cabang();
+                    //v13nr redirect('penjualan');
+
+                    if ($jenis_cetak != "" && $this->session->userdata('level') == 'penjualan') {
+                        if ($jenis_cetak == 'faktur') {
+                            $this->cetak_faktur_sj();
+                        }
+                        if ($jenis_cetak == 'sj') {
+                            $this->cetak_surat_jalan();
+                        }
+                    } else {
+                        $this->cetak_faktur();
+                    }
                 } else {
                     redirect('penjualan');
                 }
@@ -449,6 +462,18 @@ class Penjualan extends CI_Controller
             }
         }
     }
+
+    function cetak_faktur_sj()
+    {
+        $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
+        $this->load->view('laporan/v_cetak_faktur_sj', $x);
+    }
+    function cetak_surat_jalan()
+    {
+        $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
+        $this->load->view('laporan/v_surat_jalan', $x);
+    }
+
     function cetak_faktur()
     {
         $x['data'] = $this->m_penjualan->cetak_faktur();

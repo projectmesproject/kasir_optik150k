@@ -241,9 +241,21 @@
                 }
                 ?>
                 <table>
+                  
 
                   <tr>
-                    <td class="col-sm-6" rowspan="3"><button type="submit" class="btn btn-success btn-lg"> CETAK</button></td>
+                    <?php if ($this->session->userdata('level') == 'penjualan') {
+                    ?>
+                      <td class="col-sm-6" rowspan="3">
+                      <input type="hidden" name="jenis_cetak" id="jenis_cetak" />  
+                      <small class="text-danger">Cetak Faktur ( Cetak Surat Jalan dan Faktur ) , Cetak Surat Jalan hanya cetak surat jalan </small><br/><br/>
+                      <button type="submit" class="btn btn-success btn-lg" onclick="submitForm('faktur')"> CETAK FAKTUR</button><br/>
+                      <br /><button type="submit" class="btn btn-info btn-lg" onclick="submitForm('sj')"> CETAK SURAT JALAN</button></td>
+
+                    <?php
+                    } else { ?>
+                      <td class="col-sm-6" rowspan="3"><button type="submit" class="btn btn-success btn-lg"> CETAK</button></td>
+                    <?php } ?>
                     <th colspan="4">Total Yang Harus Dibayar (Rp) : </th>
                     <th style="text-align:right;"><input type="text" id="totbayar" value="<?php echo number_format($this->cart->total()); ?>" min="0" name="totbayar" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
                   </tr>
@@ -390,21 +402,27 @@
               })
             });
           }
+
+          function submitForm(jenis){
+            $('#jenis_cetak').val(jenis)
+          }
+
           $('#simpan_penjualan_form').submit(function() {
+            
             var total = $('#totbayar').val()
             var uang = $("#jml_uang").val();
             var uang2 = $("#jml_uang2").val();
             var status = $("#status").val();
+            var jenis_cetak = $("#jenis_cetak").val();
             var bayar = uang + uang2
-            console.log(`${bayar} - ${total} - ${status}`)
-            if(bayar < total && status == 'COMPLETE'){
+            if (bayar < total && status == 'COMPLETE') {
               swal.fire("Penjualan", "Uang tidak cukup untuk bayar Lunas, silahkan pilih status DP untuk melanjutkan !", "warning")
               return false;
             }
-             if(bayar >= total && status == 'COMPLETE'){
+            if (bayar >= total && status == 'COMPLETE') {
               return true;
-            } 
-            if(status == 'DP'){
+            }
+            if (status == 'DP') {
               return true;
             }
           })
