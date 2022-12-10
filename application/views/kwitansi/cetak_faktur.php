@@ -50,7 +50,8 @@
 <body class="container p-5"></body>
 <?php
 $bulantahun = date('mY');
-$nomor = sprintf("%04d", $data);
+$nomor = 4;
+$nomor = sprintf("%04d", $nomor);
 $array_warna = array("168, 168, 50,.6","244, 156, 247,.6","247, 159, 156,.6","155, 228, 250,.6","164, 242, 148,.6");
 for ($i = 1; $i < 6; $i++) {
     if ($i == $versi) {
@@ -62,7 +63,7 @@ for ($i = 1; $i < 6; $i++) {
                 <div style="position: absolute;top:0;bottom:0;right:0;left:0;opacity:.8" class="border"></div>
                 <div class="d-flex-column">
                     <div class="border-bottom-line col-sm-3 pl-0">
-                        <span>No. KWI/OPT/<?= $nomor ?>/<?= $bulantahun ?></span>
+                        <span>No. <?= $data->kode_kwitansi; ?></span>
                     </div>
                     <div class="col-sm-12 border-bottom-dot pl-0">
                         <span>Sudah Diterima Dari</span>

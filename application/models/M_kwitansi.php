@@ -17,7 +17,7 @@ class M_kwitansi extends CI_Model
         $select = $this->db->query("SELECT * FROM tbl_kwitansi WHERE DATE(date_created) ='$today'")->result_array();
         $count = count($select);
         $count++;
-        $count = sprintf("%04d",$count);
+        $count = sprintf("%04d", $count);
         $kode = "KWI-OPT/$count/$bulan/$tahun";
 
         $data = array(
@@ -31,6 +31,10 @@ class M_kwitansi extends CI_Model
         );
 
         $this->db->insert('tbl_kwitansi', $data);
+    }
+    public function get_kwitansi($id)
+    {
+        return $this->db->get_where('tbl_kwitansi',array("id_kwitansi" => $id));
     }
 
     public function hapus_kwitansi($id)

@@ -30,8 +30,8 @@ class Kwitansi extends CI_Controller
 
     function cetak_kwitansi($kwitansi, $versi)
     {
-        // $x['data'] = $this->m_kwitansi->cetak_faktur2($nofak);
-        $x['data'] = $kwitansi;
+     
+        $x['data'] = $this->m_kwitansi->get_kwitansi($kwitansi)->row();  
         $x['versi'] = $versi;
         $this->load->view('kwitansi/cetak_faktur', $x);
     }
