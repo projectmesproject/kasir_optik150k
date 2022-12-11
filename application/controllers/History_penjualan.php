@@ -19,8 +19,8 @@ class History_penjualan extends CI_Controller
         $data['title'] = "Data History Penjualan";
         $data_array = array();
 
-        $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp order by jual_tanggal desc")->result_array();
-       
+        $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.cabang='' or A.cabang is null and A.no_hp !='' or A.no_hp is not null order by jual_tanggal desc ")->result_array();
+
         foreach ($data1 as $dt) {
             $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
             $dt["jumlah_item"] = $jmlh->jum;
@@ -69,10 +69,10 @@ class History_penjualan extends CI_Controller
     {
         $search = $this->input->post('search');
         $data_array = array();
-        
+
         $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.no_hp LIKE '%$search%' OR A.jual_nofak LIKE '%$search%' OR B.nama LIKE '%$search%'  order by jual_tanggal desc")->result_array();
-        
-        if($this->session->userdata('level') == 'penjualan'){
+
+        if ($this->session->userdata('level') == 'penjualan') {
 
             $data1 = $this->db->query("select A.* from tbl_jual  where no_hp LIKE '%$search%' OR jual_nofak LIKE '%$search%' OR cabang LIKE '%$search%'  order by jual_tanggal desc")->result_array();
         }
@@ -84,7 +84,7 @@ class History_penjualan extends CI_Controller
             array_push($data_array, $dt);
         }
         $data = $data_array;
-       
+
         ob_start();
 ?>
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -141,7 +141,7 @@ class History_penjualan extends CI_Controller
                 <?php } ?>
             </tbody>
         </table>
-<?php
+    <?php
         $konten = ob_get_contents();
         return $konten;
     }
@@ -150,11 +150,11 @@ class History_penjualan extends CI_Controller
     {
         $search = $this->input->post('search');
         $data_array = array();
-        
-    
 
-            $data1 = $this->db->query("select * from tbl_jual where jual_nofak LIKE '%$search%' OR cabang LIKE '%$search%' order by jual_tanggal desc")->result_array();
-        
+
+
+        $data1 = $this->db->query("select * from tbl_jual where jual_nofak LIKE '%$search%' OR cabang LIKE '%$search%' order by jual_tanggal desc")->result_array();
+
 
 
         foreach ($data1 as $dt) {
@@ -163,9 +163,9 @@ class History_penjualan extends CI_Controller
             array_push($data_array, $dt);
         }
         $data = $data_array;
-       
+
         ob_start();
-?>
+    ?>
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>

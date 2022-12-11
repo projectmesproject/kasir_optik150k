@@ -106,34 +106,37 @@
       <!-- DATA PENJUALAN -->
       <!-- Divider -->
       <?php if ($this->session->userdata('level') != 'pembelian') { ?>
-      <!-- Heading -->
-      <hr class="sidebar-divider">
-      <div class="sidebar-heading">
-        Data Penjualan
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo3" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-cart-plus"></i>
-          <span>Data Penjualan</span>
-        </a>
-        <div id="collapseTwo3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Data Penjualan</h6>
-            <?php if ($this->session->userdata('level') == 'kasir' || $this->session->userdata('level') == 'penjualan') { ?>
-              <a class="collapse-item" href="<?php echo site_url('Penjualan'); ?>">Penjualan</a>
-              <?php
-              $show_byr_dp = 0;
-              if ($show_byr_dp) {
-              ?>
-                <a class="collapse-item" href="<?php echo site_url('jual_dp'); ?>">Pembayaran DP</a>
-            <?php }
-            } ?>
-            <a class="collapse-item" href="<?php echo site_url('history_penjualan'); ?>">History Penjualan</a>
-          </div>
+        <!-- Heading -->
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">
+          Data Penjualan
         </div>
-      </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo3" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-cart-plus"></i>
+            <span>Data Penjualan</span>
+          </a>
+          <div id="collapseTwo3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Data Penjualan</h6>
+              <?php if ($this->session->userdata('level') == 'kasir' || $this->session->userdata('level') == 'penjualan') { ?>
+                <a class="collapse-item" href="<?php echo site_url('Penjualan'); ?>">Penjualan</a>
+                <?php
+                $show_byr_dp = 0;
+                if ($show_byr_dp) {
+                ?>
+                  <a class="collapse-item" href="<?php echo site_url('jual_dp'); ?>">Pembayaran DP</a>
+              <?php }
+              } ?>
+              <a class="collapse-item" href="<?php echo site_url('history_penjualan'); ?>">History Penjualan</a>
+              <?php if ($this->session->userdata("level") == "admin") { ?>
+                <a class="collapse-item" href="<?php echo site_url('history_penjualan_cabang'); ?>">History Penjualan Cabang</a>
+              <?php } ?>
+            </div>
+          </div>
+        </li>
       <?php } ?>
       <!-- AKHIR DATA PENJUALAN -->
       <!-- Heading -->

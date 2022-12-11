@@ -49,7 +49,7 @@
             <tr>
               <td>Customer</td>
               <td>:</td>
-              <td><?= $customer['nama']; ?></td>
+              <td><?= $customer['nama'] ?? '-'; ?></td>
             </tr>
           <?php } ?>
           <tr>

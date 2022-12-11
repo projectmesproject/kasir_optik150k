@@ -9,7 +9,7 @@
 <body onload="window.print()">
     <div id="laporan">
         <table align="center" style="width:302px; border-bottom:3px double;border-top:none;border-right:none;border-left:none;margin-top:5px;margin-bottom:20px;">
-      
+
         </table>
 
         <table border="0" align="center" style="width:302px; border:none;margin-top:5px;margin-bottom:0px;">
@@ -56,19 +56,38 @@
             <?php
             $nope = $b['no_hp'];
             $nama_p = $this->db->query("select * from tbl_customer where no_hp='$nope'")->row_array();
+
             ?>
             <tr>
                 <th style="text-align:left;">Nama Pelanggan</th>
-                <th style="text-align:left;">: <?php echo $nama_p['nama']; ?></th>
+                <th style="text-align:left;">: <?php
+                                                if ($nama_p) {
+                                                    echo $nama_p['nama'];
+                                                } else {
+                                                    echo "-";
+                                                }
+                                                ?></th>
 
             </tr>
             <tr>
                 <th style="text-align:left;">No HP</th>
-                <th style="text-align:left;">: <?php echo $b['no_hp']; ?></th>
+                <th style="text-align:left;">: <?php
+                                                if ($nama_p) {
+                                                    echo $b['no_hp'];
+                                                } else {
+                                                    echo "-";
+                                                }
+                                                ?></th>
             </tr>
             <tr>
                 <th style="text-align:left;">Alamat</th>
-                <th style="text-align:left;">: <?php echo $nama_p['alamat']; ?></th>
+                <th style="text-align:left;">: <?php
+                                                if ($nama_p) {
+                                                    echo $nama_p['alamat'];
+                                                } else {
+                                                    echo "-";
+                                                }
+                                                ?></th>
             </tr>
 
             <tr>
@@ -140,10 +159,10 @@
             <?php } ?>
 
             <?php if ($b['jual_kembalian'] != 0) { ?>
-            <tr>
-                <th style="text-align:left;">Kembalian</th>
-                <th style="text-align:left;">: <?php echo 'Rp ' . number_format($b['jual_kembalian']) . ',-'; ?></th>
-            </tr>
+                <tr>
+                    <th style="text-align:left;">Kembalian</th>
+                    <th style="text-align:left;">: <?php echo 'Rp ' . number_format($b['jual_kembalian']) . ',-'; ?></th>
+                </tr>
             <?php } ?>
             <?php if ($b['jual_kurang_uang'] != 0) { ?>
                 <tr>
