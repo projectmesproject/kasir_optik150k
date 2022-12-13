@@ -19,15 +19,14 @@
                     </center><br />
                 </td>
             </tr>
-
         </table>
 
         <table border="0" align="center" style="width:900px;border:none;">
             <tr>
-                <th style="text-align:left">Tanggal : <?= date('d-M-Y', strtotime($tanggal1)) . " - " . date('d-M-Y', strtotime($tanggal2)) ?></th>
+                <th style="text-align:left">Tanggal : <?= date('d M Y', strtotime($tanggal1)) . " - " . date('d M Y', strtotime($tanggal2)) ?></th>
             </tr>
             <tr>
-                <th style="text-align:left">Barang : <?= $nama_barang ?></th>
+                <th style="text-align:left">Supplier : <?= $supplier->suplier_nama ?></th>
             </tr>
         </table>
 

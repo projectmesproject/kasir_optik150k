@@ -12,6 +12,7 @@ class Laporan extends CI_Controller
 		$this->load->model('m_penjualan');
 		$this->load->model('m_laporan');
 		$this->load->model('m_karyawan');
+		$this->load->model('m_customer');
 	}
 
 	function index()
@@ -22,6 +23,9 @@ class Laporan extends CI_Controller
 		$data['listBarang'] = $this->m_barang->listBarang();
 		$data['kat'] = $this->m_kategori->tampil_kategori();
 		$data['karyawan'] = $this->m_karyawan->tampil_karyawan();
+		$data['customer'] = $this->m_customer->tampil_customer();
+		$data['cabang'] = $this->m_laporan->get_cabang();
+		$data['supplier'] = $this->m_suplier->tampil_suplier();
 
 		$this->load->view('template/header', $data);
 		$this->load->view('template/sidebar', $data);
@@ -29,7 +33,20 @@ class Laporan extends CI_Controller
 		$this->load->view('laporan/index', $data);
 		$this->load->view('template/footer', $data);
 	}
-
+	function listPenjualan_cabang()
+	{
+		$start = $this->input->post('tgl1');
+		$end = $this->input->post('tgl2');
+		$res = 	$this->m_laporan->listPenjualan_cabang($start, $end);
+		echo json_encode($res);
+	}
+	function listSupplier_pembelian()
+	{
+		$start = $this->input->post('tgl1');
+		$end = $this->input->post('tgl2');
+		$res = 	$this->m_laporan->listSupplier_pembelian($start, $end);
+		echo json_encode($res);
+	}
 	function lap_stok_barang()
 	{
 		$data['title'] = 'Laporan';
@@ -176,40 +193,40 @@ class Laporan extends CI_Controller
 	{
 		$tanggal1 = $this->input->post('tgl1');
 		$tanggal2 = $this->input->post('tgl2');
-		$nama_barang = $this->input->post('nama_barang');
+		$nama_customer = $this->input->post('nama_customer');
 
 		$x['tanggal1'] = $this->input->post('tgl1');
 		$x['tanggal2'] = $this->input->post('tgl2');
-		$x['nama_barang'] = $this->input->post('nama_barang');
+		$x['nama_customer'] = $this->m_customer->dariNama($nama_customer);
 
-		$x['jml'] = $this->m_laporan->get_data__total_jual_periode($tanggal1, $tanggal2, $nama_barang);
-		$x['data'] = $this->m_laporan->get_data_jual_periode($tanggal1, $tanggal2, $nama_barang);
+		$x['jml'] = $this->m_laporan->get_data__total_jual_periode($tanggal1, $tanggal2, $nama_customer);
+		$x['data'] = $this->m_laporan->get_data_jual_periode($tanggal1, $tanggal2, $nama_customer);
 		$this->load->view('laporan/penjualan_per_periode/cetak', $x);
 	}
 	function penjualan_cabang()
 	{
 		$tanggal1 = $this->input->post('tgl1');
 		$tanggal2 = $this->input->post('tgl2');
-		$nama_barang = $this->input->post('nama_barang');
+		$cabang = $this->input->post('cabang');
 
 		$x['tanggal1'] = $this->input->post('tgl1');
 		$x['tanggal2'] = $this->input->post('tgl2');
-		$x['nama_barang'] = $this->input->post('nama_barang');
+		$x['cabang'] = $this->input->post('cabang');
 
-		$x['jml'] = $this->m_laporan->get_total_penjualan_barang($tanggal1, $tanggal2, $nama_barang);
-		$x['data'] = $this->m_laporan->get_penjualan_cabang($tanggal1, $tanggal2, $nama_barang);
+		$x['jml'] = $this->m_laporan->get_total_penjualan_cabang($tanggal1, $tanggal2, $cabang);
+		$x['data'] = $this->m_laporan->get_penjualan_cabang($tanggal1, $tanggal2, $cabang);
 		$this->load->view('laporan/penjualan_cabang/cetak', $x);
 	}
 	function laporan_pembelian()
 	{
 		$tanggal1 = $this->input->post('tgl1');
 		$tanggal2 = $this->input->post('tgl2');
-		$nama_barang = $this->input->post('nama_barang');
+		$supplier = $this->input->post('supplier');
 		$x['tanggal1'] = $this->input->post('tgl1');
 		$x['tanggal2'] = $this->input->post('tgl2');
-		$x['nama_barang'] = $this->input->post('nama_barang');
-		$x['jml'] = $this->m_laporan->get_pembelian_total($tanggal1, $tanggal2, $nama_barang);
-		$x['data'] = $this->m_laporan->get_pembelian($tanggal1, $tanggal2, $nama_barang);
+		$x['supplier'] = $this->m_suplier->rowSupplier($supplier);
+		$x['jml'] = $this->m_laporan->get_pembelian_total($tanggal1, $tanggal2, $supplier);
+		$x['data'] = $this->m_laporan->get_pembelian($tanggal1, $tanggal2, $supplier);
 		$this->load->view('laporan/pembelian/cetak', $x);
 	}
 	function penjualan_kwitansi()

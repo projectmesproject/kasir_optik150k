@@ -200,16 +200,25 @@
                         <div class="form-group">
                             <label class="control-label col-xs-3">Tanggal Akhir</label>
                             <div class="col-xs-9">
-                                <input type="date" class="form-control" name="tgl2" id="tgl2" value="" onchange="listBarang()" placeholder="Tanggal" required>
+                                <input type="date" class="form-control" name="tgl2" id="tgl2" value="" onchange="listCustomer()" placeholder="Tanggal" required>
                             </div>
                         </div>
 
-                        <label class="control-label col-xs-6">Barang</label>
+                        <label class="control-label col-xs-6">Nama Customer</label>
+                        <div class="col-xs-9">
+                            <select name="nama_customer" id="nama_customer" class="form-control">
+                                <option value="-" selected>Customer</option>
+                                <?php foreach ($customer->result() as $value) { ?>
+                                    <option value="<?= $value->no_hp ?>"><?= $value->nama . " - " . $value->no_hp ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <!-- <label class="control-label col-xs-6">Barang</label>
                         <div class="col-xs-9">
                             <select name="nama_barang" id="nama_barang" class="form-control">
                                 <option value="-" selected>Barang</option>
                             </select>
-                        </div>
+                        </div> -->
 
 
                     </div>
@@ -244,13 +253,16 @@
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Akhir</label>
                                 <div class="col-xs-9">
-                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listBarang_pembelian()" placeholder="Tanggal" required>
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listSupplier_pembelian()" placeholder="Tanggal" required>
                                 </div>
                             </div>
-                            <label class="control-label col-xs-6">Barang</label>
+                            <label class="control-label col-xs-6">Supplier</label>
                             <div class="col-xs-9">
-                                <select name="nama_barang" class="form-control">
-                                    <option value="-" selected>Barang</option>
+                                <select name="supplier" class="form-control">
+                                    <option value="-" selected>Supplier</option>
+                                    <?php foreach ($supplier->result() as $value) { ?>
+                                        <option value="<?= $value->suplier_id ?>"><?= $value->suplier_nama?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -285,13 +297,16 @@
                             <div class="form-group">
                                 <label class="control-label col-xs-3">Tanggal Akhir</label>
                                 <div class="col-xs-9">
-                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listBarang_cabang()" placeholder="Tanggal" required>
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listPenjualan_cabang()" placeholder="Tanggal" required>
                                 </div>
                             </div>
-                            <label class="control-label col-xs-6">Barang</label>
+                            <label class="control-label col-xs-6">Cabang</label>
                             <div class="col-xs-9">
-                                <select name="nama_barang" class="form-control">
-                                    <option value="-" selected>Barang</option>
+                                <select name="cabang" class="form-control">
+                                    <option value="-" selected>Cabang</option>
+                                    <?php foreach ($cabang as $value) { ?>
+                                        <option value="<?= $value->cabang ?>"><?= $value->cabang ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -778,24 +793,53 @@
                 })
             }
 
-            function listBarang_cabang() {
-                let start = $("#form_penjualan_cabang").find('input[name=tgl1]').val();
-                let end = $("#form_penjualan_cabang").find('input[name=tgl2]').val();
-                let select = $("#form_penjualan_cabang").find('select[name=nama_barang]');
-
+            function listCustomer() {
+                let select = $("#nama_customer");
+                let select2 = $("#nohp");
+                let start = $("#tgl1").val();
+                let end = $("#tgl2").val();
                 $.ajax({
-                    url: "<?= base_url('Barang/listBarang_cabang') ?>",
+                    url: "<?= base_url('Customer/listCustomer') ?>",
                     method: "post",
                     dataType: "json",
                     data: {
-                        start: start,
-                        end: end
+                        tgl1: start,
+                        tgl2: end
                     },
                     success: function(data) {
                         if (data) {
-                            let html = '<option value="">Pilih Barang</option>';
+                            let html = '<option value="">Pilih Customer(opsional)</option>';
                             $.each(data, function(index, value) {
-                                html += '"<option value="' + value.d_jual_barang_nama + '">' + value.d_jual_barang_nama + '</option>';
+                                html += '"<option value="' + value.no_hp + '">' + value.nama + " - " + value.no_hp + '</option>';
+                            });
+                            $(select).html(html);
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+
+            function listPenjualan_cabang() {
+                let start = $("#form_penjualan_cabang").find('input[name=tgl1]').val();
+                let end = $("#form_penjualan_cabang").find('input[name=tgl2]').val();
+                let select = $("#form_penjualan_cabang").find('select[name=cabang]');
+
+                $.ajax({
+                    url: "<?= base_url('Laporan/listPenjualan_cabang') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        tgl1: start,
+                        tgl2: end
+                    },
+                    success: function(data) {
+                        console.log(data)
+                        if (data) {
+                            let html = '<option value="">Pilih Cabang(Opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html += '"<option value="' + value.cabang + '">' + value.cabang + '</option>';
                             });
                             $(select).html(html);
 
@@ -807,25 +851,25 @@
                 })
             }
 
-            function listBarang_pembelian() {
+            function listSupplier_pembelian() {
                 let start = $("#form_laporan_pembelian").find('input[name=tgl1]').val();
                 let end = $("#form_laporan_pembelian").find('input[name=tgl2]').val();
-                let select = $("#form_laporan_pembelian").find('select[name=nama_barang]');
+                let select = $("#form_laporan_pembelian").find('select[name=supplier]');
 
                 $.ajax({
-                    url: "<?= base_url('Barang/listBarang_pembelian') ?>",
+                    url: "<?= base_url('Laporan/listSupplier_pembelian') ?>",
                     method: "post",
                     dataType: "json",
                     data: {
-                        start: start,
-                        end: end
+                        tgl1: start,
+                        tgl2: end
                     },
                     success: function(data) {
                         console.log(data)
                         if (data) {
-                            let html = '<option value="">Pilih Barang</option>';
+                            let html = '<option value="">Pilih Supplier (Opsional)</option>';
                             $.each(data, function(index, value) {
-                                html += '"<option value="' + value.barang_id + '">' + value.barang_nama + '</option>';
+                                html += '"<option value="' + value.beli_suplier_id + '">' + value.suplier_nama + '</option>';
                             });
                             $(select).html(html);
 

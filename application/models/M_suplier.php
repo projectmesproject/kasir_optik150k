@@ -23,4 +23,7 @@ class M_suplier extends CI_Model
     {
         $this->db->delete('tbl_suplier', ['suplier_id' => $id]);
     }
+    public function rowSupplier($id){
+        return $this->db->select('*')->from('tbl_suplier')->where('suplier_id', $id)->get()->row();
+    }
 }
