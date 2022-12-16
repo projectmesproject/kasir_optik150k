@@ -13,6 +13,7 @@ class Laporan extends CI_Controller
 		$this->load->model('m_laporan');
 		$this->load->model('m_karyawan');
 		$this->load->model('m_customer');
+		$this->load->model('m_cabang');
 	}
 
 	function index()
@@ -24,7 +25,7 @@ class Laporan extends CI_Controller
 		$data['kat'] = $this->m_kategori->tampil_kategori();
 		$data['karyawan'] = $this->m_karyawan->tampil_karyawan();
 		$data['customer'] = $this->m_customer->tampil_customer();
-		$data['cabang'] = $this->m_laporan->get_cabang();
+		$data['cabang'] = $this->m_cabang->tampil_cabang()->result();
 		$data['supplier'] = $this->m_suplier->tampil_suplier();
 
 		$this->load->view('template/header', $data);

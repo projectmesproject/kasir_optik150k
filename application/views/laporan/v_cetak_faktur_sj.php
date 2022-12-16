@@ -160,11 +160,19 @@
             <tr>
                 <td><br></td>
             </tr>
-
-            <tr>
-                <th style="text-align:left;">Metode Pembayaran</th>
-                <th style="text-align:left;">: <?php echo $b['jual_keterangan']; ?> <?php if (!empty($b['jual_keterangan2'])) echo ",$b[jual_keterangan2]"; ?></th>
-            </tr>
+            <?php if ($b['status'] != 'KREDIT') { ?>
+                <tr>
+                    <th style="text-align:left;">Metode Pembayaran</th>
+                    <th style="text-align:left;">: <?php echo $b['jual_keterangan']; ?> <?php if (!empty($b['jual_keterangan2'])) echo ",$b[jual_keterangan2]"; ?></th>
+                </tr>
+            <?php } else {
+            ?>
+                <tr>
+                    <th style="text-align:left;">Status</th>
+                    <th style="text-align:left;">: Kredit</th>
+                </tr>
+            <?php
+            } ?>
         </table>
         <table align="center" style="width:302px; border:none;margin-top:5px;margin-bottom:20px;">
 

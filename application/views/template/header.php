@@ -32,6 +32,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
   <?php if ($this->session->userdata('level') == "kasir") { ?>
     <script>
+
+     
       document.onkeyup = KeyCheck;
 
       function KeyCheck(e) {
