@@ -22,6 +22,15 @@
           (-) Cancel
         </button>
       <?php endif ?>
+      <?php if ($this->session->userdata('level') == 'penjualan') { ?>
+        <button type="button" class="btn btn-success btn-sm mr-3" onclick="window.open('<?= base_url() ?>/history_penjualan/cetak_faktur_cabang/faktur/<?= $jual['jual_nofak'] ?>','_blank')">
+          CETAK FAKTUR
+        </button>
+        <button class="btn btn-primary btn-sm mr-3" onclick="window.open('<?= base_url() ?>/history_penjualan/cetak_faktur_cabang/sj/<?= $jual['jual_nofak'] ?>','_blank')" style="float:left;">
+          CETAK SURAT JALAN
+        </button>
+
+      <?php } ?>
 
       <h6 class="m-0 font-weight-bold text-primary text-center">KETERANGAN PENJUALAN</h6>
     </div>

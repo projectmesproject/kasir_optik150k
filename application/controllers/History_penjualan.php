@@ -19,7 +19,7 @@ class History_penjualan extends CI_Controller
         $data['title'] = "Data History Penjualan";
         $data_array = array();
 
-        $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.cabang='' or A.cabang is null and A.no_hp !='' or A.no_hp is not null order by jual_tanggal desc ")->result_array();
+        $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.cabang='' AND A.no_hp !='' order by jual_tanggal desc ")->result_array();
 
         foreach ($data1 as $dt) {
             $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
@@ -62,6 +62,21 @@ class History_penjualan extends CI_Controller
         $this->load->model('m_penjualan');
         $x['data'] = $this->m_penjualan->cetak_faktur2($nofak);
         $this->load->view('laporan/v_faktur', $x);
+        //$this->session->unset_userdata('nofak');
+    }
+
+    function cetak_faktur_cabang($jenis,$nofak)
+    {
+        $this->load->model('m_penjualan');
+        $this->session->set_userdata('nofak', $nofak);
+        $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
+        if($jenis=='faktur'){
+            $this->load->view('laporan/v_cetak_faktur_sj', $x);
+        }
+        if($jenis=='sj'){
+
+            $this->load->view('laporan/v_surat_jalan', $x);
+        }
         //$this->session->unset_userdata('nofak');
     }
 
@@ -111,6 +126,8 @@ class History_penjualan extends CI_Controller
                         $status = '<div class="badge badge-success">Complete</div>';
                     } else if ($a['status'] == "DP") {
                         $status = '<div class="badge badge-warning">DP</div>';
+                    } else if ($a['status'] == "KREDIT") {
+                        $status = '<div class="badge badge-warning">KREDIT</div>';
                     } else {
                         $status = '<div class="badge badge-danger">Cancel</div>';
                     }
@@ -189,6 +206,8 @@ class History_penjualan extends CI_Controller
                         $status = '<div class="badge badge-success">Complete</div>';
                     } else if ($a['status'] == "DP") {
                         $status = '<div class="badge badge-warning">DP</div>';
+                    }  else if ($a['status'] == "KREDIT") {
+                        $status = '<div class="badge badge-warning">KREDIT</div>';
                     } else {
                         $status = '<div class="badge badge-danger">Cancel</div>';
                     }

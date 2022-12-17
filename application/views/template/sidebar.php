@@ -214,7 +214,16 @@
         </li>
         <!-- AKHIR DATA PEMBELIAN -->
       <?php } ?>
-
+      <?php if ($this->session->userdata('level') == 'penjualan') { ?>
+      <div class="sidebar-heading">
+          Master Data
+        </div>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo site_url('cabang'); ?>">
+            <i class="fas fa-building"></i>
+            <span>Cabang</span></a>
+        </li>
+        <?php } ?>
       <?php if ($this->session->userdata('level') == 'admin') { ?>
 
         <div class="sidebar-heading">

@@ -9,6 +9,7 @@ class Penjualan extends CI_Controller
         parent::__construct();
 
         $this->load->model('m_kategori');
+        $this->load->model('m_cabang');
         $this->load->model('m_barang');
         $this->load->model('m_suplier');
         $this->load->model('m_penjualan');
@@ -23,6 +24,7 @@ class Penjualan extends CI_Controller
         $data['nohp'] = $this->M_customer->tampil_customer();
         $data['cara_bayar'] = $this->M_Cara_Bayar->list();
         $data['kat'] = $this->m_kategori->tampil_kategori();
+        $data['cabang'] = $this->m_cabang->tampil_cabang();
 
         $data["paket"] = $this->m_barang->getBarangPaket();
         $this->load->view('template/header', $data);
@@ -433,6 +435,12 @@ class Penjualan extends CI_Controller
                 $jenis_cetak = "";
                 if ($this->input->post("jenis_cetak") != null) {
                     $jenis_cetak = $this->input->post("jenis_cetak");
+                }
+                if($status == 'Kredit'){
+                    $jml_uang= 0;
+                    $jml_uang2=0;
+                    $kurang = 0;
+                    $kembalian = 0;
                 }
                 // $nofak, $total, $jml_uang,$kurang, $kembalian, $bayar,$bayar2, $diskon, $nohp,$status
                 $order_proses = $this->m_penjualan->simpan_penjualan_cabang($nofak, $total, $jml_uang, $jml_uang2, $kurang, $kembalian, $bayar, $bayar2, $diskon, $cabang, $status);

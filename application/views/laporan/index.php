@@ -311,7 +311,7 @@
                                 <select name="cabang" class="form-control" onchange="listPenjualan_cabangBarang()">
                                     <option value="-" selected>Cabang</option>
                                     <?php foreach ($cabang as $value) { ?>
-                                        <option value="<?= $value->cabang ?>"><?= $value->cabang ?></option>
+                                        <option value="<?= $value->nama_cabang ?>"><?= $value->nama_cabang ?></option>
                                     <?php } ?>
                                 </select>
                             </div>

@@ -155,7 +155,16 @@
                 <?php if ($this->session->userdata('level') == 'penjualan') { ?>
                   <div class="form-group">
                     <label>Cabang</label>
-                    <input class="form-control col-sm-4" name="cabang" required />
+                    <select name="cabang" class="form-control col-sm-3">
+                      <?php foreach ($cabang->result() as $cbg) {
+                        $nm = $cbg->nama_cabang;
+                      ?>
+
+                        <option value="<?php echo $nm; ?>"><?php echo $nm; ?></option>
+
+
+                      <?php } ?>
+                    </select>
                   </div>
                 <?php } else {
                 ?>
@@ -218,6 +227,9 @@
                     <select name="status" id="status" class="form-control">
                       <option value="COMPLETE">Lunas</option>
                       <option value="DP">DP</option>
+                      <?php if ($this->session->userdata('level') == 'penjualan') { ?>
+                        <option value="Kredit" selected>Kredit</option>
+                      <?php } ?>
                     </select>
                   </div>
                   <div class="form-group col-sm-3">
@@ -241,16 +253,17 @@
                 }
                 ?>
                 <table>
-                  
+
 
                   <tr>
                     <?php if ($this->session->userdata('level') == 'penjualan') {
                     ?>
                       <td class="col-sm-6" rowspan="3">
-                      <input type="hidden" name="jenis_cetak" id="jenis_cetak" />  
-                      <small class="text-danger">Cetak Faktur ( Cetak Surat Jalan dan Faktur ) , Cetak Surat Jalan hanya cetak surat jalan </small><br/><br/>
-                      <button type="submit" class="btn btn-success btn-lg" onclick="submitForm('faktur')"> CETAK FAKTUR</button><br/>
-                      <br /><button type="submit" class="btn btn-info btn-lg" onclick="submitForm('sj')"> CETAK SURAT JALAN</button></td>
+                        <input type="hidden" name="jenis_cetak" id="jenis_cetak" />
+                        <small class="text-danger">Cetak Faktur ( Cetak Surat Jalan dan Faktur ) , Cetak Surat Jalan hanya cetak surat jalan </small><br /><br />
+                        <button type="submit" class="btn btn-success btn-lg" onclick="submitForm('faktur')"> CETAK FAKTUR</button><br />
+                        <br /><button type="submit" class="btn btn-info btn-lg" onclick="submitForm('sj')"> CETAK SURAT JALAN</button>
+                      </td>
 
                     <?php
                     } else { ?>
@@ -403,12 +416,12 @@
             });
           }
 
-          function submitForm(jenis){
+          function submitForm(jenis) {
             $('#jenis_cetak').val(jenis)
           }
 
           $('#simpan_penjualan_form').submit(function() {
-            
+
             var total = $('#totbayar').val()
             var uang = $("#jml_uang").val();
             var uang2 = $("#jml_uang2").val();
