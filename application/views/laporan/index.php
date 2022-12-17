@@ -206,19 +206,19 @@
 
                         <label class="control-label col-xs-6">Nama Customer</label>
                         <div class="col-xs-9">
-                            <select name="nama_customer" id="nama_customer" class="form-control">
-                                <option value="-" selected>Customer</option>
+                            <select name="nama_customer" id="nama_customer" class="form-control" onchange="listCustomer_Barang()">
+                                <option value="" selected>Customer</option>
                                 <?php foreach ($customer->result() as $value) { ?>
                                     <option value="<?= $value->no_hp ?>"><?= $value->nama . " - " . $value->no_hp ?></option>
                                 <?php } ?>
                             </select>
                         </div>
-                        <!-- <label class="control-label col-xs-6">Barang</label>
+                        <label class="control-label col-xs-6">Barang</label>
                         <div class="col-xs-9">
                             <select name="nama_barang" id="nama_barang" class="form-control">
-                                <option value="-" selected>Barang</option>
+                                <option value="" selected>Barang</option>
                             </select>
-                        </div> -->
+                        </div>
 
 
                     </div>
@@ -258,11 +258,17 @@
                             </div>
                             <label class="control-label col-xs-6">Supplier</label>
                             <div class="col-xs-9">
-                                <select name="supplier" class="form-control">
+                                <select name="supplier" class="form-control" onchange="listSupplier_pembelianBarang()">
                                     <option value="-" selected>Supplier</option>
                                     <?php foreach ($supplier->result() as $value) { ?>
-                                        <option value="<?= $value->suplier_id ?>"><?= $value->suplier_nama?></option>
+                                        <option value="<?= $value->suplier_id ?>"><?= $value->suplier_nama ?></option>
                                     <?php } ?>
+                                </select>
+                            </div>
+                            <label class="control-label col-xs-6">Barang</label>
+                            <div class="col-xs-9">
+                                <select name="nama_barang" class="form-control">
+                                    <option value="" selected>Barang</option>
                                 </select>
                             </div>
                         </div>
@@ -302,11 +308,17 @@
                             </div>
                             <label class="control-label col-xs-6">Cabang</label>
                             <div class="col-xs-9">
-                                <select name="cabang" class="form-control">
+                                <select name="cabang" class="form-control" onchange="listPenjualan_cabangBarang()">
                                     <option value="-" selected>Cabang</option>
                                     <?php foreach ($cabang as $value) { ?>
                                         <option value="<?= $value->cabang ?>"><?= $value->cabang ?></option>
                                     <?php } ?>
+                                </select>
+                            </div>
+                            <label class="control-label col-xs-6">Barang</label>
+                            <div class="col-xs-9">
+                                <select name="nama_barang" class="form-control">
+                                    <option value="" selected>Barang</option>
                                 </select>
                             </div>
                         </div>
@@ -795,6 +807,7 @@
 
             function listCustomer() {
                 let select = $("#nama_customer");
+                let select_barang = $("#nama_barang");
                 let select2 = $("#nohp");
                 let start = $("#tgl1").val();
                 let end = $("#tgl2").val();
@@ -813,6 +826,36 @@
                                 html += '"<option value="' + value.no_hp + '">' + value.nama + " - " + value.no_hp + '</option>';
                             });
                             $(select).html(html);
+                            let html2 = '<option value="">Pilih Barang(opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.d_jual_barang_nama + '">' + value.d_jual_barang_nama + '</option>';
+                            });
+                            $(select_barang).html(html2);
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+
+            function listCustomer_Barang() {
+                let select_barang = $("#nama_barang");
+                let nama_customer = $("#nama_customer").val();
+                $.ajax({
+                    url: "<?= base_url('Customer/listCustomer_barang') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        nama_customer: nama_customer,
+                    },
+                    success: function(data) {
+                        if (data) {
+                            let html2 = '<option value="">Pilih Barang(opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.d_jual_barang_nama + '">' + value.d_jual_barang_nama + '</option>';
+                            });
+                            $(select_barang).html(html2);
                         }
                     },
                     error: function(e) {
@@ -825,6 +868,7 @@
                 let start = $("#form_penjualan_cabang").find('input[name=tgl1]').val();
                 let end = $("#form_penjualan_cabang").find('input[name=tgl2]').val();
                 let select = $("#form_penjualan_cabang").find('select[name=cabang]');
+                let nama_barang = $("#form_penjualan_cabang").find('select[name=nama_barang]');
 
                 $.ajax({
                     url: "<?= base_url('Laporan/listPenjualan_cabang') ?>",
@@ -842,6 +886,39 @@
                                 html += '"<option value="' + value.cabang + '">' + value.cabang + '</option>';
                             });
                             $(select).html(html);
+                            let html2 = '<option value="">Pilih Barang(Opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.barang_id + '">' + value.barang_nama + '</option>';
+                            });
+                            $(nama_barang).html(html2);
+
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+
+            function listPenjualan_cabangBarang() {
+                let cabang = $("#form_penjualan_cabang").find('select[name=cabang]').val();
+                let nama_barang = $("#form_penjualan_cabang").find('select[name=nama_barang]');
+                console.log(cabang);
+                $.ajax({
+                    url: "<?= base_url('Laporan/listPenjualan_cabangBarang') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        cabang: cabang,
+                    },
+                    success: function(data) {
+                        console.log(data)
+                        if (data) {
+                            let html2 = '<option value="">Pilih Barang(Opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.barang_id + '">' + value.barang_nama + '</option>';
+                            });
+                            $(nama_barang).html(html2);
 
                         }
                     },
@@ -855,6 +932,7 @@
                 let start = $("#form_laporan_pembelian").find('input[name=tgl1]').val();
                 let end = $("#form_laporan_pembelian").find('input[name=tgl2]').val();
                 let select = $("#form_laporan_pembelian").find('select[name=supplier]');
+                let nama_barang = $("#form_laporan_pembelian").find('select[name=nama_barang]');
 
                 $.ajax({
                     url: "<?= base_url('Laporan/listSupplier_pembelian') ?>",
@@ -872,6 +950,39 @@
                                 html += '"<option value="' + value.beli_suplier_id + '">' + value.suplier_nama + '</option>';
                             });
                             $(select).html(html);
+                            let html2 = '<option value="">Pilih Barang (Barang)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.barang_id + '">' + value.barang_nama + '</option>';
+                            });
+                            $(nama_barang).html(html2);
+
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+
+            function listSupplier_pembelianBarang() {
+                let supplier = $("#form_laporan_pembelian").find('select[name=supplier]').val();
+                let nama_barang = $("#form_laporan_pembelian").find('select[name=nama_barang]');
+
+                $.ajax({
+                    url: "<?= base_url('Laporan/listSupplier_pembelianBarang') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        supplier: supplier,
+                    },
+                    success: function(data) {
+                        console.log(data)
+                        if (data) {
+                            let html2 = '<option value="">Pilih Barang (Opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.barang_id + '">' + value.barang_nama + '</option>';
+                            });
+                            $(nama_barang).html(html2);
 
                         }
                     },

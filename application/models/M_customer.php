@@ -65,6 +65,8 @@ class M_customer extends CI_Model
         $this->db->from('tbl_jual');
         $this->db->where('jual_tanggal >=', date('Y-m-d', strtotime($start)));
         $this->db->where('jual_tanggal <=', date('Y-m-d', strtotime($end)));
+        $this->db->join('tbl_detail_jual', 'tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak');
+        $this->db->join('tbl_barang', 'tbl_detail_jual.d_jual_barang_id=tbl_barang.barang_id');
         $this->db->join('tbl_customer', 'tbl_jual.no_hp=tbl_customer.no_hp');
         $this->db->group_by('tbl_customer.no_hp');
         // ->join('tbl_kategori', 'tbl_detail_jual.d_jual_barang_kat_id=tbl_kategori.kategori_id')
@@ -74,5 +76,18 @@ class M_customer extends CI_Model
     public function dariNama($id)
     {
         return $this->db->select('*')->from('tbl_customer')->where('no_hp', $id)->get()->row();
+    }
+    public function listCustomer_barang($no_hp)
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_jual');
+        $this->db->where('tbl_jual.no_hp', $no_hp);
+        $this->db->join('tbl_detail_jual', 'tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak');
+        $this->db->join('tbl_barang', 'tbl_detail_jual.d_jual_barang_id=tbl_barang.barang_id');
+        $this->db->join('tbl_customer', 'tbl_jual.no_hp=tbl_customer.no_hp');
+        $this->db->group_by('tbl_barang.barang_id');
+        // ->join('tbl_kategori', 'tbl_detail_jual.d_jual_barang_kat_id=tbl_kategori.kategori_id')
+        $res = $this->db->get()->result();
+        return $res;
     }
 }

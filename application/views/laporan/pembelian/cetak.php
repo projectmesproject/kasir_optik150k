@@ -25,9 +25,12 @@
             <tr>
                 <th style="text-align:left">Tanggal : <?= date('d M Y', strtotime($tanggal1)) . " - " . date('d M Y', strtotime($tanggal2)) ?></th>
             </tr>
-            <tr>
-                <th style="text-align:left">Supplier : <?= $supplier->suplier_nama ?></th>
-            </tr>
+            <?php if ($sup != "") { ?>
+                <tr>
+                    <th style="text-align:left">Supplier : <?= $supplier->suplier_nama ?></th>
+                </tr>
+
+            <?php  } ?>
         </table>
 
         <table border="1" align="center" style="width:900px;margin-bottom:20px;">
@@ -35,6 +38,7 @@
                 <tr>
                     <th style="width:50px;">No</th>
                     <th>No Faktur</th>
+                    <th>Supplier</th>
                     <th>Tanggal</th>
                     <th>Nama Barang</th>
                     <th>Harga Beli</th>
@@ -52,6 +56,7 @@
                     <tr>
                         <td style="text-align:center;"><?= $no; ?></td>
                         <td style="text-align:center;"><?= $value->beli_nofak; ?></td>
+                        <td style="text-align:center;"><?= $value->suplier_nama; ?></td>
                         <td style="text-align:center;"><?= date('d-M-Y', strtotime($value->beli_tanggal)); ?></td>
                         <td style="text-align:center;"><?= $value->barang_nama; ?></td>
                         <td style="text-align:right;"><?= 'Rp ' . number_format($value->d_beli_harga); ?></td>
@@ -65,7 +70,7 @@
                 $b = $jml->row_array();
                 ?>
                 <tr>
-                    <td colspan="6" style="text-align:center;"><b>Total</b></td>
+                    <td colspan="7" style="text-align:center;"><b>Total</b></td>
                     <td style="text-align:right;"><b><?php echo 'Rp ' . number_format($b['total']); ?></b></td>
                 </tr>
             </tfoot>

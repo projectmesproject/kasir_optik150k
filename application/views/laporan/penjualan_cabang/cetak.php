@@ -33,12 +33,17 @@
         <table border="1" align="center" style="width:900px;margin-bottom:20px;">
             <thead>
                 <tr>
-                    <th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br>Nama Cabang : <?= $cabang; ?></th>
+                    <?php if ($barang == "") { ?>
+                        <th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br>Nama Cabang : <?= $cabang; ?></th>
+                    <?php } else { ?>
+                        <th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br></th>
+                    <?php  } ?>
                 </tr>
 
                 <tr>
                     <th style="width:50px;">No</th>
                     <th>No Faktur</th>
+                    <th>Cabang</th>
                     <th>Tanggal</th>
                     <th>Nama Barang</th>
                     <th>Satuan</th>
@@ -54,6 +59,7 @@
                 foreach ($data->result_array() as $i) {
                     $no++;
                     $nofak = $i['jual_nofak'];
+                    $cabang = $i['cabang'];
                     $tgl = $i['jual_tanggal'];
                     $nabar = $i['d_jual_barang_nama'];
                     $satuan = $i['d_jual_barang_satuan'];
@@ -65,6 +71,7 @@
                     <tr>
                         <td style="text-align:center;"><?php echo $no; ?></td>
                         <td style="padding-left:5px;"><?php echo $nofak; ?></td>
+                        <td style="padding-left:5px;"><?php echo $cabang; ?></td>
                         <td style="text-align:center;"><?php echo $tgl; ?></td>
                         <td style="text-align:left;"><?php echo $nabar; ?></td>
                         <td style="text-align:left;"><?php echo $satuan; ?></td>
@@ -78,7 +85,7 @@
             <tfoot>
 
                 <tr>
-                    <td colspan="8" style="text-align:center;"><b>Total</b></td>
+                    <td colspan="9" style="text-align:center;"><b>Total</b></td>
                     <td style="text-align:right;"><b><?php echo 'Rp ' . number_format($b['total']); ?></b></td>
                 </tr>
             </tfoot>
