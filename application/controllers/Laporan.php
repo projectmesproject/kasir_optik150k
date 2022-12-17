@@ -8,6 +8,7 @@ class Laporan extends CI_Controller
 		$this->load->model('m_kategori');
 		$this->load->model('m_barang');
 		$this->load->model('m_suplier');
+		$this->load->model('m_pengeluaran');
 		$this->load->model('m_pembelian');
 		$this->load->model('m_penjualan');
 		$this->load->model('m_laporan');
@@ -364,6 +365,7 @@ GROUP BY jual_keterangan";
 		$data['end'] = $end;
 		$data['getPenjualan'] = $this->m_laporan->penjualan_by_metode($start, $end);
 		$data['total'] = $this->m_laporan->total_penjualan($start, $end);
+		$data['pengeluaran'] = $this->m_pengeluaran->getPengeluaran($start,$end);
 
 		$this->load->view('laporan/resume/cetak', $data);
 		// var_dump($data['getPenjualan']);

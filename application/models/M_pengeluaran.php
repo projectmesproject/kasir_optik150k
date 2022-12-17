@@ -9,6 +9,10 @@ class M_pengeluaran extends CI_Model{
         return $data;
     }
 
+    function getPengeluaran($start,$end){
+        return $this->db->query("SELECT SUM(nominal) as total_pengeluaran FROM pengeluaran WHERE tanggal BETWEEN '$start' AND '$end'")->row();  
+    }
+
     function tambahData(){
         $uang = $this->input->post('nominal',TRUE);
 

@@ -67,14 +67,36 @@
                     <td style="text-align: right;">Rp. <?= number_format($saldo) ?></td>
                 </tr>
                 <tr>
-                    <td colspan="2">Total Tunai</td>
+                    <td colspan="2">Subtotal Penjualan</td>
                     <?php
 
                     foreach ($total as $value) {
                         $result = $saldo + $value->total_semua;
                     ?>
                         <td style="text-align:right;">Rp.
-                            <!-- <?= number_format($value->total_semua) ?> -->
+                            <?= number_format($result) ?>
+                        </td>
+                    <?php } ?>
+                </tr>
+                <tr>
+                    <td colspan="2">Total Pengeluaran</td>
+                    <?php
+
+                   $pengeluaran = $pengeluaran->total_pengeluaran;
+                    ?>
+                        <td style="text-align:right;">Rp.
+                            <?= number_format($pengeluaran) ?>
+                        </td>
+                </tr>
+                <tr>
+                    <td colspan="2">Total Penjualan</td>
+                    <?php
+
+                    foreach ($total as $value) {
+                        $result = $saldo + $value->total_semua;
+                        $result -= $pengeluaran;
+                    ?>
+                        <td style="text-align:right;">Rp.
                             <?= number_format($result) ?>
                         </td>
                     <?php } ?>

@@ -427,7 +427,7 @@
             var uang2 = $("#jml_uang2").val();
             var status = $("#status").val();
             var jenis_cetak = $("#jenis_cetak").val();
-            var bayar = uang + uang2
+            var bayar = parseInt(uang) + parseInt(uang2)
             if (bayar < total && status == 'COMPLETE') {
               swal.fire("Penjualan", "Uang tidak cukup untuk bayar Lunas, silahkan pilih status DP untuk melanjutkan !", "warning")
               return false;
