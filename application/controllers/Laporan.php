@@ -219,6 +219,22 @@ class Laporan extends CI_Controller
 		$x['data'] = $this->m_laporan->get_data_jual_periode($tanggal1, $tanggal2, $nama_customer, $nama_barang);
 		$this->load->view('laporan/penjualan_per_periode/cetak', $x);
 	}
+	function laporan_penjualan_kasir_dp()
+	{
+		$tanggal1 = $this->input->post('tgl1');
+		$tanggal2 = $this->input->post('tgl2');
+		$nama_customer = $this->input->post('nama_customer');
+		$nama_barang = $this->input->post('nama_barang');
+
+		$x['tanggal1'] = $this->input->post('tgl1');
+		$x['tanggal2'] = $this->input->post('tgl2');
+		$x['nama'] = $nama_customer;
+		$x['nama_customer'] = $this->m_customer->dariNama($nama_customer);
+
+		$x['jml'] = $this->m_laporan->get_total_penjualan_dp($tanggal1, $tanggal2, $nama_customer, $nama_barang);
+		$x['data'] = $this->m_laporan->get_penjualan_dp($tanggal1, $tanggal2, $nama_customer, $nama_barang);
+		$this->load->view('laporan/penjualan_kasir_dp/cetak', $x);
+	}
 	function penjualan_cabang()
 	{
 		$tanggal1 = $this->input->post('tgl1');
@@ -365,7 +381,7 @@ GROUP BY jual_keterangan";
 		$data['end'] = $end;
 		$data['getPenjualan'] = $this->m_laporan->penjualan_by_metode($start, $end);
 		$data['total'] = $this->m_laporan->total_penjualan($start, $end);
-		$data['pengeluaran'] = $this->m_pengeluaran->getPengeluaran($start,$end);
+		$data['pengeluaran'] = $this->m_pengeluaran->getPengeluaran($start, $end);
 
 		$this->load->view('laporan/resume/cetak', $data);
 		// var_dump($data['getPenjualan']);

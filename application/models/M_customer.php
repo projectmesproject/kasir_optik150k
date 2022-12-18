@@ -63,8 +63,8 @@ class M_customer extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('tbl_jual');
-        $this->db->where('jual_tanggal >=', date('Y-m-d', strtotime($start)));
-        $this->db->where('jual_tanggal <=', date('Y-m-d', strtotime($end)));
+        $this->db->where('DATE(jual_tanggal) >=', date('Y-m-d', strtotime($start)));
+        $this->db->where('DATE(jual_tanggal) <=', date('Y-m-d', strtotime($end)));
         $this->db->join('tbl_detail_jual', 'tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak');
         $this->db->join('tbl_barang', 'tbl_detail_jual.d_jual_barang_id=tbl_barang.barang_id');
         $this->db->join('tbl_customer', 'tbl_jual.no_hp=tbl_customer.no_hp');
@@ -73,14 +73,30 @@ class M_customer extends CI_Model
         $res = $this->db->get()->result();
         return $res;
     }
+    public function listCustomer_dp($start, $end)
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_jual');
+        $this->db->where('status', "DP");
+        $this->db->where('DATE(jual_tanggal) >=', date('Y-m-d', strtotime($start)));
+        $this->db->where('DATE(jual_tanggal) <=', date('Y-m-d', strtotime($end)));
+        $this->db->join('tbl_detail_jual', 'tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak');
+        $this->db->join('tbl_barang', 'tbl_detail_jual.d_jual_barang_id=tbl_barang.barang_id');
+        $this->db->join('tbl_customer', 'tbl_jual.no_hp=tbl_customer.no_hp');
+        $this->db->group_by('tbl_customer.no_hp');
+        $res = $this->db->get()->result();
+        return $res;
+    }
     public function dariNama($id)
     {
         return $this->db->select('*')->from('tbl_customer')->where('no_hp', $id)->get()->row();
     }
-    public function listCustomer_barang($no_hp)
+    public function listCustomer_barang($start, $end, $no_hp)
     {
         $this->db->select('*');
         $this->db->from('tbl_jual');
+        $this->db->where('DATE(jual_tanggal) >=', date('Y-m-d', strtotime($start)));
+        $this->db->where('DATE(jual_tanggal) <=', date('Y-m-d', strtotime($end)));
         $this->db->where('tbl_jual.no_hp', $no_hp);
         $this->db->join('tbl_detail_jual', 'tbl_jual.jual_nofak=tbl_detail_jual.d_jual_nofak');
         $this->db->join('tbl_barang', 'tbl_detail_jual.d_jual_barang_id=tbl_barang.barang_id');

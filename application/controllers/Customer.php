@@ -92,10 +92,19 @@ class Customer extends CI_Controller
         $res = $this->M_customer->listCustomer($start, $end);
         echo json_encode($res);
     }
+    public function listCustomer_dp()
+    {
+        $start = $this->input->post('tgl1');
+        $end = $this->input->post('tgl2');
+        $res = $this->M_customer->listCustomer_dp($start, $end);
+        echo json_encode($res);
+    }
     public function listCustomer_barang()
     {
+        $start = $this->input->post('tgl1');
+        $end = $this->input->post('tgl2');
         $no_hp =  $this->input->post('nama_customer');
-        $res = $this->M_customer->listCustomer_barang($no_hp);
+        $res = $this->M_customer->listCustomer_barang($start, $end, $no_hp);
         echo json_encode($res);
     }
 }

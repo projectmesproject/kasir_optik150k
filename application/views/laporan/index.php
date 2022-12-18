@@ -67,9 +67,16 @@
                                         <a class="btn btn-sm btn-success" href="#penjualan_kasir" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td style="text-align:center;vertical-align:middle">3</td>
+                                    <td style="vertical-align:middle;">Laporan Penjualan Kasir DP</td>
+                                    <td style="text-align:center;">
+                                        <a class="btn btn-sm btn-success" href="#penjualan_kasir_dp" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="text-align:center;vertical-align:middle">4</td>
                                     <td style="vertical-align:middle;">Laporan Penjualan Cabang</td>
                                     <td style="text-align:center;">
                                         <a class="btn btn-sm btn-success" href="#penjualan_cabang" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
@@ -77,14 +84,14 @@
                                 </tr>
 
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">4</td>
+                                    <td style="text-align:center;vertical-align:middle">5</td>
                                     <td style="vertical-align:middle;">Laporan Pembelian</td>
                                     <td style="text-align:center;">
                                         <a class="btn btn-sm btn-success" href="#laporan_pembelian" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">5</td>
+                                    <td style="text-align:center;vertical-align:middle">6</td>
                                     <td style="vertical-align:middle;">Laporan Penjualan Kwitansi</td>
                                     <td style="text-align:center;">
                                         <a class="btn btn-sm btn-success" href="#penjualan_kwitansi" data-toggle="modal"><span class="fa fa-print"></span> Print</a>
@@ -109,7 +116,7 @@
                                 </tr> -->
 
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">6</td>
+                                    <td style="text-align:center;vertical-align:middle">7</td>
                                     <td style="vertical-align:middle;">Laporan Pengeluaran Toko</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_pengeluaran_toko" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
@@ -117,7 +124,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align:center;vertical-align:middle">7</td>
+                                    <td style="text-align:center;vertical-align:middle">8</td>
                                     <td style="vertical-align:middle;">Resume Laporan Keuangan</td>
                                     <td style="text-align:center;">
                                         <!-- <a class="btn btn-sm btn-success" href="#lap_resume" data-toggle="modal"><span class="fa fa-eye"></span> View</a> -->
@@ -228,6 +235,62 @@
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button class="btn btn-success"><span class="fa fa-print"></span> Cetak</button>
                     </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!---------------------------------------------Laporan Penjualan KASIR DP--------------------------------------------->
+
+        <div class="modal fade" id="penjualan_kasir_dp">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Penjualan Kasir DP</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="form_penjualan_kasir_dp" action="<?= base_url('Laporan/laporan_penjualan_kasir_dp') ?>" method="post" target="_blank">
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Tanggal Awal</label>
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" name="tgl1" value="" placeholder="Tanggal" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Tanggal Akhir</label>
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" name="tgl2" value="" onchange="listCustomer_dp()" placeholder="Tanggal" required>
+                                </div>
+                            </div>
+
+                            <label class="control-label col-xs-6">Nama Customer</label>
+                            <div class="col-xs-9">
+                                <select name="nama_customer" class="form-control" onchange="listCustomer_Barang_dp()">
+                                    <option value="" selected>Customer</option>
+                                    <?php foreach ($customer->result() as $value) { ?>
+                                        <option value="<?= $value->no_hp ?>"><?= $value->nama . " - " . $value->no_hp ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <label class="control-label col-xs-6">Barang</label>
+                            <div class="col-xs-9">
+                                <select name="nama_barang" class="form-control">
+                                    <option value="" selected>Barang</option>
+                                </select>
+                            </div>
+
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button class="btn btn-success"><span class="fa fa-print"></span> Cetak</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -828,7 +891,40 @@
                             $(select).html(html);
                             let html2 = '<option value="">Pilih Barang(opsional)</option>';
                             $.each(data, function(index, value) {
-                                html2 += '"<option value="' + value.d_jual_barang_nama + '">' + value.d_jual_barang_nama + '</option>';
+                                html2 += '"<option value="' + value.d_jual_barang_id + '">' + value.d_jual_barang_nama + '</option>';
+                            });
+                            $(select_barang).html(html2);
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+
+            function listCustomer_dp() {
+                let select = $("#form_penjualan_kasir_dp").find('select[name=nama_customer]');
+                let select_barang = $("#form_penjualan_kasir_dp").find('select[name=nama_barang]');
+                let start = $("#form_penjualan_kasir_dp").find('input[name=tgl1]').val();
+                let end = $("#form_penjualan_kasir_dp").find('input[name=tgl2]').val();
+                $.ajax({
+                    url: "<?= base_url('Customer/listCustomer_dp') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        tgl1: start,
+                        tgl2: end
+                    },
+                    success: function(data) {
+                        if (data) {
+                            let html = '<option value="">Pilih Customer(opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html += '"<option value="' + value.no_hp + '">' + value.nama + " - " + value.no_hp + '</option>';
+                            });
+                            $(select).html(html);
+                            let html2 = '<option value="">Pilih Barang(opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.d_jual_barang_id + '">' + value.d_jual_barang_nama + '</option>';
                             });
                             $(select_barang).html(html2);
                         }
@@ -842,18 +938,51 @@
             function listCustomer_Barang() {
                 let select_barang = $("#nama_barang");
                 let nama_customer = $("#nama_customer").val();
+                let start = $("#tgl1").val();
+                let end = $("#tgl2").val();
                 $.ajax({
                     url: "<?= base_url('Customer/listCustomer_barang') ?>",
                     method: "post",
                     dataType: "json",
                     data: {
+                        tgl1: start,
+                        tgl2: end,
                         nama_customer: nama_customer,
                     },
                     success: function(data) {
                         if (data) {
                             let html2 = '<option value="">Pilih Barang(opsional)</option>';
                             $.each(data, function(index, value) {
-                                html2 += '"<option value="' + value.d_jual_barang_nama + '">' + value.d_jual_barang_nama + '</option>';
+                                html2 += '"<option value="' + value.d_jual_barang_id + '">' + value.d_jual_barang_nama + '</option>';
+                            });
+                            $(select_barang).html(html2);
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e);
+                    }
+                })
+            }
+
+            function listCustomer_Barang_dp() {
+                let nama_customer = $("#form_penjualan_kasir_dp").find('select[name=nama_customer]').val();
+                let select_barang = $("#form_penjualan_kasir_dp").find('select[name=nama_barang]');
+                let start = $("#form_penjualan_kasir_dp").find('input[name=tgl1]').val();
+                let end = $("#form_penjualan_kasir_dp").find('input[name=tgl2]').val();
+                $.ajax({
+                    url: "<?= base_url('Customer/listCustomer_barang') ?>",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        tgl1: start,
+                        tgl2: end,
+                        nama_customer: nama_customer,
+                    },
+                    success: function(data) {
+                        if (data) {
+                            let html2 = '<option value="">Pilih Barang(opsional)</option>';
+                            $.each(data, function(index, value) {
+                                html2 += '"<option value="' + value.d_jual_barang_id + '">' + value.d_jual_barang_nama + '</option>';
                             });
                             $(select_barang).html(html2);
                         }
