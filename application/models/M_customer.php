@@ -1,10 +1,11 @@
 <?php
+defined('BASEPATH') or exit('No direct script access allowed');
 class M_customer extends CI_Model
 {
-
     function tampilData()
     {
-        return $this->db->query("select * from tbl_customer order by id DESC")->result_array();
+        // return $this->db->query("select * from tbl_customer order by id DESC")->result_array();
+        return $this->db->select('id,kd_customer,nama,no_hp,alamat')->from('tbl_customer')->order_by('id', 'DESC')->get()->result_array();
     }
 
     function tampil_customer()
@@ -37,6 +38,10 @@ class M_customer extends CI_Model
     {
         $hsl = $this->db->query("SELECT * FROM tbl_customer where no_hp='$noHp'");
         return $hsl;
+    }
+    public function getId($id)
+    {
+        return  $this->db->select('*')->from('tbl_customer')->where('id', $id)->get()->row();
     }
 
     public function getKodeCustomer()

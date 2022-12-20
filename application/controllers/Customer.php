@@ -16,13 +16,13 @@ class Customer extends CI_Controller
         $data['title'] = "Customer";
         $data['customer'] = $this->M_customer->tampilData();
         $data['kd_cus'] = $this->M_customer->getKodeCustomer();
-
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
         $this->load->view('template/topbar', $data);
         $this->load->view('customer/index', $data);
         $this->load->view('template/footer', $data);
     }
+
 
     public function get_customer()
     {
@@ -105,6 +105,12 @@ class Customer extends CI_Controller
         $end = $this->input->post('tgl2');
         $no_hp =  $this->input->post('nama_customer');
         $res = $this->M_customer->listCustomer_barang($start, $end, $no_hp);
+        echo json_encode($res);
+    }
+    public function getId()
+    {
+        $id = $this->input->post('id');
+        $res = $this->M_customer->getId($id);
         echo json_encode($res);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
 class M_Cara_Bayar extends CI_Model
 {
     private $table = "tbl_cara_bayar";

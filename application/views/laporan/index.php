@@ -226,6 +226,15 @@
                                 <option value="" selected>Barang</option>
                             </select>
                         </div>
+                        <label class="control-label col-xs-6">Cara Bayar</label>
+                        <div class="col-xs-9">
+                            <select name="cara_bayar" id="cara_bayar" class="form-control">
+                                <option value="" selected>Cara Bayar</option>
+                                <?php foreach ($cara_bayar as $value) { ?>
+                                    <option value="<?= $value->cara_bayar ?>"><?= $value->cara_bayar ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
 
 
                     </div>

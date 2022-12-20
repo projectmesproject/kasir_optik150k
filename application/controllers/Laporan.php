@@ -15,6 +15,7 @@ class Laporan extends CI_Controller
 		$this->load->model('m_karyawan');
 		$this->load->model('m_customer');
 		$this->load->model('m_cabang');
+		$this->load->model('m_cara_bayar');
 	}
 
 	function index()
@@ -28,6 +29,7 @@ class Laporan extends CI_Controller
 		$data['customer'] = $this->m_customer->tampil_customer();
 		$data['cabang'] = $this->m_cabang->tampil_cabang()->result();
 		$data['supplier'] = $this->m_suplier->tampil_suplier();
+		$data['cara_bayar'] = $this->m_cara_bayar->list();
 
 		$this->load->view('template/header', $data);
 		$this->load->view('template/sidebar', $data);
@@ -203,20 +205,108 @@ class Laporan extends CI_Controller
 		$this->load->view('template/footer', $data);
 	}
 
+	function _group_by($array, $keys = array())
+	{
+		$return = array();
+		$nama = "";
+		foreach ($array as $val) {
+
+			if ($nama != $val[$keys]) {
+				$nama = $val[$keys];
+				// if (!array_filter($return, $val[$keys])) {
+				// 	array_push($return, $val[$keys]);
+				// }
+			}
+		}
+
+		return $return;
+	}
+
 	function lap_penjualan_periode_cetak()
 	{
 		$tanggal1 = $this->input->post('tgl1');
 		$tanggal2 = $this->input->post('tgl2');
 		$nama_customer = $this->input->post('nama_customer');
 		$nama_barang = $this->input->post('nama_barang');
+		$cara_bayar = $this->input->post('cara_bayar');
 
 		$x['tanggal1'] = $this->input->post('tgl1');
 		$x['tanggal2'] = $this->input->post('tgl2');
+
+
+
+		// Customer Section
+
+		$data = $this->m_laporan->laporan_penjualan_kasir_customer($tanggal1, $tanggal2, $nama_customer)->result_array();
+
+		$customer_arr = array();
+		$group_cust = $this->_group_by($data, 'no_hp');
+		$group_nama = $this->_group_by($data, 'nama');
+
+		foreach ($group_cust as $idx => $cust) {
+			$customer = new stdClass();
+			$customer->nama = $group_nama[$idx];
+			$customer->no_hp = $cust;
+			$customer->items  = $this->m_laporan->laporan_penjualan_kasir_customer($tanggal1, $tanggal2, $cust)->result_array();
+			array_push($customer_arr, $customer);
+		}
+
+		$x['data'] = $customer_arr;
+
+		// End Section Customer
+
+		// Cara Bayar Section
+
+		$data1 = $this->m_laporan->laporan_penjualan_kasir_cara_bayar($tanggal1, $tanggal2, $cara_bayar)->result_array();
+
+
+		$cara_bayar_arr = array();
+		$group_cara_bayar_arr = array();
+		$group_cara_bayar = $this->_group_by($data1, 'jual_keterangan');
+		$group_cara_bayar2 = $this->_group_by($data1, 'jual_keterangan2');
+
+		foreach ($group_cara_bayar as $idx) {
+			$std['bayar'] = $idx;
+
+			array_push($group_cara_bayar_arr, $std);
+		}
+
+		foreach ($group_cara_bayar2 as $idx) {
+			$std['bayar'] = $idx;
+
+			array_push($group_cara_bayar_arr, $std);
+		}
+
+		print_r($group_cara_bayar2);
+		// print_r($group_cara_bayar2);
+		exit();
+		$group_nama_bayar = $this->_group_by($group_cara_bayar_arr, 'bayar');
+
+
+		foreach ($group_nama_bayar as $idx => $byr) {
+			$cara_bayar_std = new stdClass();
+			$cara_bayar_std->bayar = $byr;
+			$cara_bayar_std->items  = $this->m_laporan->laporan_penjualan_kasir_cara_bayar($tanggal1, $tanggal2, $byr)->result_array();
+			array_push($cara_bayar_arr, $cara_bayar_std);
+		}
+
+		print_r($cara_bayar_arr);
+		exit();
+		$x['data1'] = $cara_bayar_arr;
+
+		// End Section Cara Bayar
+
+		$x['data1'] = $this->m_laporan->laporan_penjualan_kasir_barang($tanggal1, $tanggal2, $nama_barang);
+
+
+
+
+
 		$x['nama'] = $nama_customer;
 		$x['nama_customer'] = $this->m_customer->dariNama($nama_customer);
 
-		$x['jml'] = $this->m_laporan->get_data__total_jual_periode($tanggal1, $tanggal2, $nama_customer, $nama_barang);
-		$x['data'] = $this->m_laporan->get_data_jual_periode($tanggal1, $tanggal2, $nama_customer, $nama_barang);
+		// $x['jml'] = $this->m_laporan->get_data__total_jual_periode($tanggal1, $tanggal2, $nama_customer, $nama_barang);
+		// $x['data'] = $this->m_laporan->get_data_jual_periode($tanggal1, $tanggal2, $nama_customer, $nama_barang);
 		$this->load->view('laporan/penjualan_per_periode/cetak', $x);
 	}
 	function laporan_penjualan_kasir_dp()
