@@ -27,7 +27,7 @@
               <th>No</th>
               <th>Jenis Pengeluaran</th>
               <th>Nominal</th>
-              <th>Penerima</th>
+              <th>Karyawan</th>
               <th>Keterangan</th>
               <th>Tanggal</th>
               <th>Aksi</th>
@@ -38,7 +38,7 @@
               <th>No</th>
               <th>Jenis Pengeluaran</th>
               <th>Nominal</th>
-              <th>Penerima</th>
+              <th>Karyawan</th>
               <th>Keterangan</th>
               <th>Tanggal</th>
               <th>Aksi</th>

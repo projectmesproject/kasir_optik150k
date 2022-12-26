@@ -4,9 +4,10 @@ class M_pengeluaran extends CI_Model
     private $table = "pengeluaran";
     function tampilData()
     {
-        $this->db->select('a.*,b.nama as nama_karyawan');
-        $this->db->from("pengeluaran a");
-        $this->db->join("karyawan b", "a.penerima=b.id", "left");
+        $this->db->select('*');
+        $this->db->from("pengeluaran");
+        // $this->db->join("karyawan b", "a.penerima=b.id", "left");
+        $this->db->order_by('id' , 'DESC');
         $data = $this->db->get()->result_array();
         return $data;
     }
@@ -30,7 +31,7 @@ class M_pengeluaran extends CI_Model
         ];
 
         $this->db->insert('pengeluaran', $data);
-        $this->db->query("update saldo set saldo=saldo-'$uang' where id=1");
+        // $this->db->query("update saldo set saldo=saldo-'$uang' where id=1");
     }
 
     function editData()
@@ -38,10 +39,10 @@ class M_pengeluaran extends CI_Model
         $data = [
             "jenis_pengeluaran" => $this->input->post('jns_pengeluaran', TRUE),
             "nominal" => $this->input->post('nominal', TRUE),
-            "tanggal" => $this->input->post('tanggal', TRUE),
+            "tanggal" => date('Y-m-d'),
             "keterangan" => $this->input->post('keterangan', TRUE),
             "nama_karyawan" => $this->input->post('karyawan', TRUE),
-            "updated_time" => date('Y-m-d H:i:s')
+            "updated_time" => date('Y-m-d')
         ];
 
         $this->db->where('id', $this->input->post('id', TRUE));
