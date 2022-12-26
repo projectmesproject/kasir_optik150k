@@ -681,13 +681,11 @@ GROUP BY jual_keterangan";
 		$data['saldo'] = $this->input->post('saldo');
 		$data['start'] = $start;
 		$data['end'] = $end;
-		$data['getPenjualan'] = $this->m_laporan->penjualan_by_metode($start, $end);
-		$data['total'] = $this->m_laporan->total_penjualan($start, $end);
-		$data['pengeluaran'] = $this->m_pengeluaran->getPengeluaran($start, $end);
+		$data['getPenjualan'] = $this->m_laporan->queryResume($start, $end);
+		$data['cashKasir'] = $this->m_laporan->queryResumeCash($start, $end);
+		$data['pengeluaran'] = $this->m_laporan->queryPengeluaran($start, $end);
 
 		$this->load->view('laporan/resume/cetak', $data);
-		// var_dump($data['getPenjualan']);
-		// die;
 	}
 
 	function lap_hutang_karyawan()

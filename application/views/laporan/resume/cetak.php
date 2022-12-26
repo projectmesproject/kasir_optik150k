@@ -34,72 +34,51 @@
         <table border="1" align="center" style="width:900px;margin-bottom:20px;">
             <thead>
                 <tr>
-                    <th colspan="11" style="text-align:left;">Periode : <?= $start; ?> - <?= $end; ?></th>
+                    <th colspan="11" style="text-align:left;">Periode : <?= $start; ?> - <?= $end; ?> <br> Saldo : Rp.  <?= number_format($saldo) ?> </th>
                 </tr>
                 <tr>
                     <th style="width:50px;">No</th>
-                    <th>Keterangan Penjualan</th>
+                    <th>Metode Penjualan</th>
                     <th style="width:250px;"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $no = 1;
+                               $totalPenjualan = 0;
                 foreach ($getPenjualan as $value) {
-                    $total_semua_fix = $value->total_semua + $value->total_semua2;
+$totalPenjualan += $value['total'];
                 ?>
                     <tr>
                         <td style="text-align:center;"><?= $no++ ?></td>
                         <td style="text-align:left;">
-                            Cara Bayar1 : <?= ($value->jual_keterangan) ?> <br>
-                            Cara Bayar2 : <?= $value->jual_keterangan2 ?></td>
+                             <?= ($value['method_types']) ?> 
                         <td style="text-align:right;">Rp.
-                            <?= number_format($total_semua_fix) ?>
+                            <?= number_format($value['total']) ?>
                         </td>
                     </tr>
                 <?php } ?>
 
             </tbody>
             <tfoot>
-                <tr>
-                    <td colspan="2">Saldo</td>
-                    <td style="text-align: right;">Rp. <?= number_format($saldo) ?></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Subtotal Penjualan</td>
-                    <?php
-
-                    foreach ($total as $value) {
-                        $result = $value->total_semua;
-                    ?>
-                        <td style="text-align:right;">Rp.
-                            <?= number_format($result) ?>
-                        </td>
-                    <?php } ?>
-                </tr>
-                <tr>
+                             <tr>
                     <td colspan="2">Total Pengeluaran</td>
-                    <?php
-
-                    $pengeluaran = $pengeluaran->total_pengeluaran;
-                    ?>
-                    <td style="text-align:right;">Rp.
-                        <?= number_format($pengeluaran) ?>
+                                      <td style="text-align:right;">Rp.
+                        <?= number_format($pengeluaran->pengeluaran)?>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">Total Penjualan</td>
-                    <?php
-
-                    foreach ($total as $value) {
-                        $result = $saldo + $value->total_semua;
-                        $result -= $pengeluaran;
-                    ?>
-                        <td style="text-align:right;">Rp.
-                            <?= number_format($result) ?>
+                    <td colspan="2">Total Di Kasir</td>
+                                          <td style="text-align:right;">Rp.
+                            <?php $wes = 0;
+						$wes = $saldo + $cashKasir['cash'] - $pengeluaran->pengeluaran; ?>
+                         <?= number_format($wes); ?></td>
                         </td>
-                    <?php } ?>
                 </tr>
+                <tr>
+					<td colspan="2">Total Keseluruhan Penjualan </td>
+					<td align="right">Rp. <?= number_format($totalPenjualan) ?></td>
+				</tr>
             </tfoot>
         </table>
         <table align="center" style="width:800px; border:none;margin-top:5px;margin-bottom:20px;">

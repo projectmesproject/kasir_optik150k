@@ -376,4 +376,35 @@ class M_laporan extends CI_Model
 		}
 		
 	}
+	public function queryResume($start,$end)
+	{
+		$this->db->select('*,sum(amount) as total');
+		$this->db->from('tbl_resume');
+		$this->db->where('DATE(created_at) >=', $start);
+		$this->db->where('DATE(created_at) <=', $end);
+		// $this->db->where('method_types !=', "Cash");
+		$this->db->group_by('method_types');
+		$res = $this->db->get()->result_array();
+		return $res;
+	}
+	public function queryResumeCash($start,$end)
+	{
+		$this->db->select('*,sum(amount) as cash');
+		$this->db->from('tbl_resume');
+		$this->db->where('DATE(created_at) >=', $start);
+		$this->db->where('DATE(created_at) <=', $end);
+		$this->db->where('method_types', 'Cash');
+		$this->db->group_by('method_types');
+		$res = $this->db->get()->row_array();
+		return $res;
+	}
+	public function queryPengeluaran($start, $end)
+	{
+		$this->db->select('*,sum(nominal) as pengeluaran');
+		$this->db->from('pengeluaran');
+		$this->db->where('DATE(tanggal) >=', $start);
+		$this->db->where('DATE(tanggal) <=', $end);
+		$res = $this->db->get()->row();
+		return $res;
+	}
 }
