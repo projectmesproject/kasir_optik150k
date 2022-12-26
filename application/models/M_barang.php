@@ -304,6 +304,20 @@ class M_barang extends CI_Model
 		// echo json_encode($response);
 		return $dt;
 	}
+	public function getKodeBarangList()
+	{
+		$this->db->select('barang_nama as label, CONCAT(barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok) as value');
+		$this->db->from('tbl_barang');
+		$this->db->like('barang_id', $this->input->post("search"));
+		$dt = $this->db->get()->result_array();
+		// $html = "";
+		//   foreach($dt as $v ){
+		// 		$response[] = array("value"=>$v['value'],"label"=>$v['label']);
+		// 		$html .= "<li data-value='$v[value]'>$v[label]</li>";
+		// 	}
+		// echo json_encode($response);
+		return $dt;
+	}
 	public function listBarang2($start, $end)
 	{
 		$this->db->select('*');

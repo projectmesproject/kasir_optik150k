@@ -99,6 +99,22 @@ class Penjualan extends CI_Controller
 
         echo $html;
     }
+    public function get_kode_barang_autocomplete()
+    {
+        $result = $this->m_barang->getKodeBarangList();
+        $html = "";
+        if (count($result) > 0) {
+
+            foreach ($result as $v) {
+                // $response[] = array("value"=>$v['value'],"label"=>$v['label']);
+                $html .= "<li class='item_barang' data-value='$v[value]'>$v[label]</li>";
+            }
+        } else {
+            $html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
+        }
+
+        echo $html;
+    }
 
     function bayar_dp()
     {

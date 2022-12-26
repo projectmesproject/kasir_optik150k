@@ -1,3 +1,12 @@
+<?php
+
+if(!$this->session->userdata('level')){
+$this->session->set_flashdata("message",' <div class="alert alert-danger" role="alert">
+Sesi Login Telah Habis, Silahkan Login Kembali</div>');
+  return redirect("/");
+  exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
