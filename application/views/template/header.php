@@ -39,7 +39,7 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
   <link href="<?= base_url('assets/admin/'); ?>css/jquery-ui.css" rel="stylesheet">
   <link href="<?= base_url('assets/plugins/'); ?>select2/select2.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
-  <?php if ($this->session->userdata('level') == "kasir") { ?>
+  <?php if ($this->session->userdata('level') == "kasir" || $this->session->userdata("level") == "admin") { ?>
     <script>
       document.onkeyup = KeyCheck;
 
