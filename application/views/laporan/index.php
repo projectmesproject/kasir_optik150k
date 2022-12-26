@@ -220,6 +220,15 @@
                                 <?php } ?>
                             </select>
                         </div>
+                        <label class="control-label col-xs-6">Kategori Barang</label>
+                        <div class="col-xs-9">
+                            <select name="kategori_barang" id="kategori_barang" class="form-control">
+                                <option value="" selected>Kategori Barang</option>
+                                <?php foreach ($kat->result() as $value) { ?>
+                                    <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
                         <label class="control-label col-xs-6">Barang</label>
                         <div class="col-xs-9">
                             <select name="nama_barang" id="nama_barang" class="form-control">
@@ -229,12 +238,38 @@
                         <label class="control-label col-xs-6">Cara Bayar</label>
                         <div class="col-xs-9">
                             <select name="cara_bayar" id="cara_bayar" class="form-control">
-                                <option value="" selected>Cara Bayar</option>
+                                <option value="all" selected>Cara Bayar</option>
                                 <?php foreach ($cara_bayar as $value) { ?>
                                     <option value="<?= $value->cara_bayar ?>"><?= $value->cara_bayar ?></option>
                                 <?php } ?>
                             </select>
                         </div>
+                        <label class="control-label col-xs-6 mt-3">Tampilkan</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="percustomer" name="percustomer" checked>
+                            <label class="form-check-label" for="percustomer">
+                                Per Customer
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="perkatbarang" name="perkatbarang" checked>
+                            <label class="form-check-label" for="perkatbarang">
+                                Per Kategori Barang
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="perbarang" name="perbarang" checked>
+                            <label class="form-check-label" for="perbarang">
+                                Per Barang
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="percarabayar" name="percarabayar" checked>
+                            <label class="form-check-label" for="percarabayar">
+                                Per Cara Bayar
+                            </label>
+                        </div>
+
 
 
                     </div>
@@ -285,11 +320,40 @@
                                     <?php } ?>
                                 </select>
                             </div>
+                            <label class="control-label col-xs-6">Kategori Barang</label>
+                            <div class="col-xs-9">
+                                <select name="kategori_barang" id="kategori_barang" class="form-control">
+                                    <option value="" selected>Kategori Barang</option>
+                                    <?php foreach ($kat->result() as $value) { ?>
+                                        <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
                             <label class="control-label col-xs-6">Barang</label>
                             <div class="col-xs-9">
                                 <select name="nama_barang" class="form-control">
                                     <option value="" selected>Barang</option>
                                 </select>
+                            </div>
+
+                            <label class="control-label col-xs-6 mt-3">Tampilkan</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="percustomer2" name="percustomer" checked>
+                                <label class="form-check-label" for="percustomer">
+                                    Per Customer
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="perkatbarang2" name="perkatbarang" checked>
+                                <label class="form-check-label" for="perkatbarang">
+                                    Per Kategori Barang
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="perbarang2" name="perbarang" checked>
+                                <label class="form-check-label" for="perbarang">
+                                    Per Barang
+                                </label>
                             </div>
 
 
@@ -387,11 +451,39 @@
                                     <?php } ?>
                                 </select>
                             </div>
+                            <label class="control-label col-xs-6">Kategori Barang</label>
+                            <div class="col-xs-9">
+                                <select name="kategori_barang" id="kategori_barang" class="form-control">
+                                    <option value="" selected>Kategori Barang</option>
+                                    <?php foreach ($kat->result() as $value) { ?>
+                                        <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
                             <label class="control-label col-xs-6">Barang</label>
                             <div class="col-xs-9">
                                 <select name="nama_barang" class="form-control">
                                     <option value="" selected>Barang</option>
                                 </select>
+                            </div>
+                            <label class="control-label col-xs-6 mt-3">Tampilkan</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="percabang" name="percabang" checked>
+                                <label class="form-check-label" for="percabang">
+                                    Per Cabang
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="perkatbarang1" name="perkatbarang" checked>
+                                <label class="form-check-label" for="perkatbarang1">
+                                    Per Kategori Barang
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="perbarang1" name="perbarang" checked>
+                                <label class="form-check-label" for="perbarang1">
+                                    Per Barang
+                                </label>
                             </div>
                         </div>
                         <!-- Modal footer -->

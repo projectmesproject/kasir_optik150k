@@ -4,6 +4,17 @@
 	<title>Laporan Penjualan Kasir</title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="<?php echo base_url('assets/css/laporan.css') ?>" />
+	<style>
+		.mt-30{
+			margin-top: 30px !important;
+		}
+		/* table{
+			border-collapse: collapse;
+		}
+		table tr th, table tr td{
+			padding: 10px;
+		} */
+	</style>
 </head>
 
 <body onload="window.print()">
@@ -33,78 +44,328 @@
 		?>
 
 		<!-- Perulangan Customer -->
-		<?php
-		foreach ($data as $dt) {
-			$nama = $dt->nama;
+		<?php if($percustomer){ ?>
+		<div class="mt-30">
+			<h2 style="text-align: center;">Per Customer</h2>
+			<?php
+			foreach ($data as $dt) {
+				$nama = $dt->nama;
 
-		?>
-			<table border="1" align="center" style="width:900px;margin-bottom:20px;">
-				<thead>
-					<tr>
-						<?php if ($nama == "") { ?>
-							<th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br></th>
-						<?php } else { ?>
-							<th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br>Nama Customer / No. Hp : <?= $dt->nama . " - " . $dt->no_hp ?></th>
-						<?php } ?>
-					</tr>
-
-					<tr>
-						<th style="width:50px;">No</th>
-						<th>No Faktur</th>
-						<th>Customer</th>
-						<th>Tanggal</th>
-						<th>Nama Barang</th>
-						<th>Satuan</th>
-						<th>Harga Jual</th>
-						<th>Qty</th>
-						<th>Keterangan</th>
-						<th>SubTotal</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-					$no = 0;
-					$data_tes = $dt->items;
-					$grandtotal = 0;
-					foreach ($data_tes as $idx => $i) {
-						$no++;
-						$nofak = $i['jual_nofak'];
-						$nama = $i['nama'];
-						$tgl = $i['jual_tanggal'];
-						$nabar = $i['d_jual_barang_nama'];
-						$satuan = $i['d_jual_barang_satuan'];
-						$harjul = $i['d_jual_barang_harjul'];
-						$qty = $i['d_jual_qty'];
-						$diskon = $i['d_jual_diskon'];
-						$total = $i['d_jual_total'];
-						$grandtotal += $total;
-					?>
+			?>
+				<table border="1" align="center" style="width:900px;margin-bottom:20px;">
+					<thead>
 						<tr>
-							<td style="text-align:center;"><?php echo $no; ?></td>
-							<td style="padding-left:5px;"><?php echo $nofak; ?></td>
-							<td style="padding-left:5px;"><?php echo $nama; ?></td>
-							<td style="text-align:center;"><?php echo $tgl; ?></td>
-							<td style="text-align:left;"><?php echo $nabar; ?></td>
-							<td style="text-align:left;"><?php echo $satuan; ?></td>
-							<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
-							<td style="text-align:center;"><?php echo $qty; ?></td>
-							<td style="text-align:right;"><?php echo $diskon; ?></td>
-							<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
+							<?php if ($nama == "") { ?>
+								<th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br></th>
+							<?php } else { ?>
+								<th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br>Nama Customer / No. Hp : <?= $dt->nama . " - " . $dt->no_hp ?></th>
+							<?php } ?>
 						</tr>
-					<?php } ?>
-				</tbody>
-				<tfoot>
 
-					<tr>
-						<td colspan="9" style="text-align:center;"><b>Total</b></td>
-						<td style="text-align:right;"><b><?php echo 'Rp ' . number_format($grandtotal); ?></b></td>
-					</tr>
-				</tfoot>
-			</table>
+						<tr>
+							<th style="width:50px;">No</th>
+							<th>No Faktur</th>
+							<th>Customer</th>
+							<th>Tanggal</th>
+							<th>Nama Barang</th>
+							<th>Satuan</th>
+							<th>Harga Jual</th>
+							<th>Qty</th>
+							<th>Keterangan</th>
+							<th>SubTotal</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						$no = 0;
+						$data_tes = $dt->items;
+						$grandtotal = 0;
+						foreach ($data_tes as $idx => $i) {
+							$no++;
+							$nofak = $i['jual_nofak'];
+							$nama = $i['nama'];
+							$tgl = $i['jual_tanggal'];
+							$nabar = $i['d_jual_barang_nama'];
+							$satuan = $i['d_jual_barang_satuan'];
+							$harjul = $i['d_jual_barang_harjul'];
+							$qty = $i['d_jual_qty'];
+							$diskon = $i['d_jual_diskon'];
+							$total = $i['d_jual_total'];
+							$grandtotal += $total;
+						?>
+							<tr>
+								<td style="text-align:center;"><?php echo $no; ?></td>
+								<td style="padding-left:5px;"><?php echo $nofak; ?></td>
+								<td style="padding-left:5px;"><?php echo $nama; ?></td>
+								<td style="text-align:center;"><?php echo $tgl; ?></td>
+								<td style="text-align:left;"><?php echo $nabar; ?></td>
+								<td style="text-align:left;"><?php echo $satuan; ?></td>
+								<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
+								<td style="text-align:center;"><?php echo $qty; ?></td>
+								<td style="text-align:right;"><?php echo $diskon; ?></td>
+								<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
+							</tr>
+						<?php } ?>
+					</tbody>
+					<tfoot>
 
-		<?php
-		} ?>
+						<tr>
+							<td colspan="9" style="text-align:center;"><b>Total</b></td>
+							<td style="text-align:right;"><b><?php echo 'Rp ' . number_format($grandtotal); ?></b></td>
+						</tr>
+					</tfoot>
+				</table>
+
+			<?php
+			} ?>
+		</div>
+		<?php } ?>
 		<!-- End Perulangan Customer -->
+
+		<!-- Perulangan Cara Bayar -->
+		<?php if($percarabayar){ ?>
+		<div class="mt-30">
+			<h2 style="text-align: center;">Per Cara Bayar</h2>
+			<?php
+			foreach ($data1 as $dt) {
+				$bayar = $dt->bayar;
+
+			?>
+				<table border="1" align="center" style="width:900px;margin-bottom:20px;">
+					<thead>
+						<tr>
+							<?php if ($bayar == "") { ?>
+								<th colspan="12" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br>Cara Bayar : Unknown</th>
+							<?php } else { ?>
+								<th colspan="12" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br>Cara Bayar : <?= $bayar ?></th>
+							<?php } ?>
+						</tr>
+
+						<tr>
+							<th style="width:50px;">No</th>
+							<th>No Faktur</th>
+							<th>Customer</th>
+							<th>Tanggal</th>
+							<th>Nama Barang</th>
+							<th>Satuan</th>
+							<th>Harga Jual</th>
+							<th>Qty</th>
+							<th>Keterangan</th>
+							<th>Cara Bayar 1</th>
+							<th>Cara Bayar 2</th>
+							<th>SubTotal</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						$no = 0;
+						$data_tes = $dt->items;
+						$grandtotal = 0;
+						foreach ($data_tes as $idx => $i) {
+							$no++;
+							$nofak = $i['jual_nofak'];
+							$nama = $i['nama'];
+							$tgl = $i['jual_tanggal'];
+							$nabar = $i['d_jual_barang_nama'];
+							$satuan = $i['d_jual_barang_satuan'];
+							$harjul = $i['d_jual_barang_harjul'];
+							$qty = $i['d_jual_qty'];
+							$diskon = $i['d_jual_diskon'];
+							$total = $i['d_jual_total'];
+							$cara_bayar1 = $i['jual_keterangan'];
+							$cara_bayar2 = $i['jual_keterangan2'];
+							$grandtotal += $total;
+						?>
+							<tr>
+								<td style="text-align:center;"><?php echo $no; ?></td>
+								<td style="padding-left:5px;"><?php echo $nofak; ?></td>
+								<td style="padding-left:5px;"><?php echo $nama; ?></td>
+								<td style="text-align:center;"><?php echo $tgl; ?></td>
+								<td style="text-align:left;"><?php echo $nabar; ?></td>
+								<td style="text-align:left;"><?php echo $satuan; ?></td>
+								<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
+								<td style="text-align:center;"><?php echo $qty; ?></td>
+								<td style="text-align:right;"><?php echo $diskon; ?></td>
+								<td style="text-align:right;"><?php echo $cara_bayar1; ?></td>
+								<td style="text-align:right;"><?php echo $cara_bayar2; ?></td>
+								<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
+							</tr>
+						<?php } ?>
+					</tbody>
+					<tfoot>
+
+						<tr>
+							<td colspan="11" style="text-align:center;"><b>Total</b></td>
+							<td style="text-align:right;"><b><?php echo 'Rp ' . number_format($grandtotal); ?></b></td>
+						</tr>
+					</tfoot>
+				</table>
+
+			<?php
+			} ?>
+		</div>
+		<?php } ?>
+		<!-- End Perulangan Cara Bayar -->
+
+		<!-- Perulangan Kategori -->
+		<?php if($perkatbarang){ ?>
+		<div class="mt-30">
+			<h2 style="text-align: center;">Per Kategori Barang</h2>
+			<?php
+			foreach ($data2 as $dt) {
+				$kategori = $dt->kategori;
+
+			?>
+				<table border="1" align="center" style="width:900px;margin-bottom:20px;">
+					<thead>
+						<tr>
+							<?php if ($kategori == "") { ?>
+								<th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br></th>
+							<?php } else { ?>
+								<th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br>Kategori : <?= $kategori ?></th>
+							<?php } ?>
+						</tr>
+
+						<tr>
+							<th style="width:50px;">No</th>
+							<th>No Faktur</th>
+							<th>Customer</th>
+							<th>Tanggal</th>
+							<th>Nama Barang</th>
+							<th>Satuan</th>
+							<th>Harga Jual</th>
+							<th>Qty</th>
+							<th>Keterangan</th>
+							<th>SubTotal</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						$no = 0;
+						$data_tes = $dt->items;
+						$grandtotal = 0;
+						foreach ($data_tes as $idx => $i) {
+							$no++;
+							$nofak = $i['jual_nofak'];
+							$nama = $i['nama'];
+							$tgl = $i['jual_tanggal'];
+							$nabar = $i['d_jual_barang_nama'];
+							$satuan = $i['d_jual_barang_satuan'];
+							$harjul = $i['d_jual_barang_harjul'];
+							$qty = $i['d_jual_qty'];
+							$diskon = $i['d_jual_diskon'];
+							$total = $i['d_jual_total'];
+							$grandtotal += $total;
+						?>
+							<tr>
+								<td style="text-align:center;"><?php echo $no; ?></td>
+								<td style="padding-left:5px;"><?php echo $nofak; ?></td>
+								<td style="padding-left:5px;"><?php echo $nama; ?></td>
+								<td style="text-align:center;"><?php echo $tgl; ?></td>
+								<td style="text-align:left;"><?php echo $nabar; ?></td>
+								<td style="text-align:left;"><?php echo $satuan; ?></td>
+								<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
+								<td style="text-align:center;"><?php echo $qty; ?></td>
+								<td style="text-align:right;"><?php echo $diskon; ?></td>
+								<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
+							</tr>
+						<?php } ?>
+					</tbody>
+					<tfoot>
+
+						<tr>
+							<td colspan="9" style="text-align:center;"><b>Total</b></td>
+							<td style="text-align:right;"><b><?php echo 'Rp ' . number_format($grandtotal); ?></b></td>
+						</tr>
+					</tfoot>
+				</table>
+
+			<?php
+			} ?>
+		</div>
+		<?php } ?>
+		<!-- End Perulangan Kategori -->
+
+		<!-- Perulangan Barang -->
+		<?php if($perbarang){ ?>
+		<div class="mt-30">
+			<h2 style="text-align: center;">Per Barang</h2>
+			<?php
+			foreach ($data3 as $dt) {
+				$barang = $dt->barang;
+
+			?>
+				<table border="1" align="center" style="width:900px;margin-bottom:20px;">
+					<thead>
+						<tr>
+							<?php if ($barang == "") { ?>
+								<th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br></th>
+							<?php } else { ?>
+								<th colspan="11" style="text-align:left;">Periode : <?= date('d M Y', strtotime($tanggal1)); ?> - <?= date('d M Y', strtotime($tanggal2)); ?><br>Kategori : <?= $barang ?></th>
+							<?php } ?>
+						</tr>
+
+						<tr>
+							<th style="width:50px;">No</th>
+							<th>No Faktur</th>
+							<th>Customer</th>
+							<th>Tanggal</th>
+							<th>Nama Barang</th>
+							<th>Satuan</th>
+							<th>Harga Jual</th>
+							<th>Qty</th>
+							<th>Keterangan</th>
+							<th>SubTotal</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						$no = 0;
+						$data_tes = $dt->items;
+						$grandtotal = 0;
+						foreach ($data_tes as $idx => $i) {
+							$no++;
+							$nofak = $i['jual_nofak'];
+							$nama = $i['nama'];
+							$tgl = $i['jual_tanggal'];
+							$nabar = $i['d_jual_barang_nama'];
+							$satuan = $i['d_jual_barang_satuan'];
+							$harjul = $i['d_jual_barang_harjul'];
+							$qty = $i['d_jual_qty'];
+							$diskon = $i['d_jual_diskon'];
+							$total = $i['d_jual_total'];
+							$grandtotal += $total;
+						?>
+							<tr>
+								<td style="text-align:center;"><?php echo $no; ?></td>
+								<td style="padding-left:5px;"><?php echo $nofak; ?></td>
+								<td style="padding-left:5px;"><?php echo $nama; ?></td>
+								<td style="text-align:center;"><?php echo $tgl; ?></td>
+								<td style="text-align:left;"><?php echo $nabar; ?></td>
+								<td style="text-align:left;"><?php echo $satuan; ?></td>
+								<td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
+								<td style="text-align:center;"><?php echo $qty; ?></td>
+								<td style="text-align:right;"><?php echo $diskon; ?></td>
+								<td style="text-align:right;"><?php echo 'Rp ' . number_format($total); ?></td>
+							</tr>
+						<?php } ?>
+					</tbody>
+					<tfoot>
+
+						<tr>
+							<td colspan="9" style="text-align:center;"><b>Total</b></td>
+							<td style="text-align:right;"><b><?php echo 'Rp ' . number_format($grandtotal); ?></b></td>
+						</tr>
+					</tfoot>
+				</table>
+
+			<?php
+			} ?>
+		</div>
+		<?php } ?>
+		<!-- End Perulangan Barang -->
+
+
 
 		<table align="center" style="width:800px; border:none;margin-top:5px;margin-bottom:20px;">
 			<tr>

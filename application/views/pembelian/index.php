@@ -75,7 +75,15 @@
                   <th>Kode Barang : </th>
                 </tr>
                 <tr>
-                  <th><input type="text" name="kode_brg" id="kode_brg" class="form-control input-sm" style="width:150px;"></th>
+                  <th>
+                    <input class="form-control input-sm" id="nabar" type="search" autocomplete="off" />
+                    <div class="ajax_list_barang" style="width: 550px;">
+                      <ul style="list-style:none;" class="list_container" id="list_container">
+
+                      </ul>
+                    </div>
+                    <!-- <input type="text" name="kode_brg" id="kode_brg" class="form-control input-sm" style="width:150px;"> -->
+                  </th>
                 </tr>
                 <div id="detail_barang" style="position:absolute;">
                 </div>
@@ -147,5 +155,46 @@
         <!-- /.container-fluid -->
 
         </div>
+
+        <script>
+          $('#nabar').keyup(function() {
+            let search = $(this).val();
+            if (search == "") {
+              $('.ajax_list_barang').hide()
+            } else {
+              $.ajax({
+                url: '<?= base_url() ?>/penjualan/get_kode_barang_autocomplete',
+                type: 'POST',
+                cache: false,
+                data: {
+                  "search": search
+                },
+                success: function(res) {
+
+                  $('.ajax_list_barang').show()
+                  $("#list_container").html(res)
+                  $('.item_barang').click(function() {
+                    let value = $(this).attr('data-value')
+                    let label = $(this).text()
+                    $('#nabar').val(label)
+                    if (value != "tambah_barang") {
+                      var res = value.split("#");
+                      console.log(res)
+                      $('#harga_ket').val(formatUang(res[0]))
+                      $('#kode_brg_ket').val(res[1])
+                      $('#jumlah_ket').val(1)
+                      $('#satuan_ket').val(res[2])
+                      $('#stok_ket').val(res[3])
+                    } else {
+                      $('#add_barang').modal('show')
+                    }
+                    $('.ajax_list_barang').hide()
+                  })
+                }
+              })
+            }
+
+          })
+        </script>
 
         <!-- End of Main Content -->

@@ -28,6 +28,14 @@ class M_kategori extends CI_Model
         $return = $query->result();
         return $return;
     }
+    public function getKategoriById($id)
+    {
+        $this->db->select('*')->from('tbl_kategori');
+        $this->db->where("kategori_id", $id);
+        $query = $this->db->get();
+        $return = $query->row();
+        return $return;
+    }
     public function listKategori($start, $end)
     {
         $res = $this->db->select('*')->from('tbl_jual')->where('jual_tanggal <=', $start)->where('jual_tanggal >=', $end)
