@@ -11,11 +11,15 @@ class Ajax extends CI_Controller
 	}
 	public function Saldo()
 	{
-		// $this->session->unset_userdata('saldo');
+		$this->session->unset_userdata('saldo');
 		$saldo = $this->input->post('saldo');
-		echo '<script>localStorage.setItem("saldo", ' . $saldo . ')</script>';
-		// $this->session->set_userdata(['saldo' => $saldo]);
+		$url_base = $this->input->post('url_base');
+		// echo '<script>
+		// sessionStorage.setItem("saldo", ' . $saldo . ')
 
+		// </script>';
+		$this->session->set_userdata(['saldo' => $saldo]);
+		// redirect($url_base);
 	}
 	public function getJual()
 	{
@@ -126,9 +130,12 @@ class Ajax extends CI_Controller
 		$queryPengeluaran = $this->queryPengeluaran($date);
 		$queryCash = $this->queryResumeCash($date);
 		$query = $this->queryResume($date);
+		$res = new stdClass();
+		$res->saldo = number_format($saldo);
 		ob_start();
 
 	?>
+		<input type="hidden" id="saldo_response" value="<?= number_format($saldo) ?>" />
 		<table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
 			<thead class="thead-light">
 				<tr>
@@ -175,7 +182,8 @@ class Ajax extends CI_Controller
 			</tfoot>
 		</table>
 <?php
-		$konten = ob_get_contents();
-		return $konten;
+		// $konten = ob_get_contents();
+		// $res->html = $konten;
+		// echo json_encode($res);
 	}
 }

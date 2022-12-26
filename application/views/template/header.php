@@ -1,7 +1,7 @@
 <?php
 
-if(!$this->session->userdata('level')){
-$this->session->set_flashdata("message",' <div class="alert alert-danger" role="alert">
+if (!$this->session->userdata('level')) {
+  $this->session->set_flashdata("message", ' <div class="alert alert-danger" role="alert">
 Sesi Login Telah Habis, Silahkan Login Kembali</div>');
   return redirect("/");
   exit();
@@ -57,25 +57,11 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
         }
 
 
-        let saldo = localStorage.getItem('saldo')
+        // let saldo = localStorage.getItem('saldo')
 
-        if (KeyID == 115) {
-          if (!saldo) {
-            $('#modalSaldo').modal('show')
-          } else {
-            $.ajax({
-              type: "POST",
-              url: "<?php echo site_url('Ajax/getResume'); ?>",
-              success: function(msg) {
-                $('#resumewoi').html(msg);
-              }
-            });
-            $('#modalLaporanPenjualanResume').modal('show');
-          }
-        }
         // if (KeyID == 115) {
-        //   if ("<?= $this->session->userdata('saldo') ?>" == 0) {
-        //     $('#modalSaldo').modal('show');
+        //   if (!saldo) {
+        //     $('#modalSaldo').modal('show')
         //   } else {
         //     $.ajax({
         //       type: "POST",
@@ -87,6 +73,44 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
         //     $('#modalLaporanPenjualanResume').modal('show');
         //   }
         // }
+        if (KeyID == 115) {
+          if ("<?= $this->session->userdata('saldo') ?>" == 0 && $('#saldo_response').val() == 0) {
+            $('#modalSaldo').modal('show');
+          } else {
+            $.ajax({
+              type: "POST",
+              url: "<?php echo site_url('Ajax/getResume'); ?>",
+              success: function(msg) {
+                $('#resumewoi').html(msg);
+              }
+            });
+            $('#modalLaporanPenjualanResume').modal('show');
+          }
+        }
+        $('#triggerSaldo').submit(function(ev) {
+          ev.preventDefault();
+          $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            cache: false,
+            data: $(this).serialize(),
+            success: function(res) {
+              $('#modalSaldo').modal('hide');
+              $.ajax({
+                type: "POST",
+                url: "<?php echo site_url('Ajax/getResume'); ?>",
+                success: function(msg) {
+                  console.log(msg)
+                  // let response = JSON.parse(msg)
+                  $('#resumewoi').html(msg);
+                  $('#modalLaporanPenjualanResume').modal('show');
+
+                  $('#label_saldo_lap').text($('#saldo_response').val())
+                }
+              });
+            }
+          })
+        })
       }
     </script>
   <?php } ?>
@@ -199,13 +223,16 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Tanggal : <?= date('d-m-Y'); ?> <br>Saldo Di Kasir : <?= number_format($this->session->userdata('saldo')) ?></h5>
+          <h5 class="modal-title">Tanggal : <?= date('d-m-Y'); ?> <br>Saldo Di Kasir : <span id="label_saldo_lap"><?= number_format($this->session->userdata('saldo')) ?></span></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <div id="resumewoi">tes.</div>
+          <div id="resumewoi">
+            <input type="hidden" id="saldo_response" value="0" />
+            tes.
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
