@@ -46,16 +46,15 @@
                 <?php
                 $no = 1;
                 foreach ($getPenjualan as $value) {
-
+                    $total_semua_fix = $value->total_semua + $value->total_semua2;
                 ?>
                     <tr>
                         <td style="text-align:center;"><?= $no++ ?></td>
                         <td style="text-align:left;">
-                            Total <?= ($value->jual_keterangan) ?></td>
+                            Cara Bayar1 : <?= ($value->jual_keterangan) ?> <br>
+                            Cara Bayar2 : <?= $value->jual_keterangan2 ?></td>
                         <td style="text-align:right;">Rp.
-
-                            <?= number_format($value->total_semua) ?>
-
+                            <?= number_format($total_semua_fix) ?>
                         </td>
                     </tr>
                 <?php } ?>
@@ -71,7 +70,7 @@
                     <?php
 
                     foreach ($total as $value) {
-                        $result = $saldo + $value->total_semua;
+                        $result = $value->total_semua;
                     ?>
                         <td style="text-align:right;">Rp.
                             <?= number_format($result) ?>
@@ -82,11 +81,11 @@
                     <td colspan="2">Total Pengeluaran</td>
                     <?php
 
-                   $pengeluaran = $pengeluaran->total_pengeluaran;
+                    $pengeluaran = $pengeluaran->total_pengeluaran;
                     ?>
-                        <td style="text-align:right;">Rp.
-                            <?= number_format($pengeluaran) ?>
-                        </td>
+                    <td style="text-align:right;">Rp.
+                        <?= number_format($pengeluaran) ?>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2">Total Penjualan</td>

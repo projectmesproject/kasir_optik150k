@@ -32,8 +32,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
   <?php if ($this->session->userdata('level') == "kasir") { ?>
     <script>
-
-     
       document.onkeyup = KeyCheck;
 
       function KeyCheck(e) {
@@ -48,6 +46,38 @@
           });
           $('#modalLaporanPenjualan').modal('show');
         }
+
+
+        let saldo = localStorage.getItem('saldo')
+
+        if (KeyID == 115) {
+          if (!saldo) {
+            $('#modalSaldo').modal('show')
+          } else {
+            $.ajax({
+              type: "POST",
+              url: "<?php echo site_url('Ajax/getResume'); ?>",
+              success: function(msg) {
+                $('#resumewoi').html(msg);
+              }
+            });
+            $('#modalLaporanPenjualanResume').modal('show');
+          }
+        }
+        // if (KeyID == 115) {
+        //   if ("<?= $this->session->userdata('saldo') ?>" == 0) {
+        //     $('#modalSaldo').modal('show');
+        //   } else {
+        //     $.ajax({
+        //       type: "POST",
+        //       url: "<?php echo site_url('Ajax/getResume'); ?>",
+        //       success: function(msg) {
+        //         $('#resumewoi').html(msg);
+        //       }
+        //     });
+        //     $('#modalLaporanPenjualanResume').modal('show');
+        //   }
+        // }
       }
     </script>
   <?php } ?>
@@ -133,6 +163,19 @@
     input[type="search"]::-webkit-search-cancel-button {
       -webkit-appearance: searchfield-cancel-button;
     }
+
+    .modal-fullscreen .modal-dialog {
+      max-width: 100%;
+      margin: 0;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100vh;
+      display: flex;
+      position: fixed;
+      z-index: 100000;
+    }
   </style>
   <script>
     function formatUang(x) {
@@ -143,7 +186,25 @@
 
 <body id="page-top">
   <!-- Modal -->
-  <div class="modal fade bd-example-modal-lg" id="modalLaporanPenjualan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal fade modal-fullscreen" id="modalLaporanPenjualanResume" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tanggal : <?= date('d-m-Y'); ?> <br>Saldo Di Kasir : <?= number_format($this->session->userdata('saldo')) ?></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="resumewoi">tes.</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade modal-fullscreen" id="modalLaporanPenjualan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -158,6 +219,34 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade bd-example-modal-sm" id="modalSaldo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Anda Belum Mengisi saldo! Mohon isi Saldo Terlebih dahulu</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="<?= base_url('Ajax/Saldo') ?>" id="triggerSaldo" method="post">
+
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12">
+                <label> Saldo </label>
+                <input type="number" class="form-control" name="saldo" placeholder="Saldo" />
+              </div>
+            </div>
+
+          </div>
+          <div class=" modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Confirm</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

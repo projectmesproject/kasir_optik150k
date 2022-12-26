@@ -9,7 +9,14 @@ class Ajax extends CI_Controller
 	{
 		parent::__construct();
 	}
+	public function Saldo()
+	{
+		// $this->session->unset_userdata('saldo');
+		$saldo = $this->input->post('saldo');
+		echo '<script>localStorage.setItem("saldo", ' . $saldo . ')</script>';
+		// $this->session->set_userdata(['saldo' => $saldo]);
 
+	}
 	public function getJual()
 	{
 		$date = date('Y-m-d');
@@ -31,24 +38,21 @@ class Ajax extends CI_Controller
 
 					$total += ($items['total_qty']);
 				?>
-
 					<tr>
-						<td><?= $items['d_jual_barang_nama']; ?></td>
-						<td><?= $items['total_qty']; ?></td>
-
+						<td><?= ($items['d_jual_barang_nama']); ?></td>
+						<td><?= number_format($items['total_qty']); ?></td>
 					</tr>
-
 					<?php $i++; ?>
 				<?php endforeach; ?>
 			</tbody>
 			<tfoot class="bg-primary text-white font-weight-bold">
 				<tr>
 					<td>Total :</td>
-					<td><?= $total ?></td>
+					<td><?= number_format($total) ?></td>
 				</tr>
 			</tfoot>
 		</table>
-<?php
+	<?php
 		$konten = ob_get_contents();
 		return $konten;
 	}
@@ -81,9 +85,97 @@ class Ajax extends CI_Controller
 		foreach ($dt as $v) {
 			$response[] = array("value" => $v['value'], "label" => $v['label']);
 		}
-
-
-
 		echo json_encode($response);
+	}
+
+	public function queryResume($date)
+	{
+		$this->db->select('*,sum(amount) as total');
+		$this->db->from('tbl_resume');
+		$this->db->where('DATE(created_at) >=', $date);
+		$this->db->where('DATE(created_at) <=', $date);
+		// $this->db->where('method_types !=', "Cash");
+		$this->db->group_by('method_types');
+		$res = $this->db->get()->result_array();
+		return $res;
+	}
+	public function queryResumeCash($date)
+	{
+		$this->db->select('*,sum(amount) as cash');
+		$this->db->from('tbl_resume');
+		$this->db->where('DATE(created_at) >=', $date);
+		$this->db->where('DATE(created_at) <=', $date);
+		$this->db->where('method_types', 'Cash');
+		$this->db->group_by('method_types');
+		$res = $this->db->get()->row_array();
+		return $res;
+	}
+	public function queryPengeluaran($date)
+	{
+		$this->db->select('*,sum(nominal) as pengeluaran');
+		$this->db->from('pengeluaran');
+		$this->db->where('DATE(tanggal) >=', $date);
+		$this->db->where('DATE(tanggal) <=', $date);
+		$res = $this->db->get()->row();
+		return $res;
+	}
+	public function getResume()
+	{
+		$date = date('Y-m-d');
+		$saldo = $this->session->userdata('saldo');
+		$queryPengeluaran = $this->queryPengeluaran($date);
+		$queryCash = $this->queryResumeCash($date);
+		$query = $this->queryResume($date);
+		ob_start();
+
+	?>
+		<table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+			<thead class="thead-light">
+				<tr>
+					<th style="width:50px;">#</th>
+					<th>Metode Pembayaran</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<?php
+				$i = 0;
+				$total = 0;
+				$no = 1;
+				?>
+				<?php foreach ($query as $items) :
+					$total += $items['total'];
+				?>
+					<tr>
+						<td><?= $no++ ?></td>
+						<td><?= ($items['method_types']); ?></td>
+						<td><?= number_format($items['total']); ?></td>
+					</tr>
+
+					<?php $i++; ?>
+				<?php endforeach; ?>
+			</tbody>
+			<tfoot>
+				<tr class="bg-danger text-white font-weight-bold">
+					<td colspan="2">Pengeluaran </td>
+					<td><?= number_format($queryPengeluaran->pengeluaran) ?> </td>
+				</tr>
+				<tr class="bg-primary text-white font-weight-bold">
+					<td colspan="2">Total Di Kasir </td>
+					<td><?php
+						$wes = 0;
+						$wes = $saldo + $queryCash['cash'] - $queryPengeluaran->pengeluaran;
+						?> <?= number_format($wes); ?></td>
+				</tr>
+				<tr class="bg-success text-white font-weight-bold">
+					<td colspan="2">Total Keseluruhan Penjualan </td>
+					<td><?= number_format($total) ?></td>
+				</tr>
+			</tfoot>
+		</table>
+<?php
+		$konten = ob_get_contents();
+		return $konten;
 	}
 }

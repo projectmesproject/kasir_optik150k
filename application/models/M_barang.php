@@ -259,7 +259,7 @@ class M_barang extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
-		$this->db->like('barang_id', "PKT");
+		$this->db->like('barang_nama', "FREE");
 		return $this->db->get()->result();
 	}
 

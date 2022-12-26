@@ -7,6 +7,18 @@ class M_penjualan extends CI_Model
 	{
 		$idadmin = $this->session->userdata('idadmin');
 		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_jml_uang2,jual_kurang_uang,jual_kembalian,jual_user_id,jual_keterangan,jual_keterangan2,diskon,no_hp,status) VALUES ('$nofak','$total','$jml_uang','$jml_uang2','$kurang','$kembalian','$idadmin','$bayar','$bayar2','$diskon','$nohp','$status')");
+		$data_resume = [
+			'method_types' => $bayar,
+			'amount' => $jml_uang,
+			'created_at' => date('Y-m-d H:i:s')
+		];
+		$data_resume2 = [
+			'method_types' => $bayar2,
+			'amount' => $jml_uang2,
+			'created_at' => date('Y-m-d H:i:s')
+		];
+		$this->db->insert('tbl_resume', $data_resume);
+		$this->db->insert('tbl_resume', $data_resume2);
 		foreach ($this->cart->contents() as $item) {
 			$data = array(
 				'd_jual_nofak' 			=>	$nofak,
@@ -20,6 +32,7 @@ class M_penjualan extends CI_Model
 				'd_jual_diskon'			=>	$item['disc'],
 				'd_jual_total'			=>	$item['subtotal']
 			);
+
 			$this->db->insert('tbl_detail_jual', $data);
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$item[qty]' where barang_id='$item[id]'");
 			$this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");

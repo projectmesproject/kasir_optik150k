@@ -39,8 +39,13 @@ class M_laporan extends CI_Model
 	}
 	function penjualan_by_metode($start, $end)
 	{
-		$res =	$this->db->select('*,sum(jual_total) as total_semua, jual_keterangan')->from($this->tb_jual)
-			->group_by('jual_keterangan')->where('DATE(jual_tanggal) >=', $start)->where('DATE(jual_tanggal) <=', $end)->get()->result();
+		$this->db->select('*,sum(jual_jml_uang) as total_semua,sum(jual_jml_uang2) as total_semua2');
+		$this->db->from($this->tb_jual);
+		$this->db->where('DATE(jual_tanggal) >=', $start);
+		$this->db->where('DATE(jual_tanggal) <=', $end);
+		// $this->db->group_by(array('jual_keterangan', 'jual_keterangan2'));
+		$this->db->group_by(array("jual_keterangan", "jual_keterangan"));
+		$res = $this->db->get()->result();
 		return $res;
 	}
 

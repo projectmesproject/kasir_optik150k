@@ -41,9 +41,9 @@ class Auth extends CI_Controller
                     $data = [
                         'id' => $user['id'],
                         'username' => $user['username'],
-                        'level' => $user['level']
+                        'level' => $user['level'],
+                        'saldo' => 0
                     ];
-
                     $this->session->set_userdata($data);
                     if ($user['level'] == 'admin') {
                         redirect('user');
