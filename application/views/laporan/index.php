@@ -222,7 +222,7 @@
                         </div>
                         <label class="control-label col-xs-6">Kategori Barang</label>
                         <div class="col-xs-9">
-                            <select name="kategori_barang" id="kategori_barang" class="form-control">
+                            <select name="kategori_barang" class="form-control">
                                 <option value="" selected>Kategori Barang</option>
                                 <?php foreach ($kat->result() as $value) { ?>
                                     <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
@@ -322,7 +322,7 @@
                             </div>
                             <label class="control-label col-xs-6">Kategori Barang</label>
                             <div class="col-xs-9">
-                                <select name="kategori_barang" id="kategori_barang" class="form-control">
+                                <select name="kategori_barang" class="form-control">
                                     <option value="" selected>Kategori Barang</option>
                                     <?php foreach ($kat->result() as $value) { ?>
                                         <option value="<?= $value->kategori_id ?>"><?= $value->kategori_nama ?></option>
