@@ -70,26 +70,55 @@
 
               <hr>
 
-              <table>
-                <tr>
-                  <th>Kode Barang : </th>
-                </tr>
-                <tr>
-                  <th>
-                    <input class="form-control input-sm" id="nabar" type="search" autocomplete="off" />
-                    <div class="ajax_list_barang" style="width: 550px;">
-                      <ul style="list-style:none;" class="list_container" id="list_container">
 
-                      </ul>
-                    </div>
-                    <!-- <input type="text" name="kode_brg" id="kode_brg" class="form-control input-sm" style="width:150px;"> -->
-                  </th>
+              <!-- <th>Kode Barang : </th> -->
+              <!-- </tr>
+                <tr>
+                  <th> -->
+              <div class="row">
+                <div class="form-group col-sm-2">
+                  <label>Kode Barang :</label>
+                  <input class="form-control input-sm" id="kode_brg" name="kode_brg" type="search" autocomplete="off" />
+                  <div class="ajax_list_barang" style="width: 550px;">
+                    <ul style="list-style:none;display:none;" class="list_container" id="list_container">
+
+                    </ul>
+                  </div>
+                </div>
+                <div class="form-group" style="max-width: 10%;">
+                  <label>Nama Barang :</label>
+                  <input type="text" readonly id="nabar" name="satuan" class="form-control" />
+                </div>
+                <div class="form-group col-sm-1">
+                  <label>Satuan :</label>
+                  <input type="text" readonly id="satuan" name="satuan" class="form-control" />
+                </div>
+                <div class="form-group col-sm-2">
+                  <label>Harga Pokok (Rp) :</label>
+                  <input type="text" id="harpok" name="harpok" class="form-control" required/>
+                </div>
+                <div class="form-group col-sm-3">
+                  <label>Harga Jual :</label>
+                  <input type="text" id="harjul" name="harjul" class="form-control" required/>
+                </div>
+                <div class="form-group col-sm-2">
+                  <label>Jumlah :</label>
+                  <input type="number" id="jumlah" name="jumlah" class="form-control" min="0"  required/>
+                </div>
+                <div class="form-group col-sm-3">
+                  <label>&nbsp;</label><br />
+                  <button class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
+                </div>
+              </div>
+              <!-- <input type="text" name="kode_brg" id="kode_brg" class="form-control input-sm select2" style="width:150px;"> -->
+              <!-- </th>
                 </tr>
                 <div id="detail_barang" style="position:absolute;">
+
                 </div>
               </table>
 
-              </form>
+              </form> -->
               <hr>
 
 
@@ -157,13 +186,13 @@
         </div>
 
         <script>
-          $('#nabar').keyup(function() {
+          $('#kode_brg').keyup(function() {
             let search = $(this).val();
             if (search == "") {
               $('.ajax_list_barang').hide()
             } else {
               $.ajax({
-                url: '<?= base_url() ?>/penjualan/get_kode_barang_autocomplete',
+                url: '<?= base_url() ?>/pembelian/get_kode_barang_autocomplete',
                 type: 'POST',
                 cache: false,
                 data: {
@@ -172,19 +201,24 @@
                 success: function(res) {
 
                   $('.ajax_list_barang').show()
+                  $('#list_container').show()
                   $("#list_container").html(res)
                   $('.item_barang').click(function() {
                     let value = $(this).attr('data-value')
-                    let label = $(this).text()
-                    $('#nabar').val(label)
                     if (value != "tambah_barang") {
                       var res = value.split("#");
                       console.log(res)
-                      $('#harga_ket').val(formatUang(res[0]))
-                      $('#kode_brg_ket').val(res[1])
-                      $('#jumlah_ket').val(1)
-                      $('#satuan_ket').val(res[2])
-                      $('#stok_ket').val(res[3])
+                      // $('#harga_ket').val(formatUang(res[0]))
+                      // $('#kode_brg_ket').val(res[1])
+                      $('#kode_brg').val(res[0])
+                      $('#nabar').val(res[1])
+                      $('#harpok').val(res[2])
+                      $('#harjul').val(res[3])
+                      $('#satuan').val(res[5])
+                      $("#jumlah").val('1')
+                      // $('#jumlah_ket').val(1)
+                      // $('#satuan_ket').val(res[2])
+                      // $('#stok_ket').val(res[3])
                     } else {
                       $('#add_barang').modal('show')
                     }

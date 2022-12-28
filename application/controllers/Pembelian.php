@@ -6,7 +6,6 @@ class Pembelian extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
-
 		$this->load->model('m_kategori');
 		$this->load->model('m_barang');
 		$this->load->model('m_suplier');
@@ -53,8 +52,10 @@ class Pembelian extends CI_Controller
 			'harga'    => $this->input->post('harjul'),
 			'qty'      => $this->input->post('jumlah')
 		);
-
 		$this->cart->insert($data);
+		// print_r($this->cart->contents());
+		// print_r($data);
+		// exit();
 		redirect('pembelian');
 	}
 
@@ -109,4 +110,20 @@ class Pembelian extends CI_Controller
 
 		echo $html;
 	}
+	public function get_kode_barang_autocomplete()
+    {
+        $result = $this->m_barang->getKodeBarangList();
+        $html = "";
+        if (count($result) > 0) {
+
+            foreach ($result as $v) {
+                // $response[] = array("value"=>$v['value'],"label"=>$v['label']);
+                $html .= "<li class='item_barang' data-value='$v[value]'>$v[label]</li>";
+            }
+        } else {
+            $html .= "<li data-value='tambah_barang' class='item_barang'>(+) Tambah Data Barang</li>";
+        }
+
+        echo $html;
+    }
 }
