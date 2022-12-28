@@ -355,4 +355,13 @@ class M_barang extends CI_Model
 		$res = $this->db->get()->result();
 		return $res;
 	}
+	public function autoBarang($barang)
+	{
+		$this->db->select('barang_nama');
+		$this->db->like('barang_nama', $barang, 'both');
+		$this->db->order_by('barang_nama', 'ASC');
+		$this->db->limit(50);
+		$this->db->distinct('barang_nama');
+		return $this->db->get('tbl_barang')->result();
+	}
 }

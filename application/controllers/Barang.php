@@ -336,4 +336,15 @@ class Barang extends CI_Controller
 		$res = $this->m_barang->listBarang_pembelian($start, $end);
 		echo json_encode($res);
 	}
+	function autoBarang()
+	{
+		if (isset($_GET['term'])) {
+			$result = $this->m_barang->autoBarang($_GET['term']);
+			if (count($result) > 0) {
+				foreach ($result as $row)
+					$arr_result[] = $row->barang_nama;
+				echo json_encode($arr_result);
+			}
+		}
+	}
 }
