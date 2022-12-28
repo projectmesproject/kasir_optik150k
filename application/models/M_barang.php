@@ -136,7 +136,7 @@ class M_barang extends CI_Model
 			$data = array(
 
 				"barang_id" => $this->m_barang->get_kobar(),
-				"barang_nama" => $this->input->post('nabar'),
+				"barang_nama" => strtoupper($this->input->post('nabar')),
 				"barang_satuan" => $this->input->post('satuan'),
 				"barang_harpok" => str_replace(',', '', $this->input->post('harpok')),
 				"barang_harjul" => str_replace(',', '', $this->input->post('harjul')),
@@ -149,7 +149,7 @@ class M_barang extends CI_Model
 			$data = array(
 
 				"barang_id" => $this->m_barang->get_kobar(),
-				"barang_nama" => $this->input->post('nabar'),
+				"barang_nama" => strtoupper($this->input->post('nabar')),
 				"barang_satuan" => $this->input->post('satuan'),
 				"barang_harpok" => str_replace(',', '', $this->input->post('harpok')),
 				"barang_harjul" => str_replace(',', '', $this->input->post('harjul')),
@@ -194,7 +194,7 @@ class M_barang extends CI_Model
 	{
 		if ($gambar = 'fajar_h30') {
 			$data = array(
-				"barang_nama" => $_POST['nabar'],
+				"barang_nama" => strtoupper($_POST['nabar']),
 				"barang_satuan" => $_POST['satuan'],
 				"barang_harpok" => str_replace(',', '', $_POST['harpok']),
 				"barang_harjul" => str_replace(',', '', $_POST['harjul']),
@@ -205,7 +205,7 @@ class M_barang extends CI_Model
 			);
 		} else {
 			$data = array(
-				"barang_nama" => $_POST['nabar'],
+				"barang_nama" => strtoupper($_POST['nabar']),
 				"barang_satuan" => $_POST['satuan'],
 				"barang_harpok" => str_replace(',', '', $_POST['harpok']),
 				"barang_harjul" => str_replace(',', '', $_POST['harjul']),

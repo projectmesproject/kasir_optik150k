@@ -18,7 +18,7 @@
         </button>
       <?php endif ?>
       <?php if ($jual['status'] == 'COMPLETE') : ?>
-        <button type="button" class="btn btn-primary btn-sm" onclick="batal(<?= $jual['jual_nofak']; ?>)" style="float:left;">
+        <button type="button" class="btn btn-primary btn-sm mr-3" onclick="batal(<?= $jual['jual_nofak']; ?>)" style="float:left;">
           (-) Cancel
         </button>
       <?php endif ?>
