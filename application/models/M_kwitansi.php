@@ -29,12 +29,17 @@ class M_kwitansi extends CI_Model
             "date_created" => date('Y-m-d H:i:s'),
 
         );
-
+        $data_resume = [
+            'method_types' => 'Cash',
+            'amount' => $this->input->post('harga'),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        $this->db->insert('tbl_resume', $data_resume);
         $this->db->insert('tbl_kwitansi', $data);
     }
     public function get_kwitansi($id)
     {
-        return $this->db->get_where('tbl_kwitansi',array("id_kwitansi" => $id));
+        return $this->db->get_where('tbl_kwitansi', array("id_kwitansi" => $id));
     }
 
     public function hapus_kwitansi($id)

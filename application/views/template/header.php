@@ -56,23 +56,6 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
           $('#modalLaporanPenjualan').modal('show');
         }
 
-
-        // let saldo = localStorage.getItem('saldo')
-
-        // if (KeyID == 115) {
-        //   if (!saldo) {
-        //     $('#modalSaldo').modal('show')
-        //   } else {
-        //     $.ajax({
-        //       type: "POST",
-        //       url: "<?php echo site_url('Ajax/getResume'); ?>",
-        //       success: function(msg) {
-        //         $('#resumewoi').html(msg);
-        //       }
-        //     });
-        //     $('#modalLaporanPenjualanResume').modal('show');
-        //   }
-        // }
         if (KeyID == 115) {
           if ("<?= $this->session->userdata('saldo') ?>" == 0 && $('#saldo_response').val() == 0) {
             $('#modalSaldo').modal('show');
@@ -101,7 +84,6 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
                 url: "<?php echo site_url('Ajax/getResume'); ?>",
                 success: function(msg) {
                   console.log(msg)
-                  // let response = JSON.parse(msg)
                   $('#resumewoi').html(msg);
                   $('#modalLaporanPenjualanResume').modal('show');
 
