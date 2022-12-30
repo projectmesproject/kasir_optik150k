@@ -259,7 +259,7 @@
           foreach ($paket as $pkt) {
         ?>
             <div class="form-check form-check-inline">
-              <input class="form-check-input checkPaket" type="checkbox" data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
+              <input class="form-check-input checkPaket" type="checkbox" style=" width: 40px; height: 40px; " data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
               <label class="form-check-label" for="pkt<?= $pkt->barang_id ?>"><?= $pkt->barang_nama ?></label>
             </div>
 
