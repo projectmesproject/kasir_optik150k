@@ -142,6 +142,24 @@ class Penjualan extends CI_Controller
         }
     }
 
+    function updateQty()
+    {
+        $kobar = $this->input->post('update_kobar');
+        $qty = $this->input->post('qty');
+        foreach ($this->cart->contents() as $items) {
+            $id = $items['id'];
+            $rowid = $items['rowid'];
+            if ($id == $kobar) {
+                $up = array(
+                    'rowid' => $rowid,
+                    'qty' => $qty
+                );
+                $this->cart->update($up);
+            }
+        }
+        redirect('penjualan');
+    }
+
     function get_autocomplete()
     {
         if (isset($_GET['term'])) {
@@ -244,7 +262,12 @@ class Penjualan extends CI_Controller
                         <td style="text-align:center;"><?= $items['satuan']; ?></td>
                         <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
                         <td style="text-align:right;"><?php echo $items['disc']; ?></td>
-                        <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
+                        <td style="text-align:center;">
+                            <form action="<?= base_url('penjualan/updateQty') ?>" method="post">
+                                <input type="hidden" value="<?= $items['id'] ?>" name="update_kobar">
+                                <input type="text" name="qty" value="<?php echo number_format($items['qty']); ?>">
+                            </form>
+                        </td>
                         <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
 
                         <td style="text-align:center;"><a href="<?php base_url() ?>penjualan/remove/<?= $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
