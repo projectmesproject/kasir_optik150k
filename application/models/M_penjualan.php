@@ -175,4 +175,14 @@ class M_penjualan extends CI_Model
 	{
 		return  $this->db->query("select * from tbl_jual where cabang !=null or cabang != '' and no_hp ='' or no_hp=null order by jual_tanggal desc")->result_array();
 	}
+	function get_history_penjualan()
+	{
+		$this->db->select('A.*, B.nama AS namaplg,C.count(d_jual_nofak) as jum')->from('tbl_jual as A');
+		$this->db->join('tbl_customer B', 'A.no_hp=B.no_hp', 'LEFT');
+		$this->db->where('A.cabang=', '');
+		$this->db->where('A.no_hp!=', '');
+		$this->db->order_by('A.jual_tanggal', 'DESC');
+		$res =	$this->db->get()->result();
+		return $res;
+	}
 }
