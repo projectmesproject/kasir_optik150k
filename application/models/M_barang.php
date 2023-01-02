@@ -186,8 +186,6 @@ class M_barang extends CI_Model
 	///baru	
 	function get_barang1($kobar)
 	{
-
-
 		$this->db->where('barang_id', $kobar);
 		return $this->db->get('tbl_barang');
 	}
@@ -319,7 +317,7 @@ class M_barang extends CI_Model
 	{
 		$this->db->select('barang_nama as label, CONCAT(barang_id,"#",barang_nama,"#",barang_harpok,"#",barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok) as value');
 		$this->db->from('tbl_barang');
-		$this->db->like('barang_id', $this->input->post("search"));
+		$this->db->like('barang_nama', $this->input->post("search"));
 		$dt = $this->db->get()->result_array();
 		// $html = "";
 		//   foreach($dt as $v ){
