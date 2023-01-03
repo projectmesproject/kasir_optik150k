@@ -301,7 +301,7 @@ class M_barang extends CI_Model
 
 	public function getBarangList()
 	{
-		$this->db->select('barang_nama as label, CONCAT(barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok) as value');
+		$this->db->select('barang_nama as label, CONCAT(barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok, "#" , barang_harga_cabang) as value');
 		$this->db->from('tbl_barang');
 		$this->db->like('barang_nama', $this->input->post("search"));
 		$dt = $this->db->get()->result_array();
