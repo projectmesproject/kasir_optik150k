@@ -168,12 +168,13 @@ class Barang extends CI_Controller
 		$sheet->setCellValue('D3', "SATUAN"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
 		$sheet->setCellValue('E3', "HARGA POKOK"); // Set kolom E3 dengan tulisan "ALAMAT"
 		$sheet->setCellValue('F3', "HARGA JUAL"); // Set kolom E3 dengan tulisan "ALAMAT"
-		$sheet->setCellValue('G3', "BARANG STOK"); // Set kolom E3 dengan tulisan "ALAMAT"
-		$sheet->setCellValue('H3', "BARANG MINIMAL STOK"); // Set kolom E3 dengan tulisan "ALAMAT"
-		$sheet->setCellValue('I3', "TANGGAL INPUT"); // Set kolom E3 dengan tulisan "ALAMAT"
-		$sheet->setCellValue('J3', "TANGGAL UPDATE"); // Set kolom E3 dengan tulisan "ALAMAT"
-		$sheet->setCellValue('K3', "ID KATEGORI"); // Set kolom E3 dengan tulisan "ALAMAT"
-		$sheet->setCellValue('L3', "SERIAL NUMBER"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('G3', "HARGA JUAL CABANG"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('H3', "BARANG STOK"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('I3', "BARANG MINIMAL STOK"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('J3', "TANGGAL INPUT"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('K3', "TANGGAL UPDATE"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('L3', "ID KATEGORI"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('M3', "SERIAL NUMBER"); // Set kolom E3 dengan tulisan "ALAMAT"
 
 		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
 		$sheet->getStyle('A3')->applyFromArray($style_col);
@@ -188,6 +189,7 @@ class Barang extends CI_Controller
 		$sheet->getStyle('J3')->applyFromArray($style_col);
 		$sheet->getStyle('K3')->applyFromArray($style_col);
 		$sheet->getStyle('L3')->applyFromArray($style_col);
+		$sheet->getStyle('M3')->applyFromArray($style_col);
 
 		// Panggil function view yang ada di SiswaModel untuk menampilkan semua data siswanya
 		$dataBarangs = $this->m_barang->getToExcel();
@@ -201,12 +203,13 @@ class Barang extends CI_Controller
 			$sheet->setCellValue('D' . $numrow, $data->barang_satuan);
 			$sheet->setCellValue('E' . $numrow, $data->barang_harpok);
 			$sheet->setCellValue('F' . $numrow, $data->barang_harjul);
-			$sheet->setCellValue('G' . $numrow, $data->barang_stok);
-			$sheet->setCellValue('H' . $numrow, $data->barang_min_stok);
-			$sheet->setCellValue('I' . $numrow, $data->barang_tgl_input);
-			$sheet->setCellValue('J' . $numrow, $data->barang_tgl_last_update);
-			$sheet->setCellValue('K' . $numrow, $data->barang_kategori_id);
-			$sheet->setCellValue('L' . $numrow, $data->serial_number);
+			$sheet->setCellValue('G' . $numrow, $data->barang_harga_cabang);
+			$sheet->setCellValue('H' . $numrow, $data->barang_stok);
+			$sheet->setCellValue('I' . $numrow, $data->barang_min_stok);
+			$sheet->setCellValue('J' . $numrow, $data->barang_tgl_input);
+			$sheet->setCellValue('K' . $numrow, $data->barang_tgl_last_update);
+			$sheet->setCellValue('L' . $numrow, $data->barang_kategori_id);
+			$sheet->setCellValue('M' . $numrow, $data->serial_number);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $numrow)->applyFromArray($style_row);
@@ -221,6 +224,7 @@ class Barang extends CI_Controller
 			$sheet->getStyle('J' . $numrow)->applyFromArray($style_row);
 			$sheet->getStyle('K' . $numrow)->applyFromArray($style_row);
 			$sheet->getStyle('L' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('M' . $numrow)->applyFromArray($style_row);
 
 			$no++; // Tambah 1 setiap kali looping
 			$numrow++; // Tambah 1 setiap kali looping
@@ -239,6 +243,7 @@ class Barang extends CI_Controller
 		$sheet->getColumnDimension('J')->setWidth(20); // Set width kolom E
 		$sheet->getColumnDimension('K')->setWidth(20); // Set width kolom E
 		$sheet->getColumnDimension('L')->setWidth(20); // Set width kolom E
+		$sheet->getColumnDimension('M')->setWidth(20); // Set width kolom E
 
 		// Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
 		$sheet->getDefaultRowDimension()->setRowHeight(-1);
@@ -271,23 +276,24 @@ class Barang extends CI_Controller
 					$barang_satuan = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
 					$barang_harpok  = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
 					$barang_harjul  = $worksheet->getCellByColumnAndRow(5, $row)->getValue();
-					$barang_stok  = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
-					$barang_min_stok  = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
-					$barang_tgl_input  = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
-					$barang_tgl_last_update = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
-					$barang_kategori_id = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
-					$serial_number  = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
+					$barang_harga_cabang  = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
+					$barang_stok  = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
+					$barang_min_stok  = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
+					$barang_tgl_input  = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
+					$barang_tgl_last_update = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
+					$barang_kategori_id = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
+					$serial_number  = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
 					$temp_data[] = array(
 						'barang_id'	=> $barang_id,
 						'barang_nama'	=> $barang_nama,
 						'barang_satuan'	=> $barang_satuan,
 						'barang_harpok'	=> $barang_harpok,
 						'barang_harjul'	=> $barang_harjul,
+						'barang_harga_cabang'	=> $barang_harga_cabang,
 						'barang_stok'	=> $barang_stok,
 						'barang_min_stok'	=> $barang_min_stok,
 						'barang_tgl_input'	=> $barang_tgl_input,
 						'barang_tgl_last_update'	=> $barang_tgl_last_update,
-
 						'barang_kategori_id'	=> $barang_kategori_id,
 						'serial_number'	=> $serial_number,
 					);
