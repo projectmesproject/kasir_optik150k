@@ -8,11 +8,13 @@ class M_penjualan extends CI_Model
 		$idadmin = $this->session->userdata('idadmin');
 		$this->db->query("INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_jml_uang2,jual_kurang_uang,jual_kembalian,jual_user_id,jual_keterangan,jual_keterangan2,diskon,no_hp,status) VALUES ('$nofak','$total','$jml_uang','$jml_uang2','$kurang','$kembalian','$idadmin','$bayar','$bayar2','$diskon','$nohp','$status')");
 		$data_resume = [
+			'resume_nofak' => $nofak,
 			'method_types' => $bayar,
 			'amount' => $jml_uang,
 			'created_at' => date('Y-m-d H:i:s')
 		];
 		$data_resume2 = [
+			'resume_nofak' => $nofak,
 			'method_types' => $bayar2,
 			'amount' => $jml_uang2,
 			'created_at' => date('Y-m-d H:i:s')
@@ -167,6 +169,12 @@ class M_penjualan extends CI_Model
 	{
 		$this->db->where('jual_nofak', $id);
 		$res = $this->db->update('tbl_jual', $data);
+		return $res;
+	}
+	function update_status_resume($id)
+	{
+		$this->db->where('resume_nofak', $id);
+		$res = $this->db->delete('tbl_resume');
 		return $res;
 	}
 
