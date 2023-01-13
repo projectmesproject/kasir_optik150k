@@ -260,6 +260,8 @@ class Laporan extends CI_Controller
 			$percarabayar = 0;
 		}
 
+
+
 		$x['percustomer'] = $percustomer;
 		$x['perkatbarang'] = $perkatbarang;
 		$x['perbarang'] = $perbarang;
@@ -269,10 +271,17 @@ class Laporan extends CI_Controller
 
 		$x['tanggal1'] = $this->input->post('tgl1');
 		$x['tanggal2'] = $this->input->post('tgl2');
+		$cara_bayar1 = "";
+		if($cara_bayar == "all"){
+			$cara_bayar1 = "";
+		}
 
+		// All Report Section
+		$all_data = $this->m_laporan->laporan_penjualan_kasir_all($tanggal1,$tanggal2,$nama_barang,$nama_customer,$kategori_barang,$cara_bayar1)->result_array();
+		$x['all_data'] = $all_data;
 		// Customer Section
 
-		$data = $this->m_laporan->laporan_penjualan_kasir_customer($tanggal1, $tanggal2, $nama_customer)->result_array();
+		$data = $this->m_laporan->laporan_penjualan_kasir_customer($tanggal1, $tanggal2, "")->result_array();
 
 		$customer_arr = array();
 		$group_cust = $this->_group_by($data, 'no_hp');
@@ -288,11 +297,12 @@ class Laporan extends CI_Controller
 
 		$x['data'] = $customer_arr;
 
+
 		// End Section Customer
 
 		// Cara Bayar Section
 
-		$data1 = $this->m_laporan->laporan_penjualan_kasir_cara_bayar($tanggal1, $tanggal2, $cara_bayar)->result_array();
+		$data1 = $this->m_laporan->laporan_penjualan_kasir_cara_bayar($tanggal1, $tanggal2, "")->result_array();
 
 
 		$cara_bayar_arr = array();
@@ -319,7 +329,7 @@ class Laporan extends CI_Controller
 
 		// Section Kategori Barang
 
-		$data = $this->m_laporan->laporan_penjualan_kasir_kategori_barang($tanggal1, $tanggal2, $kategori_barang)->result_array();
+		$data = $this->m_laporan->laporan_penjualan_kasir_kategori_barang($tanggal1, $tanggal2, "")->result_array();
 
 		$katbar_arr = array();
 		$group_kat_bar = $this->_group_by($data, 'd_jual_barang_kat_id');
@@ -337,7 +347,7 @@ class Laporan extends CI_Controller
 
 		// Section Kategori Barang
 
-		$data3 = $this->m_laporan->laporan_penjualan_kasir_barang($tanggal1, $tanggal2, $nama_barang)->result_array();
+		$data3 = $this->m_laporan->laporan_penjualan_kasir_barang($tanggal1, $tanggal2, "")->result_array();
 
 		$brg_arr = array();
 		$group_bar = $this->_group_by($data3, 'd_jual_barang_nama');
@@ -345,9 +355,10 @@ class Laporan extends CI_Controller
 		foreach ($group_bar as $idx => $brg) {
 			$brg_item = new stdClass();
 			$brg_item->barang = $brg;
-			$brg_item->items  = $this->m_laporan->laporan_penjualan_kasir_kategori_barang($tanggal1, $tanggal2, $brg)->result_array();
+			$brg_item->items  = $this->m_laporan->laporan_penjualan_kasir_barang($tanggal1, $tanggal2, $brg)->result_array();
 			array_push($brg_arr, $brg_item);
 		}
+
 
 		$x['data3'] = $brg_arr;
 
@@ -412,11 +423,12 @@ class Laporan extends CI_Controller
 			$customer = new stdClass();
 			$customer->nama = $group_nama[$idx];
 			$customer->no_hp = $cust;
-			$customer->items  = $this->m_laporan->get_penjualan_dp($tanggal1, $tanggal2, $nama_customer,$nama_barang)->result_array();
+			$customer->items  = $this->m_laporan->get_penjualan_dp($tanggal1, $tanggal2, $cust ,$nama_barang)->result_array();
 			array_push($customer_arr, $customer);
 		}
 
 		$x['data'] = $customer_arr;
+
 
 		// End Section Customer
 

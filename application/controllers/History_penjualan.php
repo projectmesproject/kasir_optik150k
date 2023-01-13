@@ -11,7 +11,7 @@ class History_penjualan extends CI_Controller
         $this->load->model('M_Cara_Bayar');
         if ($this->session->userdata('level') != TRUE) {
             redirect(base_url());
-        }
+        } 
     }
 
     function index()
@@ -19,7 +19,7 @@ class History_penjualan extends CI_Controller
         $data['title'] = "Data History Penjualan";
         $data_array = array();
 
-        $data1 = $this->db->query("select A.*, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.cabang='' AND A.no_hp !='' order by jual_tanggal desc ")->result_array();
+        $data1 = $this->db->query("select A.jual_nofak, A.jual_tanggal, A.no_hp,A.jual_total, a.status, A.cabang, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.cabang='' AND A.no_hp !='' order by jual_tanggal desc ")->result_array();
 
         foreach ($data1 as $dt) {
             $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
