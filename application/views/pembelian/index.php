@@ -85,27 +85,27 @@
                     </ul>
                   </div>
                 </div>
-                <div class="form-group" style="max-width: 10%;">
+                <div class="form-group col-sm-4">
                   <label>Nama Barang :</label>
-                  <input type="text" readonly id="nabar" name="satuan" class="form-control" />
+                  <input type="text" readonly id="nabar" name="nabar" class="form-control" />
                 </div>
-                <div class="form-group col-sm-1">
+                <div class="form-group col-sm-2">
                   <label>Satuan :</label>
                   <input type="text" readonly id="satuan" name="satuan" class="form-control" />
                 </div>
                 <div class="form-group col-sm-2">
-                  <label>Harga Pokok (Rp) :</label>
-                  <input type="text" id="harpok" name="harpok" class="form-control" required/>
+                  <label>Harga Pokok :</label>
+                  <input type="text" id="harpok" name="harpok" class="form-control" required />
                 </div>
-                <div class="form-group col-sm-3">
+                <div class="form-group col-sm-2">
                   <label>Harga Jual :</label>
-                  <input type="text" id="harjul" name="harjul" class="form-control" required/>
+                  <input type="text" id="harjul" name="harjul" class="form-control" required />
                 </div>
                 <div class="form-group col-sm-2">
                   <label>Jumlah :</label>
-                  <input type="number" id="jumlah" name="jumlah" class="form-control" min="0"  required/>
+                  <input type="number" id="jumlah" name="jumlah" class="form-control" min="0" required />
                 </div>
-                <div class="form-group col-sm-3">
+                <div class="form-group ml-3">
                   <label>&nbsp;</label><br />
                   <button class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
                 </div>

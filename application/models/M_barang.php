@@ -111,7 +111,18 @@ class M_barang extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
-		$this->db->limit(50);
+		$this->db->limit(100);
+		$this->db->order_by('barang_id', "DESC");
+		$this->db->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id');
+
+		$query = $this->db->get();
+
+		return $query;
+	}
+	public function list_barang_R()
+	{
+		$this->db->select('*');
+		$this->db->from('tbl_barang');
 		$this->db->order_by('barang_id', "DESC");
 		$this->db->join('tbl_kategori', 'tbl_kategori.kategori_id=tbl_barang.barang_kategori_id');
 
@@ -175,8 +186,6 @@ class M_barang extends CI_Model
 	///baru	
 	function get_barang1($kobar)
 	{
-
-
 		$this->db->where('barang_id', $kobar);
 		return $this->db->get('tbl_barang');
 	}
@@ -292,7 +301,7 @@ class M_barang extends CI_Model
 
 	public function getBarangList()
 	{
-		$this->db->select('barang_nama as label, CONCAT(barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok) as value');
+		$this->db->select('barang_nama as label, CONCAT(barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok, "#" , barang_harga_cabang) as value');
 		$this->db->from('tbl_barang');
 		$this->db->like('barang_nama', $this->input->post("search"));
 		$dt = $this->db->get()->result_array();
@@ -308,7 +317,7 @@ class M_barang extends CI_Model
 	{
 		$this->db->select('barang_nama as label, CONCAT(barang_id,"#",barang_nama,"#",barang_harpok,"#",barang_harjul, "#", barang_id, "#", barang_satuan, "#", barang_stok) as value');
 		$this->db->from('tbl_barang');
-		$this->db->like('barang_id', $this->input->post("search"));
+		$this->db->like('barang_nama', $this->input->post("search"));
 		$dt = $this->db->get()->result_array();
 		// $html = "";
 		//   foreach($dt as $v ){

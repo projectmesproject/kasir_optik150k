@@ -8,6 +8,7 @@ class History_penjualan extends CI_Controller
     {
         parent::__construct();
         $this->load->model('M_penjualan');
+        $this->load->model('M_History_Penjualan');
         $this->load->model('M_Cara_Bayar');
         if ($this->session->userdata('level') != TRUE) {
             redirect(base_url());
@@ -19,11 +20,11 @@ class History_penjualan extends CI_Controller
         $data['title'] = "Data History Penjualan";
         $data_array = array();
 
-        $data1 = $this->db->query("select A.jual_nofak, A.jual_tanggal, A.no_hp,A.jual_total, a.status, A.cabang, B.nama AS namaplg from tbl_jual  A LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.cabang='' AND A.no_hp !='' order by jual_tanggal desc ")->result_array();
-
+        $data1 = $this->db->query("select A.jual_nofak, A.jual_tanggal, A.no_hp,A.jual_total, a.status, A.cabang, B.nama AS namaplg,count(D.d_jual_nofak) as jumlah_item from tbl_jual A RIGHT JOIN tbl_detail_jual D ON A.jual_nofak = D.d_jual_nofak LEFT JOIN tbl_customer B ON B.no_hp = A.no_hp where A.cabang='' AND A.no_hp !='' GROUP BY A.jual_nofak order by jual_tanggal desc;")->result();
+        // $data1 = $this->M_penjualan->get_history_penjualan();
         foreach ($data1 as $dt) {
-            $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt[jual_nofak]'")->row();
-            $dt["jumlah_item"] = $jmlh->jum;
+            $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt->jual_nofak'")->row();
+            $dt->jumlah_item = $jmlh->jum;
             array_push($data_array, $dt);
         }
         $data["data"] = $data_array;
@@ -34,6 +35,63 @@ class History_penjualan extends CI_Controller
         $this->load->view('template/topbar', $data);
         $this->load->view('history_penjualan/index', $data);
         $this->load->view('template/footer', $data);
+    }
+
+    public function list_history_penjualan()
+    {
+        $list = $this->M_History_Penjualan->get_datatables();
+        $data_array = array();
+        foreach ($list as $dt) {
+            $jmlh = $this->db->query("select count(d_jual_nofak) as jum from tbl_detail_jual where d_jual_nofak='$dt->jual_nofak'")->row();
+            $dt->jumlah_item = $jmlh->jum;
+            array_push($data_array, $dt);
+        }
+        $s = $data_array;
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($s as $value) {
+            if ($value->status == "COMPLETE") {
+                $status = '<div class="badge badge-success">Complete</div>';
+            } else if ($value->status == "DP") {
+                $status = '<div class="badge badge-warning">DP</div>';
+            } else {
+                $status = '<div class="badge badge-danger">Cancel</div>';
+            }
+            $nama_plg = "-";
+            if ($value->namaplg) {
+                $nama_plg = $value->namaplg;
+            }
+            if ($value->cabang) {
+                $nama_plg = $value->cabang;
+            }
+
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $nama_plg;
+            $row[] = $value->jual_tanggal;
+            $row[] = $value->no_hp;
+            $row[] = $value->jual_nofak;
+            $row[] = $value->jumlah_item;
+            $row[] = $value->jual_total;
+            $row[] = $status;
+            $row[] = "
+                      <a class='badge badge-success' href='history_penjualan/in_detail/$value->jual_nofak'>View</a>
+                      <a class='badge badge-success' href='history_penjualan/cetak_faktur/$value->jual_nofak' target='_blank'>Cetak</a>
+                      <a class='badge badge-success' href='penjualan_edit/index/$value->jual_nofak'>Edit</a>
+                      <a class='badge badge-success' href='history_penjualan/takdeletekowe/$value->jual_nofak'>Delete</a>
+                      <a class='badge badge-danger' href='history_penjualan/batal/$value->jual_nofak'>Batal</a>
+                                ";
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "data" => $data,
+            "recordsTotal" => $this->M_History_Penjualan->count_all(),
+            "recordsFiltered" => $this->M_History_Penjualan->count_filtered(),
+        );
+        echo json_encode($output);
     }
 
     function in_detail($id)
@@ -65,15 +123,15 @@ class History_penjualan extends CI_Controller
         //$this->session->unset_userdata('nofak');
     }
 
-    function cetak_faktur_cabang($jenis,$nofak)
+    function cetak_faktur_cabang($jenis, $nofak)
     {
         $this->load->model('m_penjualan');
         $this->session->set_userdata('nofak', $nofak);
         $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
-        if($jenis=='faktur'){
+        if ($jenis == 'faktur') {
             $this->load->view('laporan/v_cetak_faktur_sj', $x);
         }
-        if($jenis=='sj'){
+        if ($jenis == 'sj') {
 
             $this->load->view('laporan/v_surat_jalan', $x);
         }
@@ -206,7 +264,7 @@ class History_penjualan extends CI_Controller
                         $status = '<div class="badge badge-success">Complete</div>';
                     } else if ($a['status'] == "DP") {
                         $status = '<div class="badge badge-warning">DP</div>';
-                    }  else if ($a['status'] == "KREDIT") {
+                    } else if ($a['status'] == "KREDIT") {
                         $status = '<div class="badge badge-warning">KREDIT</div>';
                     } else {
                         $status = '<div class="badge badge-danger">Cancel</div>';
@@ -255,6 +313,7 @@ class History_penjualan extends CI_Controller
             'status' => "CANCEL",
         ];
         $res =  $this->M_penjualan->update_status($id, $data);
+        $res = $this->M_penjualan->update_status_resume($id);
         $data_array = array();
         $data1 =  $this->M_penjualan->detail_penjualan($id);
         foreach ($data1 as $dt) {

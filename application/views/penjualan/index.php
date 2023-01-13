@@ -77,7 +77,11 @@
         </div>
         <div class="form-group col-sm-2">
           <label>Harga(Rp) :</label>
-          <input type="text" readonly id="harga_ket" name="harga_ket" class="form-control" />
+          <?php if ($this->session->userdata('level') == "penjualan") { ?>
+            <input type="text" readonly id="harga_ket_cabang" name="harga_ket" class="form-control" />
+          <?php } else { ?>
+            <input type="text" readonly id="harga_ket" name="harga_ket" class="form-control" />
+          <?php  } ?>
         </div>
         <div class="form-group col-sm-4">
           <label>Keterangan :</label>
@@ -128,6 +132,7 @@
             </thead>
 
             <tbody>
+
               <?php $i = 1; ?>
               <?php foreach ($this->cart->contents() as $items) : ?>
                 <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
@@ -137,11 +142,17 @@
                   <td style="text-align:center;"><?= $items['satuan']; ?></td>
                   <td style="text-align:right;"><?php echo number_format($items['amount']); ?></td>
                   <td style="text-align:right;"><?php echo $items['disc']; ?></td>
-                  <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
+                  <td style="text-align:center;">
+                    <form action="<?= base_url('penjualan/updateQty') ?>" method="post">
+                      <input type="hidden" value="<?= $items['id'] ?>" name="update_kobar">
+                      <input type="text" name="qty" value="<?php echo number_format($items['qty']); ?>">
+                    </form>
+                  </td>
                   <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
 
                   <td style="text-align:center;"><a href="<?php base_url() ?>penjualan/remove/<?= $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
                 </tr>
+
 
                 <?php $i++; ?>
               <?php endforeach; ?>
@@ -204,7 +215,12 @@
           </div>
           <div class="form-group col-sm-2">
             <label class="font-weight-bold">Cara Bayar 1 :</label>
-            <select required name="bayar" id="bayar" class="form-control">
+            <?php if ($this->session->userdata('level') == "penjualan") { ?>
+              <input type="hidden" name="bayar" value="Cash">
+            <?php } ?>
+            <select required name="bayar" id="bayar" class="form-control" <?php if ($this->session->userdata('level') == "penjualan") {
+                                                                            echo "disabled";
+                                                                          } ?>>
               <option value="" selected disabled>-- Pilih Cara Bayar --</option>
               <?php foreach ($cara_bayar as $bayar) {
               ?>
@@ -217,7 +233,12 @@
 
           <div class="form-group col-sm-2">
             <label class="font-weight-bold">Cara Bayar 2 :</label>
-            <select name="bayar2" id="bayar2" class="form-control">
+            <?php if ($this->session->userdata('level') == "penjualan") { ?>
+              <input type="hidden" name="bayar2" value="">
+            <?php } ?>
+            <select name="bayar2" id="bayar2" class="form-control" <?php if ($this->session->userdata('level') == "penjualan") {
+                                                                      echo "disabled";
+                                                                    } ?>>
               <option value="" selected>-- Pilih Cara Bayar --</option>
               <?php foreach ($cara_bayar as $bayar) {
 
@@ -230,6 +251,7 @@
               ?>
             </select>
           </div>
+
           <div class="form-group col-sm-2">
             <label class="font-weight-bold">Status :</label>
             <select name="status" id="status" class="form-control">
@@ -252,7 +274,7 @@
           foreach ($paket as $pkt) {
         ?>
             <div class="form-check form-check-inline">
-              <input class="form-check-input checkPaket" type="checkbox" data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
+              <input class="form-check-input checkPaket" type="checkbox" style=" width: 40px; height: 40px; " data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
               <label class="form-check-label" for="pkt<?= $pkt->barang_id ?>"><?= $pkt->barang_nama ?></label>
             </div>
 
@@ -277,7 +299,10 @@
             } else { ?>
               <td class="col-sm-6" rowspan="3"><button type="submit" class="btn btn-success btn-lg"> CETAK</button></td>
             <?php } ?>
+
+
             <th colspan="4">Total Yang Harus Dibayar (Rp) : </th>
+
             <th style="text-align:right;"><input type="text" id="totbayar" value="<?php echo number_format($this->cart->total()); ?>" min="0" name="totbayar" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
           </tr>
 
@@ -285,7 +310,11 @@
 
           <tr>
             <th colspan="4">Tunai 1(Rp) :</th>
-            <th style="text-align:right;"><input type="text" id="jml_uang" name="jml_uang" class="jml_uang form-control input-sm" style="text-align:right;margin-bottom:5px;" required></th>
+            <?php if ($this->session->userdata('level') == "penjualan") { ?>
+              <th style="text-align:right;"><input type="text" id="jml_uang" name="jml_uang" value="<?php echo number_format($this->cart->total()); ?>" class="jml_uang form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
+            <?php } else { ?>
+              <th style="text-align:right;"><input type="text" id="jml_uang" name="jml_uang" class="jml_uang form-control input-sm" style="text-align:right;margin-bottom:5px;" required></th>
+            <?php } ?>
 
           </tr>
           <tr id="tunai2_la_">
@@ -540,7 +569,11 @@
             if (value != "tambah_barang") {
               var res = value.split("#");
               console.log(res)
-              $('#harga_ket').val(formatUang(res[0]))
+              <?php if ($this->session->userdata('level') == 'penjualan') { ?>
+                $('#harga_ket_cabang').val(formatUang(res[4]))
+              <?php } else { ?>
+                $('#harga_ket').val(formatUang(res[0]))
+              <?php } ?>
               $('#kode_brg_ket').val(res[1])
               $('#jumlah_ket').val(1)
               $('#satuan_ket').val(res[2])

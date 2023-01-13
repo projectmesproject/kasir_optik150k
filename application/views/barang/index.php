@@ -355,7 +355,7 @@
             $('#table').DataTable({
               scrollY: "480px",
               scrollCollapse: true,
-              paging: false,
+              paging: true,
               scrollX: true,
               info: true,
               dom: 'Bfrtip',

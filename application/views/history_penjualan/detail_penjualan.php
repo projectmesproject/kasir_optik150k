@@ -214,12 +214,12 @@
               window.location.href = "<?= base_url('history_penjualan') ?>"
             }
           },
-          error: function(xhr, status, error) {
-            console.log({
-              status,
-              error
-            })
-          }
+          // error: function(xhr, status, error) {
+          // console.log({
+          // status,
+          // error
+          // })
+          // }
 
         })
       }
