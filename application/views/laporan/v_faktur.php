@@ -44,13 +44,7 @@
             </tr>
             <tr>
                 <th style="text-align:left;">Tanggal</th>
-                <th style="text-align:left;">: <?php
-                                                $userTimezone = new DateTimeZone('Asia/Jakarta');
-                                                //				$dataa = $b["jual_tanggal"];
-                                                //				$date = new DateTime(".$dataa.");
-                                                $date = new DateTime();
-                                                //				$myDateTime = new DateTime($date, $userTimezone);
-                                                echo $date->format('D, d M Y H:i:s');
+                <th style="text-align:left;">: <?= $b['jual_tanggal']
                                                 ?></th>
             </tr>
             <?php

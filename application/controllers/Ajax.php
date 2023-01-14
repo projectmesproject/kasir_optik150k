@@ -21,13 +21,40 @@ class Ajax extends CI_Controller
 		$this->session->set_userdata(['saldo' => $saldo]);
 		// redirect($url_base);
 	}
-	public function getJual()
+	public function getJual1()
 	{
 		$date = date('Y-m-d');
 		$data = $this->db->select('*,count(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_barang_id')->where('DATE(jual_tanggal)', $date)->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak')->get()->result_array();
 		ob_start();
 ?>
-		<table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+		<?php $i = 1;
+		$total = 0;
+		$kolom = 3;
+		?>
+		<?php foreach ($data as $items) :
+
+			$total += ($items['total_qty']);
+		?>
+			<?php if (($i) % $kolom == 1) { ?>
+				<div class="row">
+				<?php } ?>
+				<div class="col-sm-4"><?= ($items['d_jual_barang_nama']) . " <label style='color:red'>Qty: " . ($items['total_qty']) . "</label>"  ?></div>
+				<?php if (($i) % $kolom == 0) { ?>
+				</div>
+			<?php } ?>
+			<?php $i++; ?>
+		<?php endforeach; ?>
+	<?php
+		$konten = ob_get_contents();
+		return $konten;
+	}
+	public function getJual()
+	{
+		$date = date('Y-m-d');
+		$data = $this->db->select('*,count(d_jual_qty) as total_qty')->from('tbl_jual')->group_by('d_jual_barang_id')->where('DATE(jual_tanggal)', $date)->join('tbl_detail_jual', 'tbl_detail_jual.d_jual_nofak=tbl_jual.jual_nofak')->get()->result_array();
+		ob_start();
+	?>
+		<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 			<thead class="thead-light">
 				<tr>
 					<th>Nama Barang</th>
@@ -37,25 +64,32 @@ class Ajax extends CI_Controller
 
 			<tbody>
 				<?php $i = 1;
-				$total = 0; ?>
+				$total = 0;
+				$kolom = 3;
+				?>
 				<?php foreach ($data as $items) :
 
 					$total += ($items['total_qty']);
 				?>
-					<tr>
+					<?php if (($i) % $kolom == 1) { ?>
+						<tr>
+						<?php } ?>
 						<td><?= ($items['d_jual_barang_nama']); ?></td>
 						<td><?= number_format($items['total_qty']); ?></td>
-					</tr>
+						<?php if (($i) % $kolom == 0) { ?>
+						</tr>
+					<?php } ?>
 					<?php $i++; ?>
 				<?php endforeach; ?>
 			</tbody>
 			<tfoot class="bg-primary text-white font-weight-bold">
 				<tr>
-					<td>Total :</td>
+					<td colspan="5">Total :</td>
 					<td><?= number_format($total) ?></td>
 				</tr>
 			</tfoot>
 		</table>
+
 	<?php
 		$konten = ob_get_contents();
 		return $konten;

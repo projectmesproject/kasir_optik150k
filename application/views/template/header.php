@@ -202,7 +202,7 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
 <body id="page-top">
   <!-- Modal -->
   <div class="modal fade modal-fullscreen" id="modalLaporanPenjualanResume" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Tanggal : <?= date('d-m-Y'); ?> <br>Saldo Di Kasir : <span id="label_saldo_lap"><?= number_format($this->session->userdata('saldo')) ?></span></h5>
@@ -223,7 +223,7 @@ Sesi Login Telah Habis, Silahkan Login Kembali</div>');
     </div>
   </div>
   <div class="modal fade modal-fullscreen" id="modalLaporanPenjualan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Penjualan Tanggal : <?= date('d-m-Y'); ?></h5>
