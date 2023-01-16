@@ -177,7 +177,34 @@ class M_penjualan extends CI_Model
 		$res = $this->db->delete('tbl_resume');
 		return $res;
 	}
-
+	function cari_barang($nomor_faktur, $nabar)
+	{
+		$this->db->where('d_jual_nofak', $nomor_faktur);
+		$this->db->where('d_jual_barang_nama', $nabar);
+		return $this->db->get('tbl_detail_jual')->result_array();
+	}
+	function cari_barang1($nomor_faktur, $nabar)
+	{
+		$this->db->where('d_jual_nofak', $nomor_faktur);
+		$this->db->where('d_jual_barang_id', $nabar);
+		return $this->db->get('tbl_detail_jual')->result_array();
+	}
+	function update_detail($nomor_faktur, $nabar, $data)
+	{
+		$this->db->where('d_jual_nofak', $nomor_faktur);
+		$this->db->where('d_jual_barang_nama', $nabar);
+		$res = $this->db->update('tbl_detail_jual', $data);
+		return $res;
+	}
+	function update_stok_barang($id, $qty_baru)
+	{
+		$check = $this->db->select('*')->from('tbl_barang')->where('barang_id', $id)->get()->row();
+		$newQty = $check->barang_stok - $qty_baru;
+		$this->db->where('barang_id', $id);
+		$data = ['barang_stok' => $newQty];
+		$res = $this->db->update('tbl_barang', $data);
+		return $res;
+	}
 
 	function get_penjualan_cabang()
 	{
@@ -191,6 +218,15 @@ class M_penjualan extends CI_Model
 		$this->db->where('A.no_hp!=', '');
 		$this->db->order_by('A.jual_tanggal', 'DESC');
 		$res =	$this->db->get()->result();
+		return $res;
+	}
+	function get_penjualan_paket($id)
+	{
+		$this->db->select('A.*,B.*');
+		$this->db->from('tbl_jual A');
+		$this->db->where('A.jual_nofak', $id);
+		$this->db->join('tbl_detail_jual B', 'B.d_jual_nofak = A.jual_nofak');
+		$res = $this->db->get()->result_array();
 		return $res;
 	}
 }

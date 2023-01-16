@@ -264,7 +264,7 @@
           </div>
           <div class="form-group col-sm-3">
             <label class="font-weight-bold">Keterangan :</label>
-            <input type="text" id="diskon" name="diskon" class="diskon form-control input-sm" required>
+            <input type="text" id="diskon" name="diskon" class="diskon form-control input-sm">
           </div>
         </div>
         <br>

@@ -189,6 +189,12 @@ class M_barang extends CI_Model
 		$this->db->where('barang_id', $kobar);
 		return $this->db->get('tbl_barang');
 	}
+	function get_barang2($nabar)
+	{
+		$this->db->where('barang_nama', $nabar);
+		return $this->db->get('tbl_barang');
+	}
+
 
 	///baruu
 	function search_barang($kobar)

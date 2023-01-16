@@ -463,7 +463,8 @@ class Penjualan extends CI_Controller
             $status = $this->input->post('status');
 
 
-            if (!empty($total) && !empty($jml_uang)) {
+            // if (!empty($total) && !empty($jml_uang)) {
+            if (($total == 0) && ($jml_uang == 0)) {
 
 
                 $nofak = $this->m_penjualan->get_nofak();

@@ -51,13 +51,7 @@
             </tr>
             <tr>
                 <th style="text-align:left;">Tanggal</th>
-                <th style="text-align:left;">: <?php
-                                                $userTimezone = new DateTimeZone('Asia/Jakarta');
-                                                //				$dataa = $b["jual_tanggal"];
-                                                //				$date = new DateTime(".$dataa.");
-                                                $date = new DateTime();
-                                                //				$myDateTime = new DateTime($date, $userTimezone);
-                                                echo $date->format('D, d M Y H:i:s');
+                <th style="text-align:left;">: <?= $b['jual_tanggal']
                                                 ?></th>
             </tr>
             <?php
@@ -241,7 +235,7 @@
             </div>
             <div class="table-responsive mt-3">
                 <p>Kami kirimkan barang-barang tersebut dibawah ini dengan kendaraan ....................................................... No.........................................</p>
-                <table class="table table-bordered">
+                <table class="table table-bordered" style="font-size: 15px;">
                     <thead>
                         <tr>
                             <th style="width: 15%;">Banyaknya</th>
@@ -250,17 +244,21 @@
                     </thead>
                     <tbody>
                         <?php
-                        $nabar = $i['d_jual_barang_nama'];
-                        $satuan = $i['d_jual_barang_satuan'];
-                        $qty = $i['d_jual_qty'];
-                        $diskon = $i['d_jual_diskon'];
-                        $total = $i['d_jual_total'];
+                        foreach ($data->result_array() as $i) {
+                            $no++;
+
+                            $nabar = $i['d_jual_barang_nama'];
+                            $satuan = $i['d_jual_barang_satuan'];
+                            $qty = $i['d_jual_qty'];
+                            $diskon = $i['d_jual_diskon'];
+                            $total = $i['d_jual_total'];
+
                         ?>
-                        <tr>
-                            <td><?= $qty ?></td>
-                            <td><?= $nabar ?></td>
-                        </tr>
-                        <?php
+                            <tr>
+                                <td><?= $qty ?></td>
+                                <td><?= $nabar ?></td>
+                            </tr>
+                        <?php }
                         ?>
                     </tbody>
                 </table>
