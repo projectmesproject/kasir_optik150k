@@ -74,6 +74,53 @@ class M_penjualan extends CI_Model
 		return true;
 	}
 
+	function edit_penjualan_cabang($nofak, $kobar, $qty)
+	{
+
+		$select = $this->db->query("SELECT jual_total FROM tbl_jual WHERE jual_nofak='$nofak'")->row();
+		$select_barang = $this->db->query("SELECT d_jual_nofak FROM tbl_detail_jual WHERE d_jual_nofak='$nofak' AND d_jual_barang_id='$kobar'")->result_array();
+		$count = count($select_barang);
+		$produk = $this->m_barang->get_barang1($kobar)->result_array();
+
+		$produk = $produk[0];
+		$total = $qty * $produk["barang_harjul"];
+
+		$jual_total = $select->jual_total;
+		if ($count == 0) {
+			// Pengurangan Stok Barang
+			//
+			// 1. Get qty barang jual sebelumnya
+			// 2. Add qty ke stok barang = stok + 4
+			// 3. Pengurangan stok berdasarkan qty saat ini = stok - 2
+
+			$data = array(
+				'd_jual_nofak' 			=>	$nofak,
+				'd_jual_barang_id'		=>	$produk['barang_id'],
+				'd_jual_barang_kat_id'  =>  $produk['barang_kategori_id'],
+				'd_jual_barang_nama'	=>	$produk['barang_nama'],
+				'd_jual_barang_satuan'	=>	$produk['barang_satuan'],
+				'd_jual_barang_harpok'	=>	$produk['barang_harpok'],
+				'd_jual_barang_harjul'	=>	$produk['barang_harjul'],
+				'd_jual_qty'			=>	$qty,
+				'd_jual_total'			=>	$total
+			);
+
+			// Add Items detail jual
+			$this->db->insert('tbl_detail_jual', $data);
+
+
+			// Update total harga
+			$grand_total = $jual_total + $total;
+			$this->db->query("UPDATE tbl_jual SET jual_total='$grand_total' WHERE jual_nofak='$nofak'");
+		}
+
+		$this->db->query("update tbl_barang set barang_stok=barang_stok-'$qty' where barang_id='$kobar'");
+		// $this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");
+		// $this->db->query("update saldo set saldo=saldo-'$kembalian' where id=1");
+
+		return true;
+	}
+
 
 	function simpan_penjualan1($nofak, $total, $jml_uang, $kembalian, $diskon, $nohp, $dp)
 	{

@@ -97,7 +97,7 @@
 
           <div class="" style="overflow: hidden;">
             <div class="table-responsive" id="result_table">
-              <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+              <table class="table table-bordered table-hover" id="tbl" width="100%" cellspacing="0">
                 <thead class="thead-light">
                   <tr>
                     <th>Kode Barang</th>
@@ -117,19 +117,19 @@
 
                   ?>
                     <tr>
-                      <th><?php echo $v["d_jual_barang_id"]; ?></th>
-                      <th><?php echo $v["d_jual_barang_nama"]; ?></th>
-                      <th><?php echo $v["d_jual_barang_satuan"]; ?></th>
-                      <th><?php echo number_format($v["d_jual_barang_harjul"]); ?></th>
-                      <th>Keterangan</th>
-                      <th><?php echo number_format($v["d_jual_qty"]); ?></th>
-                      <th><?php echo number_format($v["d_jual_barang_harjul"] * $v["d_jual_qty"]); ?></th>
+                      <td><?php echo $v["d_jual_barang_id"]; ?></td>
+                      <td><?php echo $v["d_jual_barang_nama"]; ?></td>
+                      <td><?php echo $v["d_jual_barang_satuan"]; ?></td>
+                      <td><?php echo number_format($v["d_jual_barang_harjul"]); ?></td>
+                      <td>Keterangan</td>
+                      <td><?php echo number_format($v["d_jual_qty"]); ?></td>
+                      <td><?php echo number_format($v["d_jual_barang_harjul"] * $v["d_jual_qty"]); ?></td>
                       <?php
                       $subtotal = $v["d_jual_barang_harjul"] * $v["d_jual_qty"];
                       $total = $total + $subtotal;
 
                       ?>
-                      <th style="text-align:center;"><a href="<?= base_url('penjualan_edit/remove_from_edit/' . $v['d_jual_id']) ?>?kd=<?php echo $this->uri->segment(3); ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Delete</a></th>
+                      <td style="text-align:center;"><a href="<?= base_url('penjualan_edit/remove_from_edit/' . $v['d_jual_id']) ?>?kd=<?php echo $this->uri->segment(3); ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Delete</a></td>
                     </tr>
                   <?php } ?>
 
@@ -295,14 +295,13 @@
       })
 
       function loadData() {
-        $('#dataTable tr').each(function() {
+        $('#tbl tr').each(function() {
           var kode_brg = $(this).find("td:first").html();
           const selected = [];
           $(".form-check input[type=checkbox]").each(function() {
             selected.push(this.value);
           });
           selected.map((item, index) => {
-
             if (item == kode_brg) {
               $('#pkt' + kode_brg).prop('checked', true);
             }
