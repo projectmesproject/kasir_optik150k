@@ -149,123 +149,126 @@
               </table>
               <br>
 
-              <?php echo form_open('Penjualan/simpan_penjualan') ?>
+              <!-- <?php echo form_open('Penjualan/simpan_penjualan') ?> -->
               <a href="#no_hp" class="btn btn-info btn-sm"><i class='fas fa-sync'></i> Refresh</a>
+              <form action="<?= base_url('penjualan_edit/simpan_ulang') ?>" method="POST">
 
-              <hr>
-              <table>
-                <tr>
-                  <div id="no"></div>
-                  <th>No HP : </th>
-                </tr>
-                <tr>
-                  <th><input type="text" name="no_hp" list="list_no" autocomplete="off" id="no_hp" value="<?= $penjualan[0]['no_hp'] ?>" class="form-control input-sm" style="width:150px;" required>
-                    <datalist id="list_no">
-                      <?php foreach ($nohp->result() as $nohp) : ?>
-                        <option value="<?= $nohp->no_hp ?>"><?= $nohp->no_hp ?></option>
-                      <?php endforeach ?>
-                    </datalist>
-                  </th>
-                </tr>
-                <div id="detail_customer" style="position:absolute;">
-                </div>
-              </table>
-              <br>
-              <table>
 
-                <tr>
-                  <?php if ($this->uri->segment(3) == $penjualan[0]['jual_nofak']) { ?>
-                    <th style="width:140px;">Total Belanja(Rp) :</th>
-                    <th style="text-align:right;width:140px;"><input type="text" name="total2" value="<?= $penjualan[0]['jual_total'] ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
-                    <input type="hidden" id="total" name="total" value="<?php echo $this->cart->total(); ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly>
-                    <th>Keterangan : </th>
-                    <th style="text-align:right;"><input type="text" id="diskon" value="<?= $penjualan[0]['jual_keterangan'] ?>" name="diskon" class="diskon form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" required></th>
-
-                    <th>Cara Bayar : </th>
-                    <th style="text-align:right;">
-                      <select name="bayar" id="bayars" class="form-control">
-                        <option value="">-- Pilih Cara Bayar --</option>
-                        <option value="Uang Muka">Uang Muka</option>
-                        <option value="Lunas">Lunas</option>
-                        <option value="Debit">Debit</option>
-                        <option value="Kredit">Kredit</option>
-                        <option value="Transfer">Transfer</option>
-                        <option value="OVO">OVO</option>
-                        <option value="LINK">LINK</option>
-                        <option value="DANA">DANA</option>
-                        <option value="Lain-Lain">Lain-Lain</option>
-                      </select>
+                <hr>
+                <table>
+                  <tr>
+                    <div id="no"></div>
+                    <th>No HP : </th>
+                  </tr>
+                  <tr>
+                    <th><input type="text" name="no_hp" list="list_no" autocomplete="off" id="no_hp" value="<?= $penjualan[0]['no_hp'] ?>" class="form-control input-sm" style="width:150px;" required>
+                      <datalist id="list_no">
+                        <?php foreach ($nohp->result() as $nohp) : ?>
+                          <option value="<?= $nohp->no_hp ?>"><?= $nohp->no_hp ?></option>
+                        <?php endforeach ?>
+                      </datalist>
                     </th>
-                  <?php   } else { ?>
-                    <th style="width:140px;">Total Belanja(Rp) :</th>
-                    <th style="text-align:right;width:140px;"><input type="text" name="total2" value="<?php echo number_format($this->cart->total()); ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
-                    <input type="hidden" id="total" name="total" value="<?php echo $this->cart->total(); ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly>
-                    <th>Keterangan : </th>
-                    <th style="text-align:right;"><input type="text" id="diskon" name="diskon" class="diskon form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" required></th>
-                    <th>Cara Bayar : </th>
-                    <th style="text-align:right;">
-                      <select required name="bayar" id="bayar" class="form-control">
-                        <option value="">-- Pilih Cara Bayar --</option>
-                        <option value="Uang Muka">Uang Muka</option>
-                        <option value="Lunas">Lunas</option>
-                        <option value="Debit">Debit</option>
-                        <option value="Kredit">Kredit</option>
-                        <option value="Transfer">Transfer</option>
-                        <option value="OVO">OVO</option>
-                        <option value="LINK">LINK</option>
-                        <option value="DANA">DANA</option>
-                        <option value="Lain-Lain">Lain-Lain</option>
-                      </select>
-                    </th>
-                  <?php } ?>
-
-
-
-
-
-                </tr>
+                  </tr>
+                  <div id="detail_customer" style="position:absolute;">
+                  </div>
+                </table>
                 <br>
-                <?php
-                // var_dump($paket);
-                if ($this->session->userdata('level') == 'admin') {
-                  foreach ($paket as $pkt) {
-                ?>
-                    <div class="form-check form-check-inline">
-                      <input type="hidden" id="nomor_faktur" value="<?= $this->uri->segment(3) ?>">
-                      <input class="form-check-input checkPaket" type="checkbox" style=" width: 40px; height: 40px; " data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
-                      <label class="form-check-label" for="pkt<?= $pkt->barang_id ?>"><?= $pkt->barang_nama ?></label>
-                    </div>
+                <table>
 
-                <?php
+                  <tr>
+                    <?php if ($this->uri->segment(3) == $penjualan[0]['jual_nofak']) { ?>
+                      <th style="width:140px;">Total Belanja(Rp) :</th>
+                      <th style="text-align:right;width:140px;"><input type="text" name="jual_total" value="<?= $total ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly></th>
+                      <!-- <input type="hidden" id="total" name="total" value="<?php echo $this->cart->total(); ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" readonly> -->
+                      <th>Cara Bayar 1 : </th>
+                      <th style="text-align:right;">
+                        <select name="jual_keterangan" id="cara_bayar1" class="form-control">
+                          <option value="">-- Pilih Cara Bayar --</option>
+                          <option value="Cash">Cash</option>
+                          <option value="Uang Muka">Uang Muka</option>
+                          <option value="Lunas">Lunas</option>
+                          <option value="Debit">Debit</option>
+                          <option value="Kredit">Kredit</option>
+                          <option value="Transfer">Transfer</option>
+                          <option value="OVO">OVO</option>
+                          <option value="LINK">LINK</option>
+                          <option value="DANA">DANA</option>
+                          <option value="Lain-Lain">Lain-Lain</option>
+                        </select>
+                        <!-- <input type="text" id="diskon" value="<?= $penjualan[0]['jual_keterangan'] ?>" name="diskon" class="diskon form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" required> -->
+                      </th>
+
+                      <th>Cara Bayar 2 : </th>
+                      <th style="text-align:right;">
+                        <select name="jual_keterangan2" id="cara_bayar2" class="form-control">
+                          <option value="">-- Pilih Cara Bayar --</option>
+                          <option value="Uang Muka">Uang Muka</option>
+                          <option value="Lunas">Lunas</option>
+                          <option value="Debit">Debit</option>
+                          <option value="Kredit">Kredit</option>
+                          <option value="Transfer">Transfer</option>
+                          <option value="OVO">OVO</option>
+                          <option value="LINK">LINK</option>
+                          <option value="DANA">DANA</option>
+                          <option value="Lain-Lain">Lain-Lain</option>
+                        </select>
+                      </th>
+                    <?php   }  ?>
+
+
+
+
+
+
+                  </tr>
+                  <br>
+                  <?php
+                  // var_dump($paket);
+                  if ($this->session->userdata('level') == 'admin') {
+                    foreach ($paket as $pkt) {
+                  ?>
+                      <div class="form-check form-check-inline">
+                        <input type="hidden" id="nomor_faktur" value="<?= $this->uri->segment(3) ?>">
+                        <input class="form-check-input checkPaket" type="checkbox" style=" width: 40px; height: 40px; " data-kode_brg='<?= $pkt->barang_id ?>' id="pkt<?= $pkt->barang_id ?>" value="<?= $pkt->barang_id ?>">
+                        <label class="form-check-label" for="pkt<?= $pkt->barang_id ?>"><?= $pkt->barang_nama ?></label>
+                      </div>
+
+                  <?php
+                    }
                   }
-                }
-                ?>
-              </table>
-              <br>
-              <table>
+                  ?>
+                </table>
+                <br>
+                <table>
 
-                <tr>
-                  <td style="width:760px;" rowspan="2"><button type="button" onclick="simpanUlang();" class="btn btn-success btn-lg"> CETAK</button></td>
-                  <th>Total Yang Harus Dibayar (Rp) : </th>
-                  <th style="text-align:right;"><input type="text" id="totbayar" value="<?php echo number_format($total); ?>" min="0" name="totbayar" class="form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" readonly></th>
-                </tr>
-
-
-
-                <tr>
-                  <th>Tunai(Rp) :</th>
-                  <th style="text-align:right;"><input type="text" id="jml_uang2" name="jml_uang2" value="<?= $penjualan[0]['jual_jml_uang'] ?>" class="jml_uang form-control input-sm" style="text-align:right;margin-bottom:5px;" required></th>
-
-                </tr>
-
-                <tr>
-                  <td></td>
-                  <th>Kembalian(Rp) :</th>
-                  <th style="text-align:right;"><input type="text" id="kembalian2" name="kembalian" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" required></th>
-                </tr>
+                  <tr>
+                    <td style="width:760px;" rowspan="2"><button type="submit" class="btn btn-success btn-lg"> SAVE</button></td>
+                    <th>Total Yang Harus Dibayar (Rp) : </th>
+                    <th style="text-align:right;"><input type="text" id="totalbayar_edit" value="<?= $total ?>" min="0" class="form-control input-sm" style="text-align:right;margin-bottom:5px;width:150px" readonly></th>
+                    <input type="hidden" name="nofak" value="<?= $this->uri->segment(3) ?>">
+                    <input type="hidden" name="jual_tanggal" value="<?= $penjualan[0]['jual_tanggal'] ?>">
+                  </tr>
 
 
-              </table>
+
+                  <tr>
+                    <th>Tunai(Rp) 1 :</th>
+                    <th style="text-align:right;"><input type="text" id="tunai_edit" name="jual_jml_uang" value="<?= $penjualan[0]['jual_jml_uang'] ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;"></th>
+                  </tr>
+
+                  <tr>
+                    <td></td>
+                    <th>Tunai(Rp) 2 :</th>
+                    <th style="text-align:right;"><input type="text" id="tunai_edit2" name="jual_jml_uang2" value="<?= $penjualan[0]['jual_jml_uang2'] ?>" class="form-control input-sm" style="text-align:right;margin-bottom:5px;" min="0"></th>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <th>Kembalian(Rp) :</th>
+                    <th style="text-align:right;"><input type="text" id="kembalian_edit" name="jual_kembalian" class="form-control input-sm" style="text-align:right;margin-bottom:5px;"></th>
+                  </tr>
+
+
+                </table>
 
 
               </form>
@@ -367,32 +370,51 @@
             success: function(res) {
               console.log(res)
               // $('#result_table').html(res)
-              // location.reload()
+              location.reload()
+            }
+          })
+        } else {
+          $.ajax({
+            url: '<?= base_url() ?>/penjualan_edit/remove_paket',
+            cache: false,
+            type: 'POST',
+            data: {
+              "nabar": kode_brg,
+              "nomor_faktur": nomor_faktur
+            },
+            success: function(res) {
+              // $('#result_table').html(res)
+              location.reload()
             }
           })
         }
-        //  else {
-        //   $.ajax({
-        //     url: '<?= base_url() ?>/penjualan_edit/remove_paket',
-        //     cache: false,
-        //     type: 'POST',
-        //     data: {
-        //       "kode_brg": kode_brg
-        //     },
-        //     success: function(res) {
-        //       $('#result_table').html(res)
-        //     }
-        //   })
-        // }
 
       })
 
       $(function() {
-        $('#bayars').val('<?= $penjualan[0]["jual_keterangan2"] ?>').trigger('change')
+        let tes = $('#cara_bayar1').val('<?= $penjualan[0]["jual_keterangan"] ?>').trigger('change')
+        let tes2 = $('#cara_bayar2').val('<?= $penjualan[0]["jual_keterangan2"] ?>').trigger('change')
+        console.log("carabayar1", tes, tes2)
       });
 
-
-      function simpanUlang() {
-        window.location.href = "../../penjualan_edit/simpan_ulang?kd=<?php echo $this->uri->segment(3); ?>&bayar=" + $("#jml_uang2").val();
-      }
+      $("#tunai_edit").keyup(function() {
+        var tunai = $("#tunai_edit").val();
+        var tunai2 = $("#tunai_edit2").val();
+        var total_atas = $("#total").val();
+        var grand_total = $("#totalbayar_edit").val();
+        var kembalian = $("#kembalian_edit").val();
+        var total_tunai = tunai + tunai2
+        var hitung = grand_total - total_tunai
+        $("#kembalian_edit").val(hitung)
+      });
+      $("#tunai_edit2").keyup(function() {
+        var tunai = $("#tunai_edit").val();
+        var tunai2 = $("#tunai_edit2").val();
+        var total_atas = $("#total").val();
+        var grand_total = $("#totalbayar_edit").val();
+        var kembalian = $("#kembalian_edit").val();
+        var total_tunai = parseInt(tunai) + parseInt(tunai2)
+        var hitung = grand_total - total_tunai
+        $("#kembalian_edit").val(hitung)
+      });
     </script>

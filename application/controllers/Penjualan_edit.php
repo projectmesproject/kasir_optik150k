@@ -159,24 +159,35 @@ class Penjualan_edit extends CI_Controller
 
     function simpan_ulang()
     {
+        $data =  $this->input->post();
+        $id = $data['nofak'];
+        $this->delete_resume($id);
         $this->db->select('*');
-        $this->db->from("tbl_detail_jual");
-        $this->db->where('d_jual_nofak', $_GET["kd"]);
-        $datalama = $this->db->get()->result_array();
+        $this->db->from("tbl_jual");
+        $this->db->where('jual_nofak', $data['nofak']);
+        unset($data['nofak']);
+        $this->db->update('tbl_jual', $data);
+        $resume1 = [
+            'resume_nofak' => $id,
+            'method_types' => $data['jual_keterangan'],
+            'amount' => $data['jual_jml_uang'],
+            'created_at' => $data['jual_tanggal']
+        ];
+        $resume2 = [
+            'resume_nofak' => $id,
+            'method_types' => $data['jual_keterangan2'],
+            'amount' => $data['jual_jml_uang2'],
+            'created_at' => $data['jual_tanggal']
+        ];
+        $this->db->insert('tbl_resume', $resume1);
+        $this->db->insert('tbl_resume', $resume2);
 
-        $jumlahbeli = 0;
-        foreach ($datalama as $v) {
-            $jumlahbeli = $jumlahbeli + ($v["d_jual_barang_harjul"] * $v["d_jual_qty"]);
-        }
 
-        $this->db->where('jual_nofak', $_GET["kd"]);
-        $arrayUpdate = array(
-            'jual_total' => $jumlahbeli,
-            'jual_jml_uang' => $_GET["bayar"]
-        );
-        $this->db->update('tbl_jual', $arrayUpdate);
-
-        redirect('penjualan_edit/index/' . $_GET["kd"]);
+        redirect('penjualan_edit/index/' . $id);
+    }
+    function delete_resume($id)
+    {
+        return $this->db->select('*')->from('tbl_resume')->where('resume_nofak', $id)->delete('tbl_resume');
     }
 
     function add_to_cart_paket()
@@ -186,37 +197,35 @@ class Penjualan_edit extends CI_Controller
         $produk = $this->m_barang->get_barang1($kobar);
         $cari_produk = $this->m_penjualan->cari_barang1($nomor_faktur, $kobar);
         if (count($cari_produk) == 0) {
-            print_r("oke");
-            // $i = $produk->row_array();
-            // $data = array(
-            //     'd_jual_nofak' => $nomor_faktur,
-            //     'd_jual_barang_id' => $i['barang_id'],
-            //     'd_jual_barang_kat_id' => $i['barang_kategori_id'],
-            //     'd_jual_barang_nama'     => $i['barang_nama'],
-            //     'd_jual_barang_satuan'   => $i['barang_satuan'],
-            //     'd_jual_barang_harpok'   => $i['barang_harpok'],
-            //     'd_jual_barang_harjul'    => $i['barang_harjul'],
-            //     'd_jual_qty'      => 1,
-            //     'd_jual_total'      => $this->input->post('jumlah_ket') * $i['barang_harjul']
-            // );
-            // $this->db->insert('tbl_detail_jual', $data);
-            // $this->db->update('tbl_barang', ['barang_stok' => $i['barang_stok'] - $this->input->post('jumlah_ket')]);
+            $i = $produk->row_array();
+            $data = array(
+                'd_jual_nofak' => $nomor_faktur,
+                'd_jual_barang_id' => $i['barang_id'],
+                'd_jual_barang_kat_id' => $i['barang_kategori_id'],
+                'd_jual_barang_nama'     => $i['barang_nama'],
+                'd_jual_barang_satuan'   => $i['barang_satuan'],
+                'd_jual_barang_harpok'   => $i['barang_harpok'],
+                'd_jual_barang_harjul'    => $i['barang_harjul'],
+                'd_jual_qty'      => 1,
+                'd_jual_total'      => $this->input->post('jumlah_ket') * $i['barang_harjul']
+            );
+            $this->db->insert('tbl_detail_jual', $data);
+            $this->db->update('tbl_barang', ['barang_stok' => $i['barang_stok'] - $this->input->post('jumlah_ket')]);
         } else {
             foreach ($cari_produk as $value) {
-                var_dump($value['d_jual_qty']);
-                // $harga = $value['d_jual_barang_harjul'];
-                // $total_lama = $value['d_jual_total'];
-                // $qtylama = $value['d_jual_qty'];
-                // $qty_baru = $qtylama + 1;
-                // $total_baru = ($qty_baru * $harga) + $total_lama;
+                $harga = $value['d_jual_barang_harjul'];
+                $total_lama = $value['d_jual_total'];
+                $qtylama = $value['d_jual_qty'];
+                $qty_baru = $qtylama + 1;
+                $total_baru = ($qty_baru * $harga) + $total_lama;
 
-                // $i = $produk->row_array();
-                // $data = array(
-                //     'd_jual_nofak' => $nomor_faktur,
-                //     'd_jual_qty'      => 7,
-                //     'd_jual_total'      => $total_baru
-                // );
-                // $this->m_penjualan->update_detail($nomor_faktur, $kobar, $data);
+                $i = $produk->row_array();
+                $data = array(
+                    'd_jual_nofak' => $nomor_faktur,
+                    'd_jual_qty'      => 7,
+                    // 'd_jual_total'      => $total_baru
+                );
+                $this->m_penjualan->update_detail($nomor_faktur, $kobar, $data);
                 // $this->m_penjualan->update_stok_barang($i['barang_id'], 1);
             }
         }
@@ -324,6 +333,15 @@ class Penjualan_edit extends CI_Controller
         }
     }
 
+    function remove_paket()
+    {
+        $nabar = $this->input->post('nabar');
+        $nomor_faktur = $this->input->post('nomor_faktur');
+        $cari_produk = $this->m_penjualan->cari_barang1($nomor_faktur, $nabar);
+        $this->db->where('d_jual_id', $cari_produk[0]['d_jual_id']);
+        $this->db->delete('tbl_detail_jual');
+        // redirect('penjualan_edit/index/' . $_GET["kd"]);
+    }
     function cetak_faktur()
     {
         $x['data'] = $this->m_penjualan->cetak_faktur();
