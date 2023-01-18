@@ -186,35 +186,37 @@ class Penjualan_edit extends CI_Controller
         $produk = $this->m_barang->get_barang1($kobar);
         $cari_produk = $this->m_penjualan->cari_barang1($nomor_faktur, $kobar);
         if (count($cari_produk) == 0) {
-            $i = $produk->row_array();
-            $data = array(
-                'd_jual_nofak' => $nomor_faktur,
-                'd_jual_barang_id' => $i['barang_id'],
-                'd_jual_barang_kat_id' => $i['barang_kategori_id'],
-                'd_jual_barang_nama'     => $i['barang_nama'],
-                'd_jual_barang_satuan'   => $i['barang_satuan'],
-                'd_jual_barang_harpok'   => $i['barang_harpok'],
-                'd_jual_barang_harjul'    => $i['barang_harjul'],
-                'd_jual_qty'      => 1,
-                'd_jual_total'      => $this->input->post('jumlah_ket') * $i['barang_harjul']
-            );
-            $this->db->insert('tbl_detail_jual', $data);
-            $this->db->update('tbl_barang', ['barang_stok' => $i['barang_stok'] - $this->input->post('jumlah_ket')]);
+            print_r("oke");
+            // $i = $produk->row_array();
+            // $data = array(
+            //     'd_jual_nofak' => $nomor_faktur,
+            //     'd_jual_barang_id' => $i['barang_id'],
+            //     'd_jual_barang_kat_id' => $i['barang_kategori_id'],
+            //     'd_jual_barang_nama'     => $i['barang_nama'],
+            //     'd_jual_barang_satuan'   => $i['barang_satuan'],
+            //     'd_jual_barang_harpok'   => $i['barang_harpok'],
+            //     'd_jual_barang_harjul'    => $i['barang_harjul'],
+            //     'd_jual_qty'      => 1,
+            //     'd_jual_total'      => $this->input->post('jumlah_ket') * $i['barang_harjul']
+            // );
+            // $this->db->insert('tbl_detail_jual', $data);
+            // $this->db->update('tbl_barang', ['barang_stok' => $i['barang_stok'] - $this->input->post('jumlah_ket')]);
         } else {
             foreach ($cari_produk as $value) {
-                $harga = $value['d_jual_barang_harjul'];
-                $total_lama = $value['d_jual_total'];
-                $qtylama = $value['d_jual_qty'];
-                $qty_baru = $qtylama + 1;
-                $total_baru = ($qty_baru * $harga) + $total_lama;
+                var_dump($value['d_jual_qty']);
+                // $harga = $value['d_jual_barang_harjul'];
+                // $total_lama = $value['d_jual_total'];
+                // $qtylama = $value['d_jual_qty'];
+                // $qty_baru = $qtylama + 1;
+                // $total_baru = ($qty_baru * $harga) + $total_lama;
 
-                $i = $produk->row_array();
-                $data = array(
-                    'd_jual_nofak' => $nomor_faktur,
-                    'd_jual_qty'      => 7,
-                    // 'd_jual_total'      => $total_baru
-                );
-                $this->m_penjualan->update_detail($nomor_faktur, $kobar, $data);
+                // $i = $produk->row_array();
+                // $data = array(
+                //     'd_jual_nofak' => $nomor_faktur,
+                //     'd_jual_qty'      => 7,
+                //     'd_jual_total'      => $total_baru
+                // );
+                // $this->m_penjualan->update_detail($nomor_faktur, $kobar, $data);
                 // $this->m_penjualan->update_stok_barang($i['barang_id'], 1);
             }
         }

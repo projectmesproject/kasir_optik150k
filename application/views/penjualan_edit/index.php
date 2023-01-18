@@ -297,6 +297,7 @@
       function loadData() {
         $('#dataTable tr').each(function() {
           var kode_brg = $(this).find("td:first").html();
+          console.log(this.value)
           const selected = [];
           $(".form-check input[type=checkbox]").each(function() {
             selected.push(this.value);
@@ -355,7 +356,6 @@
       $(".checkPaket").click(function() {
         let kode_brg = $(this).attr('data-kode_brg')
         let nomor_faktur = $('#nomor_faktur').val()
-        console.log(nomor_faktur)
         if ($(this).is(':checked')) {
           $.ajax({
             url: '<?= base_url() ?>penjualan_edit/add_to_cart_paket',
@@ -371,19 +371,20 @@
               // location.reload()
             }
           })
-        } else {
-          $.ajax({
-            url: '<?= base_url() ?>/penjualan_edit/remove_paket',
-            cache: false,
-            type: 'POST',
-            data: {
-              "kode_brg": kode_brg
-            },
-            success: function(res) {
-              $('#result_table').html(res)
-            }
-          })
         }
+        //  else {
+        //   $.ajax({
+        //     url: '<?= base_url() ?>/penjualan_edit/remove_paket',
+        //     cache: false,
+        //     type: 'POST',
+        //     data: {
+        //       "kode_brg": kode_brg
+        //     },
+        //     success: function(res) {
+        //       $('#result_table').html(res)
+        //     }
+        //   })
+        // }
 
       })
 
