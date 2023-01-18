@@ -159,24 +159,35 @@ class Penjualan_edit extends CI_Controller
 
     function simpan_ulang()
     {
+        $data =  $this->input->post();
+        $id = $data['nofak'];
+        $this->delete_resume($id);
         $this->db->select('*');
-        $this->db->from("tbl_detail_jual");
-        $this->db->where('d_jual_nofak', $_GET["kd"]);
-        $datalama = $this->db->get()->result_array();
+        $this->db->from("tbl_jual");
+        $this->db->where('jual_nofak', $data['nofak']);
+        unset($data['nofak']);
+        $this->db->update('tbl_jual', $data);
+        $resume1 = [
+            'resume_nofak' => $id,
+            'method_types' => $data['jual_keterangan'],
+            'amount' => $data['jual_jml_uang'],
+            'created_at' => $data['jual_tanggal']
+        ];
+        $resume2 = [
+            'resume_nofak' => $id,
+            'method_types' => $data['jual_keterangan2'],
+            'amount' => $data['jual_jml_uang2'],
+            'created_at' => $data['jual_tanggal']
+        ];
+        $this->db->insert('tbl_resume', $resume1);
+        $this->db->insert('tbl_resume', $resume2);
 
-        $jumlahbeli = 0;
-        foreach ($datalama as $v) {
-            $jumlahbeli = $jumlahbeli + ($v["d_jual_barang_harjul"] * $v["d_jual_qty"]);
-        }
 
-        $this->db->where('jual_nofak', $_GET["kd"]);
-        $arrayUpdate = array(
-            'jual_total' => $jumlahbeli,
-            'jual_jml_uang' => $_GET["bayar"]
-        );
-        $this->db->update('tbl_jual', $arrayUpdate);
-
-        redirect('penjualan_edit/index/' . $_GET["kd"]);
+        redirect('penjualan_edit/index/' . $id);
+    }
+    function delete_resume($id)
+    {
+        return $this->db->select('*')->from('tbl_resume')->where('resume_nofak', $id)->delete('tbl_resume');
     }
 
     function add_to_cart_paket()
@@ -322,6 +333,15 @@ class Penjualan_edit extends CI_Controller
         }
     }
 
+    function remove_paket()
+    {
+        $nabar = $this->input->post('nabar');
+        $nomor_faktur = $this->input->post('nomor_faktur');
+        $cari_produk = $this->m_penjualan->cari_barang1($nomor_faktur, $nabar);
+        $this->db->where('d_jual_id', $cari_produk[0]['d_jual_id']);
+        $this->db->delete('tbl_detail_jual');
+        // redirect('penjualan_edit/index/' . $_GET["kd"]);
+    }
     function cetak_faktur()
     {
         $x['data'] = $this->m_penjualan->cetak_faktur();
