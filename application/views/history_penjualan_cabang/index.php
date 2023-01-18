@@ -46,7 +46,7 @@
                   <?= $item['jumlah_item'] ?>
                 </td>
                 <td>
-                  <?= $item['jual_total'] ?>
+                  Rp. <?= number_format($item['jual_total']) ?>
                 </td>
                 <td>
                   <div class="badge p-2 rounded-1 
@@ -93,10 +93,9 @@
       url: ' <?= base_url(); ?>history_penjualan_cabang/in_detail/' + id,
       type: "GET",
       success: (result) => {
-        console.log({
-          result
-        })
         $("#idModalDeep").html(result)
+
+        
       }
     })
   }

@@ -50,13 +50,13 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Penjualan</h1>
+    <h1 class="h3 mb-2 text-gray-800">Edit Penjualan Cabang</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-body">
             <?php echo form_open('history_penjualan_cabang/add_to_cart') ?>
-            <input type="hidden" name="nofak" value="<?=  $this->uri->segment(3) ?>">
+            <input type="hidden" name="nofak" value="<?= $this->uri->segment(3) ?>">
             <div class="row">
                 <div class="form-group col-sm-3" style="position: relative;">
                     <label>Nama Barang : </label>
@@ -158,7 +158,7 @@
                                     </td>
                                     <td style="text-align:right;"><?php echo number_format($items['d_jual_total']); ?></td>
 
-                                    <td style="text-align:center;"><a href="<?= base_url('history_penjualan_cabang/removeItems/' . $items['d_jual_nofak'] . "/" . $items['d_jual_id']."/" . $items['d_jual_barang_id']."/".$items['d_jual_qty']) ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
+                                    <td style="text-align:center;"><a href="<?= base_url('history_penjualan_cabang/removeItems/' . $items['d_jual_nofak'] . "/" . $items['d_jual_id'] . "/" . $items['d_jual_barang_id'] . "/" . $items['d_jual_qty']) ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a></td>
                                 </tr>
 
 
@@ -168,15 +168,13 @@
                     </table>
                 </div>
                 <br>
-                <?php
-                echo form_open('penjualan/simpan_penjualan_cabang', array("id" => "simpan_penjualan_form")) ?>
 
                 <a href="#no_hp" class="btn btn-info btn-sm"><i class='fas fa-sync'></i> Refresh</a>
 
                 <hr>
                 <div class="form-group">
                     <label>Cabang</label>
-                    <select name="cabang" class="form-control col-sm-3">
+                    <select name="cabang" id="cabang_select" class="form-control col-sm-3">
                         <?php foreach ($cabang->result() as $cbg) {
                             $nm = $cbg->nama_cabang;
 
@@ -200,12 +198,9 @@
                     </div>
                     <div class="form-group col-sm-2">
                         <label class="font-weight-bold">Cara Bayar 1 :</label>
-                        <?php if ($this->session->userdata('level') == "penjualan") { ?>
-                            <input type="hidden" name="bayar" value="Cash">
-                        <?php } ?>
-                        <select required name="bayar" id="bayar" class="form-control" <?php if ($this->session->userdata('level') == "penjualan") {
-                                                                                            echo "disabled";
-                                                                                        } ?>>
+                        <input type="hidden" name="bayar" value="Cash">
+
+                        <select required name="bayar" id="bayar" class="form-control" disabled>
                             <option value="" disabled>-- Pilih Cara Bayar --</option>
                             <?php foreach ($cara_bayar as $bayar) {
                             ?>
@@ -255,8 +250,8 @@
                         <td class="col-sm-6" rowspan="3">
                             <input type="hidden" name="jenis_cetak" id="jenis_cetak" />
                             <small class="text-danger">Cetak Faktur ( Cetak Surat Jalan dan Faktur ) , Cetak Surat Jalan hanya cetak surat jalan </small><br /><br />
-                            <button type="submit" class="btn btn-success btn-lg" onclick="submitForm('faktur')"> CETAK FAKTUR</button><br />
-                            <br /><button type="submit" class="btn btn-info btn-lg" onclick="submitForm('sj')"> CETAK SURAT JALAN</button>
+                            <button type="button" class="btn btn-success btn-lg" onclick='window.open("<?= base_url("history_penjualan_cabang/cetak_faktur_sj/" . $this->uri->segment(3)) ?>")'> CETAK FAKTUR</button><br />
+                            <br /><button type="button" class="btn btn-info btn-lg" onclick='window.open("<?= base_url("history_penjualan_cabang/cetak_surat_jalan/" . $this->uri->segment(3)) ?>")'> CETAK SURAT JALAN</button>
                         </td>
 
                         <th colspan="4">Total Yang Harus Dibayar (Rp) : </th>
@@ -282,9 +277,6 @@
 
 
                 </table>
-
-
-                </form>
 
             </div>
         </div>
@@ -389,6 +381,24 @@
         });
         $('.select').select2();
         loadData()
+    })
+
+    $('#cabang_select').change(function() {
+        $.ajax({
+            url: '<?= base_url() ?>/history_penjualan_cabang/update_cabang',
+            type: 'POST',
+            cache: false,
+            data: {
+                "cabang": $(this).val(),
+                "nofak" : '<?= $this->uri->segment(3)?>'
+            },
+            success: function(res) {
+                
+            }
+        })
+        // $.ajax({
+        //     url 
+        // })
     })
 
     function loadData() {

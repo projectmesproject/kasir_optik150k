@@ -82,22 +82,33 @@ class History_penjualan_cabang extends CI_Controller
 
   function updateQty($id_jual)
   {
+
     $qty = $this->input->post('qty');
     $harjul = $this->input->post('harjul_items');
     $nofak = $this->input->post('nofak_items');
     $barang_id = $this->input->post('barang_id');
     $total = (int) $qty * (int) $harjul;
 
-    // Select Stok
-    $data = $this->db->query("SELECT barang_stok FROM tbl_barang WHERE barang_id='$barang_id'")->row();
-    $qty_barang = $data->barang_stok;
-    $qty_update = (int)$qty_barang - (int)$qty;
+    $select_barang = $this->db->query("SELECT d_jual_nofak,d_jual_qty FROM tbl_detail_jual WHERE d_jual_nofak='$nofak' AND d_jual_barang_id='$barang_id'")->row();
+    $select = $this->db->query("SELECT jual_total FROM tbl_jual WHERE jual_nofak='$nofak'")->row();
+    $jual_total = $select->jual_total;
 
-    // Update Stok
-    $this->db->query("UPDATE tbl_barang SET barang_stok='$qty_update' WHERE barang_id='$barang_id'");
+    $qty_jual = $select_barang->d_jual_qty;
 
+    $grand_total = 0;
+
+    $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok + '$qty_jual' WHERE barang_id='$barang_id'");
+   
+    $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok - '$qty' WHERE barang_id='$barang_id'");
 
     $this->db->query("UPDATE tbl_detail_jual SET d_jual_qty='$qty',d_jual_total='$total' WHERE d_jual_id='$id_jual'");
+
+    $select_all_barang = $this->db->query("SELECT d_jual_nofak,d_jual_qty,d_jual_total FROM tbl_detail_jual WHERE d_jual_nofak='$nofak'")->result_array();
+    foreach($select_all_barang as $all_jual){
+      $grand_total+=$all_jual['d_jual_total'];
+    }
+    
+    $this->db->query("UPDATE tbl_jual SET jual_total='$grand_total' WHERE jual_nofak='$nofak'");
 
     redirect('history_penjualan_cabang/edit/' . $nofak);
   }
@@ -105,18 +116,39 @@ class History_penjualan_cabang extends CI_Controller
   function add_to_cart()
   {
     $kobar = $this->input->post('kode_brg_ket');
-    
+
     $stok = $this->input->post("stok_ket");
     $qty = $this->input->post('jumlah_ket');
     $nofak = $this->input->post('nofak');
 
-    $this->m_penjualan->edit_penjualan_cabang($nofak, $kobar,$qty);
-    
+    $this->m_penjualan->edit_penjualan_cabang($nofak, $kobar, $qty);
+
     redirect('history_penjualan_cabang/edit/' . $nofak);
   }
 
+  function cetak_faktur_sj($nofak)
+  {
+    $this->session->set_userdata('nofak', $nofak);
+    $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
+    $this->load->view('laporan/v_cetak_faktur_sj', $x);
+  }
+  function cetak_surat_jalan($nofak)
+  {
+    $this->session->set_userdata('nofak', $nofak);
+    $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
+    $this->load->view('laporan/v_surat_jalan', $x);
+  }
 
-  function removeItems($nofak, $id_jual,$barang_id,$qty)
+  function update_cabang()
+  {
+    $cabang = $this->input->post("cabang");
+    $nofak = $this->input->post("nofak");
+
+    $this->db->query("UPDATE tbl_jual SET cabang='$cabang' WHERE jual_nofak='$nofak'");
+  }
+
+
+  function removeItems($nofak, $id_jual, $barang_id, $qty)
   {
     // Select Stok
     $data = $this->db->query("SELECT barang_stok FROM tbl_barang WHERE barang_id='$barang_id'")->row();
@@ -128,6 +160,30 @@ class History_penjualan_cabang extends CI_Controller
     $this->db->query("DELETE FROM tbl_detail_jual WHERE d_jual_id='$id_jual'");
 
     redirect('history_penjualan_cabang/edit/' . $nofak);
+  }
+
+  function hapus_penjualan_cabang($nofak)
+  {
+    // Proses Get Penjualan
+    $get_jual_detail = $this->db->query("SELECT d_jual_nofak,d_jual_qty,d_jual_barang_id FROM tbl_detail_jual WHERE d_jual_nofak='$nofak'")->result_array();
+    foreach ($get_jual_detail as $jd) {
+      $qty = $jd['d_jual_qty'];
+      $barang_id = $jd['d_jual_barang_id'];
+      // Update Stok
+      $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok + '$qty' WHERE barang_id='$barang_id'");
+    }
+
+    // Hapus tbl_jual
+    $this->db->delete('tbl_jual', array('jual_nofak' => $nofak)); 
+
+    
+    // Hapus tbl_detail_jual
+    $this->db->delete('tbl_detail_jual', array('d_jual_nofak' => $nofak)); 
+
+    $res = new stdClass();
+    $res->status = 200;
+    $res->message = "Berhasil Hapus Penjualan Cabang";
+    echo json_encode($res);
   }
 
 
@@ -164,7 +220,7 @@ class History_penjualan_cabang extends CI_Controller
         <tr>
           <td width="220">Total Harga</td>
           <td width="20">:</td>
-          <td><?= $penjualan_new->jual_total; ?></td>
+          <td>Rp. <?= number_format($penjualan_new->jual_total); ?></td>
         </tr>
       </table>
     </div>
@@ -212,9 +268,49 @@ class History_penjualan_cabang extends CI_Controller
       </div>
       <div class="card-footer">
         <button class="btn btn-warning" onclick="window.location='<?= base_url() ?>history_penjualan_cabang/edit/<?= $id ?>'">EDIT</button>
-        <button class="btn btn-danger">DELETE</button>
+        <button class="btn btn-danger" onclick="deleteItems('<?= $id ?>')">DELETE</button>
       </div>
     </div>
+    <script>
+      function deleteItems(id) {
+        Swal.fire({
+          title: 'Hapus Penjualan Cabang Ini ?',
+          showCancelButton: true,
+          confirmButtonText: 'Hapus Penjualan Cabang',
+          cancelButtonText: `Batal`,
+          confirmButtonColor: '#dc3545'
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            $.ajax({
+              url: '<?= base_url() ?>history_penjualan_cabang/hapus_penjualan_cabang/' + id,
+              type: 'GET',
+              cache: false,
+              success: function(res) {
+                console.log(res)
+                try {
+                  let response = JSON.parse(res)
+                  if (response.status == 200) {
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Hapus Penjualan Cabang',
+                      text: response.message
+                    }).then((result) => {
+                      location.reload()
+                    })
+                  } else {
+                    Swal.fire('Hapus Penjualan Cabang', response.message, 'warning')
+                  }
+
+                } catch (e) {
+                  Swal.fire('Hapus Penjualan Cabang', 'Kesalahan Server', 'error')
+                }
+              }
+            })
+          }
+        })
+      }
+    </script>
 <?php
   }
 }
