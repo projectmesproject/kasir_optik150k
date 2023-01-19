@@ -122,7 +122,12 @@
                       <td><?php echo $v["d_jual_barang_satuan"]; ?></td>
                       <td><?php echo number_format($v["d_jual_barang_harjul"]); ?></td>
                       <td>Keterangan</td>
-                      <td><?php echo number_format($v["d_jual_qty"]); ?></td>
+                      <form action="<?= base_url('penjualan_edit/update_qty_detail/' . $v['d_jual_id']) ?>" method="POST">
+                        <td>
+                          <input type="hidden" name="nomorfaktur" value="<?= $this->uri->segment(3) ?>">
+                          <input type="text" name="d_jual_qty" value="<?= $v['d_jual_qty'] ?>">
+                        </td>
+                      </form>
                       <td><?php echo number_format($v["d_jual_barang_harjul"] * $v["d_jual_qty"]); ?></td>
                       <?php
                       $subtotal = $v["d_jual_barang_harjul"] * $v["d_jual_qty"];

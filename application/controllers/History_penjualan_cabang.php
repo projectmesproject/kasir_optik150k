@@ -98,16 +98,16 @@ class History_penjualan_cabang extends CI_Controller
     $grand_total = 0;
 
     $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok + '$qty_jual' WHERE barang_id='$barang_id'");
-   
+
     $this->db->query("UPDATE tbl_barang SET barang_stok=barang_stok - '$qty' WHERE barang_id='$barang_id'");
 
     $this->db->query("UPDATE tbl_detail_jual SET d_jual_qty='$qty',d_jual_total='$total' WHERE d_jual_id='$id_jual'");
 
     $select_all_barang = $this->db->query("SELECT d_jual_nofak,d_jual_qty,d_jual_total FROM tbl_detail_jual WHERE d_jual_nofak='$nofak'")->result_array();
-    foreach($select_all_barang as $all_jual){
-      $grand_total+=$all_jual['d_jual_total'];
+    foreach ($select_all_barang as $all_jual) {
+      $grand_total += $all_jual['d_jual_total'];
     }
-    
+
     $this->db->query("UPDATE tbl_jual SET jual_total='$grand_total' WHERE jual_nofak='$nofak'");
 
     redirect('history_penjualan_cabang/edit/' . $nofak);
@@ -174,11 +174,11 @@ class History_penjualan_cabang extends CI_Controller
     }
 
     // Hapus tbl_jual
-    $this->db->delete('tbl_jual', array('jual_nofak' => $nofak)); 
+    $this->db->delete('tbl_jual', array('jual_nofak' => $nofak));
 
-    
+
     // Hapus tbl_detail_jual
-    $this->db->delete('tbl_detail_jual', array('d_jual_nofak' => $nofak)); 
+    $this->db->delete('tbl_detail_jual', array('d_jual_nofak' => $nofak));
 
     $res = new stdClass();
     $res->status = 200;

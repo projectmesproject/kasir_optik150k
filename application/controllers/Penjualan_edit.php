@@ -156,7 +156,26 @@ class Penjualan_edit extends CI_Controller
         $this->db->delete('tbl_detail_jual');
         redirect('penjualan_edit/index/' . $_GET["kd"]);
     }
+    function update_qty_detail($id)
+    {
 
+        $cari_produk = $this->db->select('*')->from('tbl_detail_jual')->where('d_jual_id', $id)->get()->row_array();
+        $nabar = $cari_produk['d_jual_barang_nama'];
+        $produk = $this->m_barang->get_barang2($nabar);
+        $i = $produk->row_array();
+        $qty_baru = $this->input->post('d_jual_qty');
+        $this->db->update('tbl_barang', ['barang_stok' => $i['barang_stok'] - $qty_baru]);
+        $qty_lama = $cari_produk['d_jual_qty'];
+        $harga_lama = $cari_produk['d_jual_barang_harjul'];
+        $harga_baru = $qty_baru * $harga_lama;
+        $data = [
+            'd_jual_total' => $harga_baru,
+            'd_jual_qty' => $qty_baru
+        ];
+        $this->db->where('d_jual_id', $id);
+        $this->db->update('tbl_detail_jual', $data);
+        redirect('penjualan_edit/index/' . $this->input->post('nomorfaktur'));
+    }
     function simpan_ulang()
     {
         $data =  $this->input->post();
