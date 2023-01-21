@@ -135,6 +135,12 @@ class Penjualan extends CI_Controller
 
             $this->db->where('jual_nofak', $nofak);
             $this->db->update('tbl_jual', $data);
+            $this->db->insert('tbl_resume', [
+                'resume_nofak' => $nofak,
+                'method_types' => $cara_bayar,
+                'amount' => $bayar,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
             redirect('history_penjualan');
         } else {
             $this->session->set_flashdata('msg2', 'Data gagal ditambahkan! uang anda kurang');
@@ -464,7 +470,7 @@ class Penjualan extends CI_Controller
 
 
             // if (!empty($total) && !empty($jml_uang)) {
-            if (($total == 0) && ($jml_uang == 0)) {
+            if (($total) && ($jml_uang)) {
 
 
                 $nofak = $this->m_penjualan->get_nofak();
