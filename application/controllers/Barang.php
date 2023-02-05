@@ -30,6 +30,46 @@ class Barang extends CI_Controller
 		$this->load->view('barang/index', $data);
 		$this->load->view('template/footer', $data);
 	}
+	public function list_ajax()
+	{
+		$list = $this->m_barang->get_datatables();
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $value) {
+
+			$no++;
+			$row = array();
+			$row[] = $no;
+			$row[] = $value->barang_id;
+			$row[] = $value->barang_nama;
+			$row[] = $value->barang_satuan;
+			$row[] = $value->barang_harpok;
+			$row[] = $value->barang_harjul;
+			$row[] = $value->barang_stok;
+			$row[] = $value->barang_min_stok;
+			$row[] = $value->kategori_nama;
+			$row[] = $value->serial_number;
+			$row[] =
+				"
+                  <div class='row ml-1'>
+                <button type='button' class='btn btn-success btn-sm' data-toggle='modal' data-target='#modal-edit' onclick='get(" . "\"" . $value->id . "\")'>
+                <i class='fas fa-edit fa-xs'>Edit</i>
+                </button>
+                <button type='button' class='btn btn-danger btn-sm' onclick='remove(" . "\"" . $value->id . "\")' >
+                    <i class='fas fa-trash fa-xs'>Delete</i>
+                </button>
+            </div>
+                                ";
+			$data[] = $row;
+		}
+		$output = array(
+			"draw" => $_POST['draw'],
+			"data" => $data,
+			"recordsTotal" => $this->m_barang->count_all(),
+			"recordsFiltered" => $this->m_barang->count_filtered(),
+		);
+		echo json_encode($output);
+	}
 
 	function tambah_barang()
 	{
@@ -61,7 +101,25 @@ class Barang extends CI_Controller
 		// $this->session->set_flashdata('msg','Berhasil');
 		redirect('barang');
 	}
-
+	function update()
+	{
+		$id = $this->input->post('id');
+		$data = $this->input->post();
+		$res = $this->m_barang->update($id, $data);
+		echo json_encode($res);
+	}
+	function get()
+	{
+		$id = $this->input->post('id');
+		$res = $this->m_barang->get($id);
+		echo json_encode($res);
+	}
+	function remove()
+	{
+		$id = $this->input->post('id');
+		$res = $this->m_barang->remove($id);
+		echo json_encode($res);
+	}
 	public function edit_barang1()
 	{
 		$id = $this->input->post('id');

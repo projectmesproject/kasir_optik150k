@@ -89,7 +89,7 @@
         </div>
         <div class="form-group col-sm-2">
           <label>Jumlah :</label>
-          <input type="number" readonly id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
+          <input type="number" id="jumlah_ket" name="jumlah_ket" class="form-control" min="0" />
         </div>
         <div class="form-group col-sm-3">
           <label>&nbsp;</label><br />
@@ -117,7 +117,7 @@
       <hr>
       <div class="" style="overflow: hidden;">
         <div class="table-responsive" id="result_table">
-          <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-bordered table-hover" id="dataTable_jual" width="100%" cellspacing="0">
             <thead class="thead-light">
               <tr>
                 <th>Kode Barang</th>
@@ -439,7 +439,9 @@
     loadData()
   })
 
+
   function loadData() {
+
     $('#dataTable tr').each(function() {
       var kode_brg = $(this).find("td:first").html();
       const selected = [];

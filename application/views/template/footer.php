@@ -76,6 +76,10 @@
 <script>
   $(document).ready(function() {
     $('#dataTable').DataTable();
+
+    $('#dataTable_jual').DataTable({
+      "iDisplayLength": 100
+    });
   });
 </script>
 <script type="text/javascript">
@@ -196,7 +200,7 @@
         $("#kembalian_label").text("Kekurangan(Rp)")
         hitung = Math.abs(hitung);
       }
-      if(!hitung){
+      if (!hitung) {
         hitung = 0
       }
       $("#kembalian").val(hitung);
@@ -221,7 +225,7 @@
         $("#kembalian_label").text("Kekurangan(Rp)")
         hitung = Math.abs(hitung);
       }
-      if(!hitung){
+      if (!hitung) {
         hitung = 0
       }
       $("#kembalian").val(hitung);

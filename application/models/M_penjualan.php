@@ -85,7 +85,7 @@ class M_penjualan extends CI_Model
 		$produk = $produk[0];
 		$jual_total = $select->jual_total;
 		if ($count == 0) {
-			
+
 			$total = $qty * $produk["barang_harjul"];
 			$data = array(
 				'd_jual_nofak' 			=>	$nofak,
@@ -110,7 +110,7 @@ class M_penjualan extends CI_Model
 			// Kurangi Stok Sesuai Qty
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$qty' where barang_id='$kobar'");
 		} else {
-			
+
 			$this->db->query("update tbl_barang set barang_stok=barang_stok-'$qty' where barang_id='$kobar'");
 			$qty++;
 			// Pengurangan Stok Barang
@@ -133,7 +133,7 @@ class M_penjualan extends CI_Model
 			$this->db->query("UPDATE tbl_detail_jual SET d_jual_qty='$qty',d_jual_total='$total' WHERE d_jual_nofak='$nofak' AND d_jual_barang_id='$kobar'");
 		}
 
-		
+
 		// $this->db->query("update saldo set saldo=saldo+'$jml_uang' where id=1");
 		// $this->db->query("update saldo set saldo=saldo-'$kembalian' where id=1");
 
@@ -167,11 +167,14 @@ class M_penjualan extends CI_Model
 	function get_nofak()
 	{
 		$now = date('Y-m-d');
-		$q = $this->db->query("SELECT jual_nofak FROM tbl_jual WHERE DATE(jual_tanggal) ='$now'");
-		$kd = "";
-		$kd = $q->num_rows();
-		$kd += 1;
+		// $q = $this->db->query("SELECT jual_nofak FROM tbl_jual WHERE DATE(jual_tanggal) ='$now'");
+		$q = $this->db->query("SELECT RIGHT(jual_nofak,6) AS kd_max FROM tbl_jual WHERE DATE(jual_tanggal)='$now' ORDER BY jual_nofak DESC LIMIT 1")->row();
+		// $kd = "";
+		// $kd = $q->result();
+
+		$kd = (int)($q->kd_max) + 1;
 		$kd = sprintf("%06d", $kd);
+		// print_r($kd);
 		// if ($q->num_rows() > 0) {
 		// 	foreach ($q->result() as $k) {
 		// 		$tmp = ((int)$k->kd_max) + 1;

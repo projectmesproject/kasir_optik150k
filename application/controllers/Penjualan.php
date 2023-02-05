@@ -532,13 +532,13 @@ class Penjualan extends CI_Controller
     {
         $x['data'] = $this->m_penjualan->cetak_faktur();
         $this->load->view('laporan/v_faktur', $x);
-        //$this->session->unset_userdata('nofak');
+        // $this->session->unset_userdata('nofak');
     }
     function cetak_faktur_cabang()
     {
         $x['data'] = $this->m_penjualan->cetak_faktur_cabang();
         $this->load->view('laporan/v_faktur_cabang', $x);
-        //$this->session->unset_userdata('nofak');
+        // $this->session->unset_userdata('nofak');
     }
 
     function cetak_faktur_dp()

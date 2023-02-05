@@ -89,6 +89,19 @@ class M_barang extends CI_Model
 		$res = 	$this->db->get()->result();
 		return $res;
 	}
+	public function update($id, $data)
+	{
+		$this->db->where('id', $id);
+		unset($data['id']);
+		$res = $this->db->update($this->table, $data);
+		return $res;
+	}
+	public function remove($id)
+	{
+		$this->db->where('id', $id);
+		$res = 	$this->db->delete($this->table);
+		return $res;
+	}
 	public function get_byKategori($kategori_nama)
 	{
 		$res = $this->db->select('*')
@@ -176,7 +189,11 @@ class M_barang extends CI_Model
 
 		$this->db->insert('tbl_barang', $data);
 	}
-
+	function get($id)
+	{
+		$res = $this->db->select('*')->from($this->table)->where('id', $id)->get()->row_array();
+		return $res;
+	}
 	///baruu
 	function get_barang($kobar)
 	{

@@ -12,7 +12,7 @@ class History_penjualan extends CI_Controller
         $this->load->model('M_Cara_Bayar');
         if ($this->session->userdata('level') != TRUE) {
             redirect(base_url());
-        } 
+        }
     }
 
     function index()
@@ -308,12 +308,13 @@ class History_penjualan extends CI_Controller
     }
     function batal()
     {
-        $id = $this->input->post('id');
+        $id = $this->uri->segment(3);
         $data = [
             'status' => "CANCEL",
         ];
+
         $res =  $this->M_penjualan->update_status($id, $data);
-        $res = $this->M_penjualan->update_status_resume($id);
+        $res2 = $this->M_penjualan->update_status_resume($id);
         $data_array = array();
         $data1 =  $this->M_penjualan->detail_penjualan($id);
         foreach ($data1 as $dt) {
@@ -321,6 +322,6 @@ class History_penjualan extends CI_Controller
             array_push($data_array, $dt);
             $this->db->query("update tbl_barang set barang_stok=barang_stok+'$qty' where barang_id='$dt[d_jual_barang_id]'");
         }
-        echo json_encode($res);
+        redirect('history_penjualan');
     }
 }
